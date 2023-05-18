@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+
+<h1 align="center">FUD Checker</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label for="inputText" class="form-label">Post URL</label>
+    <input type="text" id="postURL" name="postURL" class="form-label" />
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+<div>
+  <p>{{postContent}}</p>
+</div>
+{% endblock %}

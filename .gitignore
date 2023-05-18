@@ -1,0 +1,5 @@
+.venv
+dotenv.env
+__pycache__
+test.py
+
