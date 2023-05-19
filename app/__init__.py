@@ -9,6 +9,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+
     db.init_app(app)
 
     from .views import views
