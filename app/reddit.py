@@ -1,5 +1,4 @@
 import praw
-from praw.models import MoreComments
 
 class RedditApp:
     def __init__(self, client_id, client_secret, user_agent, username, password):
@@ -11,6 +10,7 @@ class RedditApp:
             password = password)
 
     def getPostContent(self, submissionURL:str) -> str:
+        # gets the submission body of the post
         submission = self.reddit.submission(url=submissionURL)
         return submission.selftext
 
