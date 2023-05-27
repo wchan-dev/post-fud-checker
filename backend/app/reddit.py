@@ -35,9 +35,9 @@ class RedditApp:
         )
         return postInformation
 
-    def getPostComments(self, submissionId: str) -> list[str]:
+    def getPostComments(self, submissionURL: str) -> list[str]:
         comments = []
-        submission = self.reddit.submission(submissionId)
+        submission = self.reddit.submission(url=submissionURL)
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
             comments.append(comment.body)

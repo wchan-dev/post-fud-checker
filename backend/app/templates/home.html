@@ -13,5 +13,14 @@
   <p>Post Title: {{title}}</p>
   <p>Number of Comments: {{comments}}</p>
   <p>Upvote Ratio: {{upvote_ratio}}</p>
+  <div>
+    {% if pos_plot is defined and pos_plot is not none %}
+      <img src="data:image/png;base64, {{pos_plot}}">
+      <img src="data:image/png;base64, {{neg_plot}}">
+      <img src="data:image/png;base64, {{neu_plot}}">
+    {% else %}
+      <p>No plot data available</p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
