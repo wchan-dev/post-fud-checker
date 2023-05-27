@@ -1,9 +1,11 @@
 import nltk
+
 from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
 from nltk.tag import pos_tag
 from nltk.stem import WordNetLemmatizer
 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from collections import namedtuple
 from collections import Counter
@@ -32,7 +34,7 @@ def penn_to_wn(tag):
 Sentiment = namedtuple("Sentiment", ["word", "positive", "negative"])
 
 
-def analyzeSentiment(
+def analyzeSentimentWordsOnly( #analyzes sentiment of individual words only
     sentence: str,
 ):
     token = nltk.word_tokenize(sentence)
@@ -69,6 +71,14 @@ def analyzeSentiment(
         neutralResults,
     )
 
+def getOverallPostSentiment(comments: list[str]) -> float:
+    sid = SentimentIntensityAnalyzer()
+    total_score = 0.0
+    for comment in comments:
+        score = sid.polarity_scores(comment)['compound']
+        total_score += score
+    avg_score = round(total_score/len(comments), 3) * 100
+    return avg_score
 
 def classifySentiment(pos_score: float, neg_score: float) -> str:
     if pos_score > neg_score:
