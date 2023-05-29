@@ -4,7 +4,7 @@ export default function Logo() {
   return (
     <Box>
       <Text fontSize="lg" fontWeight="bold" color="black">
-        (lg)Logo
+        FUD Checker
       </Text>
     </Box>
   );
