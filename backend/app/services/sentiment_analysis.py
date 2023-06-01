@@ -1,5 +1,7 @@
 import nltk
 
+# eventually add options to use either nltk, text-blob, or flair (for accuracy)
+
 from nltk.corpus import wordnet as wn
 from nltk.corpus import sentiwordnet as swn
 from nltk.tag import pos_tag
@@ -34,7 +36,7 @@ def penn_to_wn(tag):
 Sentiment = namedtuple("Sentiment", ["word", "positive", "negative"])
 
 
-def analyzeSentimentWordsOnly( #analyzes sentiment of individual words only
+def analyzeSentimentWordsOnly(  # analyzes sentiment of individual words only
     sentence: str,
 ):
     token = nltk.word_tokenize(sentence)
@@ -71,14 +73,25 @@ def analyzeSentimentWordsOnly( #analyzes sentiment of individual words only
         neutralResults,
     )
 
+
+def getCommentSentiment(comment: str):
+    sid = SentimentIntensityAnalyzer()
+    raw_scores = sid.polarity_scores(comment)
+    raw_scores.update(
+        (key, "{:.2f}".format(float(value) * 100)) for key, value in raw_scores.items()
+    )
+    return raw_scores
+
+
 def getOverallPostSentiment(comments: list[str]) -> float:
     sid = SentimentIntensityAnalyzer()
     total_score = 0.0
     for comment in comments:
-        score = sid.polarity_scores(comment)['compound']
+        score = sid.polarity_scores(comment)["compound"]
         total_score += score
-    avg_score = round(total_score/len(comments), 3) * 100
+    avg_score = round(total_score / len(comments), 3) * 100
     return avg_score
+
 
 def classifySentiment(pos_score: float, neg_score: float) -> str:
     if pos_score > neg_score:
@@ -95,20 +108,20 @@ def getMostFrequent(sentimentList: list[Sentiment], num: int):
     most_frequent = counts.most_common(num)
     return most_frequent
 
-def plotMostFrequent(wordList: list[tuple], title:str):
-    matplotlib.use('agg')
+
+def plotMostFrequent(wordList: list[tuple], title: str):
+    matplotlib.use("agg")
     labels, values = zip(*wordList)
     x_pos = range(len(labels))
-    plt.bar(x_pos,values, alpha = 0.7)
-    plt.xticks(x_pos,labels)
+    plt.bar(x_pos, values, alpha=0.7)
+    plt.xticks(x_pos, labels)
 
-    plt.xlabel('Words')
+    plt.xlabel("Words")
     plt.ylabel("Frequency")
     plt.title(title)
 
     tmpfile = BytesIO()
-    plt.savefig(tmpfile, format='png')
+    plt.savefig(tmpfile, format="png")
     plt.close()
-    encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
+    encoded = base64.b64encode(tmpfile.getvalue()).decode("utf-8")
     return encoded
-
