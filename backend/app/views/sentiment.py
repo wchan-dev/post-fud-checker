@@ -6,6 +6,7 @@ from ..services.sentiment_analysis import (
     getOverallPostSentiment,
     getCommentSentiment,
 )
+from ..services.database import DatabaseHandler
 
 sentiment = Blueprint("sentiment", __name__)
 
@@ -13,6 +14,7 @@ sentiment = Blueprint("sentiment", __name__)
 @sentiment.route("/api/sentiment/reddit-post-sentiment", methods=["GET"])
 def get_sentiment_frequency():
     redditApp = RedditApp(g.reddit)
+    db = DatabaseHandler(g.db)
     postURL = request.json.get("reddit_url")
     allComments = redditApp.getPostComments(postURL)
     positive_words, negative_words, neutral_words = [], [], []
@@ -26,6 +28,7 @@ def get_sentiment_frequency():
     pos_freq = getMostFrequent(positive_words, num)
     neg_freq = getMostFrequent(negative_words, num)
     neu_freq = getMostFrequent(neutral_words, num)
+    db.call_stored_posts(redditApp.getPostContent(postURL))
 
     return jsonify(
         {

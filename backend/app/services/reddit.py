@@ -16,15 +16,12 @@ def create_reddit_instance(app):
 
 
 class PostInformation:
-    def __init__(
-        self, submission_id, permalink, title, content, comments, upvote_ratio
-    ):
-        self.submission_id = submission_id
-        self.permalink = permalink
+    def __init__(self, title, permalink, submission_id, upvote_ratio, post_timestamp):
         self.title = title
-        self.content = content
-        self.comments = comments
+        self.permalink = permalink
+        self.submission_id = submission_id
         self.upvote_ratio = upvote_ratio
+        self.post_timestamp = post_timestamp
 
 
 class RedditApp:
@@ -36,16 +33,17 @@ class RedditApp:
 
     def getPostContent(self, submissionURL: str) -> PostInformation:
         submission = self.reddit.submission(url=submissionURL)
+        submission_id = submission.id
+        permalink = submission.selftext
         postTitle = submission.title
-        content = submission.selftext
-        comments = submission.num_comments
         upvote_ratio = submission.upvote_ratio
+        post_timestamp = datetime.fromtimestamp(submission.created_utc)
         postInformation = PostInformation(
-            permalink=submissionURL,
-            content=content,
             title=postTitle,
-            comments=comments,
+            permalink=permalink,
+            submission_id=submission_id,
             upvote_ratio=upvote_ratio,
+            post_timestamp=post_timestamp,
         )
         return postInformation
 
