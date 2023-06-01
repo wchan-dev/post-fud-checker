@@ -25,4 +25,29 @@ class DatabaseHandler:
             ),
         )
         self.db.commit()
-        return 0
+
+    def call_store_comments(
+        self, submission, permalink, parent_id, score, comment_timestamp
+    ):
+        cursor = self.db.cursor()
+        cursor.execute(
+            "CALL reddit.store_comment(%s, %s, %s, %s, %s)",
+            (
+                submission,
+                permalink,
+                parent_id,
+                score,
+                comment_timestamp,
+            ),
+        )
+        self.db.commit()
+
+    def call_store_comment_sentiment(
+        self, comment_id, compound, neg, neu, pos, comment_timestamp
+    ):
+        cursor = self.db.cursor()
+        cursor.execute(
+            "CALL reddit.store_sentiments(%s, %s, %s, %s, %s,%s)",
+            (comment_id, compound, neg, neu, pos, comment_timestamp),
+        )
+        self.db.commit()

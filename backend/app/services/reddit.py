@@ -24,6 +24,15 @@ class PostInformation:
         self.post_timestamp = post_timestamp
 
 
+class CommentInformation:
+    def __init__self(self, submission, permalink, parent_id, score, comment_timestamp):
+        self.submission = submission.id
+        self.permalink = permalink
+        self.parent_id = parent_id
+        self.score = score
+        self.comment_timestamp = comment_timestamp
+
+
 class RedditApp:
     def __init__(self, reddit_instance):
         self.reddit = reddit_instance
@@ -55,12 +64,12 @@ class RedditApp:
             comments.append(comment.body)
         return comments
 
-    def getPostCommentsTimed(self, submissionURL: str) -> list[tuple[str, datetime]]:
+    def getPostCommentsTimed(self, submissionURL: str):
         comments = []
         submission = self.reddit.submission(url=submissionURL)
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
-            comments.append((comment.body, datetime.fromtimestamp(comment.created_utc)))
+            comments.append((comment, datetime.fromtimestamp(comment.created_utc)))
         comments = sorted(comments, key=lambda x: x[1])  # sorts by time
         return comments
 

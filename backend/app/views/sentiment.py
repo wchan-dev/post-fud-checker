@@ -57,11 +57,28 @@ def getRandom():
 @sentiment.route("/api/sentiment/test", methods=["GET"])
 def getCommentsTimed():
     redditApp = RedditApp(g.reddit)
+    db = DatabaseHandler(g.db)
     postURL = request.json.get("reddit_url")
     results = []
     commentsTimed = redditApp.getPostCommentsTimed(postURL)
     for comments in commentsTimed:
-        sentiment_score = getCommentSentiment(comments[0])
-        new_tpl = (comments[0], comments[1], sentiment_score)
+        sentiment_score = getCommentSentiment(comments[0].body)
+        new_tpl = (comments[0].body, comments[1], sentiment_score)
+        # db.call_store_comments(
+        #     comments[0].submission.id,
+        #     comments[0].permalink,
+        #     comments[0].parent_id,
+        #     comments[0].score,
+        #     comments[1],
+        # )
+        db.call_store_comment_sentiment(
+            comments[0].submission.id,
+            sentiment_score["compound"],
+            sentiment_score["neg"],
+            sentiment_score["neu"],
+            sentiment_score["pos"],
+            comments[1],
+        )
         results.append(new_tpl)
+
     return jsonify(results)
