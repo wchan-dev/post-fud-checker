@@ -44,12 +44,12 @@ class DatabaseHandler:
         self.db.commit()
 
     def call_store_comment_sentiment(
-        self, comment_id, compound, neg, neu, pos, comment_timestamp
+        self, comment_id, compound, neg, neu, pos, summation_score, comment_timestamp
     ):
         cursor = self.db.cursor()
         cursor.execute(
-            "CALL reddit.store_sentiments(%s, %s, %s, %s, %s,%s)",
-            (comment_id, compound, neg, neu, pos, comment_timestamp),
+            "CALL reddit.store_sentiments(%s, %s, %s, %s, %s, %s,%s)",
+            (comment_id, compound, neg, neu, pos, summation_score, comment_timestamp),
         )
         self.db.commit()
 
