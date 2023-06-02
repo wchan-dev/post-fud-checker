@@ -1,4 +1,4 @@
-import { Box, Button, Input } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Input, Stack } from "@chakra-ui/react";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import Plot from "react-plotly.js";
@@ -15,7 +15,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     return <p>No data to display</p>;
   }
   const data = [
-    { x: timeStamps, y: sentiments, mode: "lines+markers", type: "scatter" },
+    { x: timeStamps, y: sentiments, mode: "markers", type: "scatter" },
   ];
   const layout = {
     title: "Comment Sentiment Over Time",
@@ -23,7 +23,13 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     yaxis: { title: "Sentiment", showline: true },
   };
   return (
-    <Box>
+    <Box w="100%">
+      <Center>
+        {" "}
+        <Heading as="h3" size="md">
+          PlaceHolder Thread Title
+        </Heading>
+      </Center>
       <Plot data={data} layout={layout} />
     </Box>
   );
@@ -31,7 +37,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
 
 interface Comment {
   comment_timestamp: string;
-  compound: number;
+  summation_score: number;
 }
 
 const CommentSentimentForm: React.FC = () => {
@@ -55,7 +61,7 @@ const CommentSentimentForm: React.FC = () => {
           (comment: Comment) => new Date(comment.comment_timestamp)
         );
         const scores = response.data.map(
-          (comment: Comment) => comment.compound
+          (comment: Comment) => comment.summation_score
         );
         setTimeStamps(timeStamps);
         setSentiments(scores);
@@ -68,18 +74,29 @@ const CommentSentimentForm: React.FC = () => {
   };
   return (
     <Box display="flex" alignItems="center" mr="auto" ml="auto">
-      <form onSubmit={handleSubmit}></form>
-      <Input
-        type="text"
-        value={postURL}
-        onChange={(event) => setPostURL(event.target.value)}
-      />
-      <Button onClick={handleClick}>Analyze</Button>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <CommentSentimentPlot timeStamps={timeStamps} sentiments={sentiments} />
-      )}
+      <Stack direction={"column"}>
+        {" "}
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <CommentSentimentPlot
+            timeStamps={timeStamps}
+            sentiments={sentiments}
+          />
+        )}
+        <Center>
+          <form onSubmit={handleSubmit}></form>
+          <Input
+            maxW="320px"
+            type="text"
+            value={postURL}
+            onChange={(event) => setPostURL(event.target.value)}
+          />
+          <Button maxW="128px" ml="8px" onClick={handleClick}>
+            Analyze
+          </Button>
+        </Center>
+      </Stack>
     </Box>
   );
 };
