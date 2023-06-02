@@ -54,12 +54,13 @@ def getRandom():
     return jsonify(randomSubreddit)
 
 
-@sentiment.route("/api/sentiment/test", methods=["GET"])
+@sentiment.route("/api/sentiment/test", methods=["POST"])
 def getCommentsTimed():
     redditApp = RedditApp(g.reddit)
     db = DatabaseHandler(g.db)
-    postURL = request.json.get("reddit_url")
+    postURL = request.json.get("postURL")
     results = []
+    id = ""
     commentsTimed = redditApp.getPostCommentsTimed(postURL)
     for comments in commentsTimed:
         sentiment_score = getCommentSentiment(comments[0].body)
@@ -71,6 +72,7 @@ def getCommentsTimed():
         #     comments[0].score,
         #     comments[1],
         # )
+        id = comments[0].submission.id
         db.call_store_comment_sentiment(
             comments[0].submission.id,
             sentiment_score["compound"],
@@ -79,6 +81,7 @@ def getCommentsTimed():
             sentiment_score["pos"],
             comments[1],
         )
-        results.append(new_tpl)
+
+    results = db.call_get_comment_sentiments(id)
 
     return jsonify(results)

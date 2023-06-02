@@ -2,9 +2,9 @@ import PageLayOut from "../components/PageLayout";
 
 const Home = () => {
   return (
-    <body>
+    <div>
       <PageLayOut></PageLayOut>
-    </body>
+    </div>
   );
 };
 

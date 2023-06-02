@@ -1,5 +1,6 @@
 from flask import g
 import psycopg2
+from psycopg2 import extras
 
 
 def connect_db(app):
@@ -51,3 +52,21 @@ class DatabaseHandler:
             (comment_id, compound, neg, neu, pos, comment_timestamp),
         )
         self.db.commit()
+
+    def call_get_comment_sentiments(self, comment_id):
+        res = []
+        try:
+            cursor = self.db.cursor(cursor_factory=extras.RealDictCursor)
+            cursor.execute(
+                "SELECT * FROM reddit.comment_sentiments WHERE comment_id = %s",
+                (comment_id,),
+            )
+            comments = cursor.fetchall()
+            # print(f"Fetched comments: {comments}")  # Debugging line
+            res = comments
+        except (Exception, psycopg2.Error) as error:
+            print("Error while fetching data from PostgreSQL", error)
+        finally:
+            if cursor:
+                cursor.close()
+        return res
