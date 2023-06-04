@@ -24,12 +24,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   };
   return (
     <Box w="100%">
-      <Center>
-        {" "}
-        <Heading as="h3" size="md">
-          PlaceHolder Thread Title
-        </Heading>
-      </Center>
       <Plot data={data} layout={layout} />
     </Box>
   );
@@ -44,6 +38,7 @@ const CommentSentimentForm: React.FC = () => {
   const [postURL, setPostURL] = useState<string>("");
   const [timeStamps, setTimeStamps] = useState([]);
   const [sentiments, setSentiments] = useState([]);
+  const [postTitle, setPostTitle] = useState();
   const url = `/api/sentiment/test`;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -57,12 +52,13 @@ const CommentSentimentForm: React.FC = () => {
     axios
       .post(url, data)
       .then((response) => {
-        const timeStamps = response.data.map(
+        const timeStamps = response.data.comments.map(
           (comment: Comment) => new Date(comment.comment_timestamp)
         );
-        const scores = response.data.map(
+        const scores = response.data.comments.map(
           (comment: Comment) => comment.summation_score
         );
+        setPostTitle(response.data.post);
         setTimeStamps(timeStamps);
         setSentiments(scores);
         setLoading(false);
@@ -79,10 +75,13 @@ const CommentSentimentForm: React.FC = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <CommentSentimentPlot
-            timeStamps={timeStamps}
-            sentiments={sentiments}
-          />
+          <Box>
+            <Heading size="md">{postTitle}</Heading>
+            <CommentSentimentPlot
+              timeStamps={timeStamps}
+              sentiments={sentiments}
+            />
+          </Box>
         )}
         <Center>
           <form onSubmit={handleSubmit}></form>
