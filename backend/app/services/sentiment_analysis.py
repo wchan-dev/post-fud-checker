@@ -83,6 +83,17 @@ def getCommentSentiment(comment: str):
     return raw_scores
 
 
+def getPostSentiment(title: str, selftext: str) -> (dict[str, float], dict[str, float]):
+    # TODO: Length checker if posts exceed certain length
+    # TODO: Check if mainpost is a news article link ->
+    # if yes look for comment, last resort is webscrape the actual article
+    # TODO: skip over image
+    sid = SentimentIntensityAnalyzer()
+    title_score = sid.polarity_scores(title)
+    content_score = sid.polarity_scores(selftext)
+    return title_score, content_score
+
+
 def getOverallPostSentiment(comments: list[str]) -> float:
     sid = SentimentIntensityAnalyzer()
     total_score = 0.0
@@ -107,21 +118,3 @@ def getMostFrequent(sentimentList: list[Sentiment], num: int):
     counts = Counter(freq)
     most_frequent = counts.most_common(num)
     return most_frequent
-
-
-def plotMostFrequent(wordList: list[tuple], title: str):
-    matplotlib.use("agg")
-    labels, values = zip(*wordList)
-    x_pos = range(len(labels))
-    plt.bar(x_pos, values, alpha=0.7)
-    plt.xticks(x_pos, labels)
-
-    plt.xlabel("Words")
-    plt.ylabel("Frequency")
-    plt.title(title)
-
-    tmpfile = BytesIO()
-    plt.savefig(tmpfile, format="png")
-    plt.close()
-    encoded = base64.b64encode(tmpfile.getvalue()).decode("utf-8")
-    return encoded

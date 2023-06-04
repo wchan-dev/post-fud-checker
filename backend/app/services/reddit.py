@@ -16,10 +16,13 @@ def create_reddit_instance(app):
 
 
 class PostInformation:
-    def __init__(self, title, permalink, submission_id, upvote_ratio, post_timestamp):
+    def __init__(
+        self, title, permalink, submission_id, selftext, upvote_ratio, post_timestamp
+    ):
         self.title = title
         self.permalink = permalink
         self.submission_id = submission_id
+        self.selftext = selftext
         self.upvote_ratio = upvote_ratio
         self.post_timestamp = post_timestamp
 
@@ -43,28 +46,22 @@ class RedditApp:
     def getPostContent(self, submissionURL: str) -> PostInformation:
         submission = self.reddit.submission(url=submissionURL)
         submission_id = submission.id
-        permalink = submission.selftext
+        selftext = submission.selftext
+        permalink = submission.permalink
         postTitle = submission.title
         upvote_ratio = submission.upvote_ratio
         post_timestamp = datetime.fromtimestamp(submission.created_utc)
         postInformation = PostInformation(
             title=postTitle,
             permalink=permalink,
+            selftext=selftext,
             submission_id=submission_id,
             upvote_ratio=upvote_ratio,
             post_timestamp=post_timestamp,
         )
         return postInformation
 
-    def getPostComments(self, submissionURL: str) -> list[str]:
-        comments = []
-        submission = self.reddit.submission(url=submissionURL)
-        submission.comments.replace_more(limit=None)
-        for comment in submission.comments.list():
-            comments.append(comment.body)
-        return comments
-
-    def getPostCommentsTimed(self, submissionURL: str):
+    def getPostComments(self, submissionURL: str):
         comments = []
         submission = self.reddit.submission(url=submissionURL)
         submission.comments.replace_more(limit=None)

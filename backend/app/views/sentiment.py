@@ -3,6 +3,7 @@ from ..services.reddit import RedditApp
 from ..services.sentiment_analysis import (
     analyzeSentimentWordsOnly,
     getMostFrequent,
+    getPostSentiment,
     getOverallPostSentiment,
     getCommentSentiment,
 )
@@ -55,14 +56,25 @@ def getRandom():
 
 
 @sentiment.route("/api/sentiment/test", methods=["POST"])
-def getPostSentiment():
+def analyzePostSentiment():
     redditApp = RedditApp(g.reddit)
     db = DatabaseHandler(g.db)
     postURL = request.json.get("postURL")
     results = []
     id = ""
-    commentsTimed = redditApp.getPostCommentsTimed(postURL)
-    summation_score = 0.0
+    commentsTimed = redditApp.getPostComments(postURL)
+    submission = redditApp.getPostContent(postURL)
+    title_sentiment, content_sentiment = getPostSentiment(
+        submission.title, submission.selftext
+    )
+    summation_score = title_sentiment["compound"] + content_sentiment["compound"]
+    post_compound = title_sentiment["compound"] + content_sentiment["compound"]
+    post_neg = title_sentiment["neg"] + content_sentiment["neg"]
+    post_pos = title_sentiment["pos"] + content_sentiment["pos"]
+    post_neu = title_sentiment["neu"] + content_sentiment["neu"]
+    db.call_store_post(
+        submission, post_compound, post_neg, post_neu, post_pos, summation_score
+    )
     for i, comments in enumerate(commentsTimed):
         sentiment_score = getCommentSentiment(comments[0].body)
         summation_score = summation_score + float(sentiment_score["compound"])
@@ -73,10 +85,18 @@ def getPostSentiment():
             sentiment_score["neg"],
             sentiment_score["neu"],
             sentiment_score["pos"],
-            summation_score / (i + 1),
+            summation_score / (i + 2),
             comments[1],
         )
 
     results = db.call_get_comment_sentiments(id)
 
-    return jsonify(results)
+    return jsonify(post=submission.title, comments=results)
+
+
+@sentiment.route("api/database/test", methods=["POST"])
+def analyzePost():
+    redditApp = RedditApp(g.reddit)
+    db = DatabaseHandler((g.db))
+    postURL = request.json.get("postURL")
+    return None
