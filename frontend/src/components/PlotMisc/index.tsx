@@ -1,5 +1,13 @@
-import { Box, Button, Center, Heading, Input, Stack } from "@chakra-ui/react";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Input,
+  Spinner,
+  Stack,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import Plot from "react-plotly.js";
 
@@ -23,7 +31,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     yaxis: { title: "Sentiment", showline: true },
   };
   return (
-    <Box w="100%">
+    <Box w="100%" display="flex" alignItems="center" justifyContent="center">
       <Plot data={data} layout={layout} />
     </Box>
   );
@@ -39,13 +47,13 @@ const CommentSentimentForm: React.FC = () => {
   const [timeStamps, setTimeStamps] = useState([]);
   const [sentiments, setSentiments] = useState([]);
   const [postTitle, setPostTitle] = useState();
-  const url = `/api/sentiment/test`;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
+
   const [loading, setLoading] = useState(false);
-  const handleClick = () => {
+  const getSentiment = (url: string) => {
     setPostURL(postURL);
     setLoading(true);
     const data = { postURL };
@@ -68,21 +76,17 @@ const CommentSentimentForm: React.FC = () => {
         setLoading(false);
       });
   };
+
+  const handleClick = () => {
+    getSentiment(`/api/sentiment/test`);
+  };
+
+  useEffect(() => {
+    getSentiment(`/api/sentiment/initial`);
+  }, []);
   return (
     <Box display="flex" alignItems="center" mr="auto" ml="auto">
-      <Stack direction={"column"}>
-        {" "}
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <Box>
-            <Heading size="md">{postTitle}</Heading>
-            <CommentSentimentPlot
-              timeStamps={timeStamps}
-              sentiments={sentiments}
-            />
-          </Box>
-        )}
+      <Stack direction={"column"} align="center">
         <Center>
           <form onSubmit={handleSubmit}></form>
           <Input
@@ -95,6 +99,24 @@ const CommentSentimentForm: React.FC = () => {
             Analyze
           </Button>
         </Center>
+
+        {loading ? (
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        ) : (
+          <Box w="100%">
+            <Heading size="sm">{postTitle}</Heading>
+            <CommentSentimentPlot
+              timeStamps={timeStamps}
+              sentiments={sentiments}
+            />
+          </Box>
+        )}
       </Stack>
     </Box>
   );

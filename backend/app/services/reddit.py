@@ -70,6 +70,18 @@ class RedditApp:
         comments = sorted(comments, key=lambda x: x[1])  # sorts by time
         return comments
 
+    def getRandomSubmission(self) -> str:
+        # should only do it for 100+comment submissions
+        isFound = False
+        permalink = ""
+        comment_threshold = 100
+        while isFound is False:
+            random_submission = self.reddit.subreddit("all").random()
+            if random_submission.num_comments >= comment_threshold:
+                permalink = "https://www.reddit.com/" + random_submission.permalink
+                isFound = True
+        return permalink
+
     # sentiment growth since post inception
     # start out with the post content
     # then by top level comments
