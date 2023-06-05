@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Heading,
+  Link,
   Input,
   Spinner,
   Stack,
@@ -54,7 +55,7 @@ const CommentSentimentForm: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const getSentiment = (url: string) => {
-    setPostURL(postURL);
+    console.log(postURL);
     setLoading(true);
     const data = { postURL };
     axios
@@ -77,12 +78,20 @@ const CommentSentimentForm: React.FC = () => {
       });
   };
 
+  const getInitial = () => {
+    getSentiment(`/api/sentiment/initial`);
+    sessionStorage.setItem("initialPostFetched", "true");
+  };
+
   const handleClick = () => {
     getSentiment(`/api/sentiment/test`);
   };
 
   useEffect(() => {
-    getSentiment(`/api/sentiment/initial`);
+    if (!sessionStorage.getItem("initialPostFetched")) {
+      getInitial();
+      sessionStorage.setItem("initialPostFetched", "true");
+    }
   }, []);
   return (
     <Box display="flex" alignItems="center" mr="auto" ml="auto">
@@ -110,7 +119,9 @@ const CommentSentimentForm: React.FC = () => {
           />
         ) : (
           <Box w="100%">
-            <Heading size="sm">{postTitle}</Heading>
+            <Link href={postURL} isExternal>
+              <Heading size="sm">{postTitle}</Heading>
+            </Link>
             <CommentSentimentPlot
               timeStamps={timeStamps}
               sentiments={sentiments}
