@@ -71,6 +71,8 @@ const CommentSentimentForm: React.FC = () => {
         setTimeStamps(timeStamps);
         setSentiments(scores);
         setLoading(false);
+        const respURL = response.data.postURL;
+        setPostURL(respURL);
       })
       .catch((error: AxiosError) => {
         console.log(error);
@@ -96,19 +98,6 @@ const CommentSentimentForm: React.FC = () => {
   return (
     <Box display="flex" alignItems="center" mr="auto" ml="auto">
       <Stack direction={"column"} align="center">
-        <Center>
-          <form onSubmit={handleSubmit}></form>
-          <Input
-            maxW="320px"
-            type="text"
-            value={postURL}
-            onChange={(event) => setPostURL(event.target.value)}
-          />
-          <Button maxW="128px" ml="8px" onClick={handleClick}>
-            Analyze
-          </Button>
-        </Center>
-
         {loading ? (
           <Spinner
             thickness="4px"
@@ -128,6 +117,18 @@ const CommentSentimentForm: React.FC = () => {
             />
           </Box>
         )}
+        <Center>
+          <form onSubmit={handleSubmit}></form>
+          <Input
+            maxW="320px"
+            type="text"
+            value={postURL}
+            onChange={(event) => setPostURL(event.target.value)}
+          />
+          <Button maxW="128px" ml="8px" onClick={handleClick}>
+            Analyze
+          </Button>
+        </Center>
       </Stack>
     </Box>
   );

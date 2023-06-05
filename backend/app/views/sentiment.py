@@ -130,4 +130,8 @@ def initialRandomSentiment():
 
     results = db.call_get_comment_sentiments(id)
 
-    return jsonify(post=submission.title, comments=results)
+    return jsonify(
+        post=submission.title,
+        comments=results,
+        postURL=postURL,
+    )
