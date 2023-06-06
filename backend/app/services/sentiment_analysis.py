@@ -84,14 +84,26 @@ def getCommentSentiment(comment: str):
 
 
 def getPostSentiment(title: str, selftext: str) -> (dict[str, float], dict[str, float]):
-    # TODO: Length checker if posts exceed certain length
-    # TODO: Check if mainpost is a news article link ->
-    # if yes look for comment, last resort is webscrape the actual article
-    # TODO: skip over image
     sid = SentimentIntensityAnalyzer()
     title_score = sid.polarity_scores(title)
     content_score = sid.polarity_scores(selftext)
     return title_score, content_score
+
+
+def calcPostSentiment(title_sentiment, content_sentiment):
+    summation_score = title_sentiment["compound"] + content_sentiment["compound"]
+    post_compound = title_sentiment["compound"] + content_sentiment["compound"]
+    post_neg = title_sentiment["neg"] + content_sentiment["neg"]
+    post_pos = title_sentiment["pos"] + content_sentiment["pos"]
+    post_neu = title_sentiment["neu"] + content_sentiment["neu"]
+
+    return {
+        "summation_score": summation_score,
+        "post_compound": post_compound,
+        "post_neg": post_neg,
+        "post_pos": post_pos,
+        "post_neu": post_neu,
+    }
 
 
 def getOverallPostSentiment(comments: list[str]) -> float:

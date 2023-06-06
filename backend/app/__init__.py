@@ -1,5 +1,5 @@
 from flask import Flask, g
-from .services.database import connect_db
+from .database.database_handler import connect_db
 from .services.reddit import create_reddit_instance
 
 

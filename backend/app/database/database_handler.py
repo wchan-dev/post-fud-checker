@@ -42,7 +42,7 @@ class DatabaseHandler:
                 cursor.close()
 
     def call_get_post(self, submission_id: str):
-        cursor = self.db.cursor(cursor_factory=extras.RealDictRow)
+        cursor = self.db.cursor()
         res = {}
         try:
             cursor.execute("CALL reddit.get_post(%s)", submission_id)

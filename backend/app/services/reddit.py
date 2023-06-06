@@ -3,18 +3,6 @@ from flask import g
 from datetime import datetime
 
 
-def create_reddit_instance(app):
-    if "reddit" not in g:
-        g.reddit = praw.Reddit(
-            client_id=app.config["CLIENT_ID"],
-            client_secret=app.config["CLIENT_SECRET"],
-            username=app.config["PRAW_USERNAME"],
-            password=app.config["PRAW_PASSWORD"],
-            user_agent=app.config["USER_AGENT"],
-        )
-    return g.reddit
-
-
 class PostInformation:
     def __init__(
         self, title, permalink, submission_id, selftext, upvote_ratio, post_timestamp
@@ -28,12 +16,28 @@ class PostInformation:
 
 
 class CommentInformation:
-    def __init__self(self, submission, permalink, parent_id, score, comment_timestamp):
-        self.submission = submission.id
-        self.permalink = permalink
-        self.parent_id = parent_id
-        self.score = score
+    def __init__self(
+        self, comment_id, compound, neg, neu, pos, summation_score, comment_timestamp
+    ):
+        self.comment_id = comment_id
+        self.compound = compound
+        self.neg = neg
+        self.neu = neu
+        self.pos = pos
+        self.summation_score = summation_score
         self.comment_timestamp = comment_timestamp
+
+
+def create_reddit_instance(app):
+    if "reddit" not in g:
+        g.reddit = praw.Reddit(
+            client_id=app.config["CLIENT_ID"],
+            client_secret=app.config["CLIENT_SECRET"],
+            username=app.config["PRAW_USERNAME"],
+            password=app.config["PRAW_PASSWORD"],
+            user_agent=app.config["USER_AGENT"],
+        )
+    return g.reddit
 
 
 class RedditApp:
@@ -67,7 +71,9 @@ class RedditApp:
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
             comments.append((comment, datetime.fromtimestamp(comment.created_utc)))
-        comments = sorted(comments, key=lambda x: x[1])  # sorts by time
+        comments = sorted(
+            comments, key=lambda x: x[1]
+        )  # sorts by time, don't remove, the order of how plotly renders does materr
         return comments
 
     def getRandomSubmission(self) -> str:
