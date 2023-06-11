@@ -3,26 +3,6 @@ from flask import g
 from datetime import datetime
 
 
-class PostInformation:
-    def __init__(
-        self,
-        title,
-        permalink,
-        num_comments,
-        submission_id,
-        selftext,
-        upvote_ratio,
-        post_timestamp,
-    ):
-        self.title = title
-        self.permalink = permalink
-        self.submission_id = submission_id
-        self.num_comments = num_comments
-        self.selftext = selftext
-        self.upvote_ratio = upvote_ratio
-        self.post_timestamp = post_timestamp
-
-
 class CommentInformation:
     def __init__self(
         self, comment_id, compound, neg, neu, pos, summation_score, comment_timestamp
