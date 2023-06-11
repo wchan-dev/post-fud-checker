@@ -3,19 +3,6 @@ from flask import g
 from datetime import datetime
 
 
-class CommentInformation:
-    def __init__self(
-        self, comment_id, compound, neg, neu, pos, summation_score, comment_timestamp
-    ):
-        self.comment_id = comment_id
-        self.compound = compound
-        self.neg = neg
-        self.neu = neu
-        self.pos = pos
-        self.summation_score = summation_score
-        self.comment_timestamp = comment_timestamp
-
-
 def create_reddit_instance(app):
     if "reddit" not in g:
         g.reddit = praw.Reddit(
