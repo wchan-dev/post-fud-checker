@@ -19,9 +19,6 @@ class RedditApp:
     def __init__(self, reddit_instance):
         self.reddit = reddit_instance
 
-    def getSubRedditContent(self, subreddit: str):
-        return None
-
     def getPostComments(self, submissionURL: str):
         comments = []
         submission = self.reddit.submission(url=submissionURL)
