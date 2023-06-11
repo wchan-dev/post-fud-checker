@@ -43,7 +43,7 @@ class DatabaseHandler:
 
     def call_get_post(self, submission_id: str):
         cursor = self.db.cursor()
-        res = {}
+        res = None
         try:
             cursor.execute("CALL reddit.get_post(%s)", submission_id)
             res = cursor.fetchall()
@@ -53,6 +53,9 @@ class DatabaseHandler:
             if cursor:
                 cursor.close()
 
+        if not res:
+            print("no results found")
+            return None
         return res
 
     def call_store_comments(

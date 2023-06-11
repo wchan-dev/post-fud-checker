@@ -5,11 +5,19 @@ from datetime import datetime
 
 class PostInformation:
     def __init__(
-        self, title, permalink, submission_id, selftext, upvote_ratio, post_timestamp
+        self,
+        title,
+        permalink,
+        num_comments,
+        submission_id,
+        selftext,
+        upvote_ratio,
+        post_timestamp,
     ):
         self.title = title
         self.permalink = permalink
         self.submission_id = submission_id
+        self.num_comments = num_comments
         self.selftext = selftext
         self.upvote_ratio = upvote_ratio
         self.post_timestamp = post_timestamp
@@ -46,24 +54,6 @@ class RedditApp:
 
     def getSubRedditContent(self, subreddit: str):
         return None
-
-    def getPostContent(self, submissionURL: str) -> PostInformation:
-        submission = self.reddit.submission(url=submissionURL)
-        submission_id = submission.id
-        selftext = submission.selftext
-        permalink = submission.permalink
-        postTitle = submission.title
-        upvote_ratio = submission.upvote_ratio
-        post_timestamp = datetime.fromtimestamp(submission.created_utc)
-        postInformation = PostInformation(
-            title=postTitle,
-            permalink=permalink,
-            selftext=selftext,
-            submission_id=submission_id,
-            upvote_ratio=upvote_ratio,
-            post_timestamp=post_timestamp,
-        )
-        return postInformation
 
     def getPostComments(self, submissionURL: str):
         comments = []

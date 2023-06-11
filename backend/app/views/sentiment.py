@@ -30,7 +30,7 @@ def get_sentiment_frequency():
     pos_freq = getMostFrequent(positive_words, num)
     neg_freq = getMostFrequent(negative_words, num)
     neu_freq = getMostFrequent(neutral_words, num)
-    db.call_stored_posts(redditApp.getPostContent(postURL))
+    db.call_stored_posts(redditApp.reddit.submission(postURL))
 
     return jsonify(
         {
@@ -39,21 +39,6 @@ def get_sentiment_frequency():
             "neutral_words": neu_freq,
         }
     )
-
-
-@sentiment.route("/api/sentiment/overAllSentiment", methods=["GET"])
-def getOverallSentiment():
-    redditApp = RedditApp(g.reddit)
-    postURL = request.json.get("reddit_url")
-    allComments = redditApp.getPostComments(postURL)
-    overAllSentiment = getOverallPostSentiment(allComments)
-    return jsonify({"overall_post_sentiment": overAllSentiment})
-
-
-@sentiment.route("/api/sentiment/getRandom", methods=["GET"])
-def getRandom():
-    randomSubreddit = redditApp.reddit.get_random_subreddit("random")
-    return jsonify(randomSubreddit)
 
 
 @sentiment.route("/api/sentiment/test", methods=["POST"])
@@ -65,15 +50,10 @@ def analyzePostSentiment():
     postURL = request.json.get("postURL")
     results = []
     commentsTimed = redditApp.getPostComments(postURL)
-    submission = redditApp.getPostContent(postURL)
+    submission = redditApp.reddit.submission(postURL)
     num_comments = submission.num_comments
 
-    # check if submission already exists in database
     id = commentsTimed[0][0].submission.id
-    if db.call_get_post(id) != "":
-        print("firing up into the database")
-        results = db.call_get_comment_sentiments(id)
-        return jsonify(post=submission.title, comments=results, postURL=postURL)
 
     title_sentiment, content_sentiment = getPostSentiment(
         submission.title, submission.selftext

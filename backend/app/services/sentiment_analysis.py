@@ -12,9 +12,6 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from collections import namedtuple
 from collections import Counter
 
-from .news_parser.helpers import contains_links
-from .news_parser.articles import filter_text, patterns
-
 nltk.download("sentiwordnet")
 nltk.download("wordnet")
 
@@ -85,9 +82,6 @@ def getPostSentiment(title: str, selftext: str) -> (dict[str, float], dict[str, 
     sid = SentimentIntensityAnalyzer()
     title_score = sid.polarity_scores(title)
     # check if link
-    links = contains_links(selftext)
-    if links != "":
-        selftext = filter_text(links, patterns)
 
     content_score = sid.polarity_scores(selftext)
     return title_score, content_score
