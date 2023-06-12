@@ -1,13 +1,13 @@
 from flask import Flask, g
+from flask_sqlalchemy import SQLAlchemy
 from .database.database_handler import connect_db
 from .services.reddit import create_reddit_instance
 
 
 def create_app() -> Flask:
+    global db
     app = Flask(__name__)
     app.config.from_pyfile("config.py")
-
-    from .views.sentiment import sentiment
 
     app.register_blueprint(sentiment, url_prefix="/")
 
