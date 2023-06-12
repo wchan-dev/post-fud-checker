@@ -81,12 +81,12 @@ const CommentSentimentForm: React.FC = () => {
   };
 
   const getInitial = () => {
-    getSentiment(`/api/sentiment/initial`);
+    getSentiment(`/api/sentiment_analysis/initial`);
     sessionStorage.setItem("initialPostFetched", "true");
   };
 
   const handleClick = () => {
-    getSentiment(`/api/sentiment/test`);
+    getSentiment(`/api/sentiment_analysis`);
   };
 
   useEffect(() => {
