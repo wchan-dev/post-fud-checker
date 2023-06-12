@@ -1,5 +1,4 @@
-from flask import Flask, g
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 from .database.database_handler import db
 from .services.reddit import create_reddit_instance
 
@@ -9,6 +8,8 @@ def create_app() -> Flask:
     app.config.from_pyfile("config.py")
 
     db.init_app(app)  # Inits SQLAlchemy object within App
+
+    from .views import sentiment
 
     app.register_blueprint(sentiment, url_prefix="/")
 
