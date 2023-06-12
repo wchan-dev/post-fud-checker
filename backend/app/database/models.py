@@ -1,11 +1,27 @@
 from .database_handler import db
 
 
-class RedditComment(db.Model):
-    __tablename__ = "reddit_comments"
-    __table_args = {"schema": "reddit"}
+class RedditSubmission(db.Model):
+    __tablename__ = "submission"
+    __table_args__ = {"schema": "reddit"}
     id = db.Column(db.Integer, primary_key=True)
-    parent_submission_id = db.Column(db.String, nullable=False)
+    submission_id = db.Column(db.Text, nullable=False)
+    num_comments = db.Column(db.Integer, nullable=False)
+    sentiment_positive = db.Column(db.Float, nullable=False)
+    sentiment_neutral = db.Column(db.Float, nullable=False)
+    sentiment_negative = db.Column(db.Float, nullable=False)
+    self_text = db.Column(db.String, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+
+class RedditComment(db.Model):
+    __tablename__ = "comments"
+    __table_args__ = {"schema": "reddit"}
+
+    id = db.Column(db.Integer, primary_key=True)
+    parent_submission_id = db.Column(
+        db.String, db.ForeignKey("reddit.submission.submission_id"), nullable=False
+    )
     sentiment_positive = db.Column(db.Float, nullable=False)
     sentiment_neutral = db.Column(db.Float, nullable=False)
     sentiment_negative = db.Column(db.Float, nullable=False)
