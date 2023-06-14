@@ -16,3 +16,4 @@ PRAW_PASSWORD = os.getenv("PASSWORD")
 USER_AGENT = "testscript from u/soejun-go"
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")

@@ -81,21 +81,25 @@ def getCommentSentiment(comment: str):
 def getPostSentiment(title: str, selftext: str) -> (dict[str, float], dict[str, float]):
     sid = SentimentIntensityAnalyzer()
     title_score = sid.polarity_scores(title)
-    # check if link
-
     content_score = sid.polarity_scores(selftext)
+    title_score.update(
+        (key, "{:.2f}".format(float(value) * 100)) for key, value in title_score.items()
+    )
+    content_score.update(
+        (key, "{:.2f}".format(float(value) * 100))
+        for key, value in content_score.items()
+    )
+
     return title_score, content_score
 
 
 def calcPostSentiment(title_sentiment, content_sentiment):
-    summation_score = title_sentiment["compound"] + content_sentiment["compound"]
     post_compound = title_sentiment["compound"] + content_sentiment["compound"]
     post_neg = title_sentiment["neg"] + content_sentiment["neg"]
     post_pos = title_sentiment["pos"] + content_sentiment["pos"]
     post_neu = title_sentiment["neu"] + content_sentiment["neu"]
 
     return {
-        "summation_score": summation_score,
         "post_compound": post_compound,
         "post_neg": post_neg,
         "post_pos": post_pos,

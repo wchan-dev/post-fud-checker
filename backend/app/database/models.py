@@ -1,4 +1,4 @@
-from .database_handler import db
+from .. import db
 
 
 class RedditSubmission(db.Model):
@@ -12,10 +12,10 @@ class RedditSubmission(db.Model):
     sentiment_positive = db.Column(db.Float, nullable=False)
     sentiment_neutral = db.Column(db.Float, nullable=False)
     sentiment_negative = db.Column(db.Float, nullable=False)
+    sentiment_compound = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
 
-    # Relationships
-    comments = db.relationships("RedditComment", backref="post", lazy=True)
+    comments = db.relationship("RedditComment", backref="post", lazy=True)
 
 
 class RedditComment(db.Model):
@@ -29,5 +29,6 @@ class RedditComment(db.Model):
     sentiment_positive = db.Column(db.Float, nullable=False)
     sentiment_neutral = db.Column(db.Float, nullable=False)
     sentiment_negative = db.Column(db.Float, nullable=False)
+    sentiment_compound = db.Column(db.Float, nullable=False)
     self_text = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
