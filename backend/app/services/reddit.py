@@ -24,9 +24,15 @@ class RedditApp:
         submission = self.reddit.submission(url=submissionURL)
         submission.comments.replace_more(limit=None)
         for comment in submission.comments.list():
-            comments.append((comment, datetime.fromtimestamp(comment.created_utc)))
+            comments.append(
+                {
+                    "body": comment.body,
+                    "permalink": comment.permalink,
+                    "created_utc": datetime.fromtimestamp(comment.created_utc),
+                },
+            )
         comments = sorted(
-            comments, key=lambda x: x[1]
+            comments, key=lambda x: x["created_utc"]
         )  # sorts by time, don't remove, the order of how plotly renders does materr
         return comments
 

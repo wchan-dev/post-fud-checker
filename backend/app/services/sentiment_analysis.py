@@ -94,10 +94,12 @@ def getPostSentiment(title: str, selftext: str) -> (dict[str, float], dict[str, 
 
 
 def calcPostSentiment(title_sentiment, content_sentiment):
-    post_compound = title_sentiment["compound"] + content_sentiment["compound"]
-    post_neg = title_sentiment["neg"] + content_sentiment["neg"]
-    post_pos = title_sentiment["pos"] + content_sentiment["pos"]
-    post_neu = title_sentiment["neu"] + content_sentiment["neu"]
+    post_compound = float(title_sentiment["compound"]) + float(
+        content_sentiment["compound"]
+    )
+    post_neg = float(title_sentiment["neg"]) + float(content_sentiment["neg"])
+    post_pos = float(title_sentiment["pos"]) + float(content_sentiment["pos"])
+    post_neu = float(title_sentiment["neu"]) + float(content_sentiment["neu"])
 
     return {
         "post_compound": post_compound,

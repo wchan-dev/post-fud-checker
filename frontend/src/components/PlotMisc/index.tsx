@@ -39,7 +39,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
 };
 
 interface Comment {
-  comment_timestamp: string;
+  created_utc: string;
   summation_score: number;
 }
 
@@ -62,7 +62,7 @@ const CommentSentimentForm: React.FC = () => {
       .post(url, data)
       .then((response) => {
         const timeStamps = response.data.comments.map(
-          (comment: Comment) => new Date(comment.comment_timestamp)
+          (comment: Comment) => new Date(comment.created_utc)
         );
         const scores = response.data.comments.map(
           (comment: Comment) => comment.summation_score

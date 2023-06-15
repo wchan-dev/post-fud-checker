@@ -13,8 +13,7 @@ sentiment = Blueprint("sentiment", __name__)
 
 def analyze_and_store_sentiments(postURL, redditApp):
     comments = redditApp.getPostComments(postURL)
-    submission = redditApp.reddit.submission(postURL)
-
+    submission = redditApp.reddit.submission(url=postURL)
     title_sentiment, content_sentiment = getPostSentiment(
         submission.title, submission.selftext
     )
@@ -28,8 +27,10 @@ def analyze_and_store_sentiments(postURL, redditApp):
     )
 
     results = []
+    summation_score = float(post_sentiment["post_compound"])
+    print("this is first summatio_score: " + str(summation_score))
     for idx, comment in enumerate(comments):
-        comment_sentiment = getCommentSentiment(comment.selftext)
+        comment_sentiment = getCommentSentiment(comment["body"])
         store_comment(
             comment,
             db_submission_id,
@@ -38,10 +39,13 @@ def analyze_and_store_sentiments(postURL, redditApp):
             comment_sentiment["neg"],
             comment_sentiment["compound"],
         )
+        summation_score += float(comment_sentiment["compound"]) / (2 + idx)
+        print("summation_score" + "[" + str(idx + 2) + "]: " + str(summation_score))
 
         comment_dict = {
-            column.name: getattr(comment, column.name)
-            for column in comment.__table__.columns
+            **comment,
+            **comment_sentiment,
+            "summation_score": summation_score,
         }
         results.append(comment_dict)
 

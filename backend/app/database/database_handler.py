@@ -13,14 +13,15 @@ def store_submission(
 ) -> int:
     new_submission = RedditSubmission(
         submission_id=submission.id,
-        self_text=submission.selftext,
+        selftext=submission.selftext,
         title=submission.title,
         num_comments=submission.num_comments,
         sentiment_positive=sentiment_positive,
         sentiment_neutral=sentiment_neutral,
         sentiment_negative=sentiment_negative,
         sentiment_compound=sentiment_compound,
-        timestamp=datetime.fromtimestamp(submission.createdUTC),
+        permalink=submission.permalink,
+        timestamp=datetime.fromtimestamp(submission.created_utc),
     )
 
     db.session.add(new_submission)
@@ -38,12 +39,13 @@ def store_comment(
 ):
     new_comment = RedditComment(
         parent_submission_id=parent_id,
+        body=comment["body"],
+        permalink=comment["permalink"],
         sentiment_positive=sentiment_positive,
         sentiment_neutral=sentiment_neutral,
         sentiment_negative=sentiment_negative,
         sentiment_compound=sentiment_compound,
-        self_text=comment.selftext,
-        timestamp=datetime.fromtimestamp(comment.createdUTC),
+        timestamp=comment["created_utc"],
     )
 
     db.session.add(new_comment)
