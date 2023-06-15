@@ -69,7 +69,7 @@ def analyzeSentimentWordsOnly(  # analyzes sentiment of individual words only
     )
 
 
-def getCommentSentiment(comment: str):
+def calculate_comment_sentiment(comment: str):
     sid = SentimentIntensityAnalyzer()
     raw_scores = sid.polarity_scores(comment)
     raw_scores.update(
@@ -78,7 +78,9 @@ def getCommentSentiment(comment: str):
     return raw_scores
 
 
-def getPostSentiment(title: str, selftext: str) -> (dict[str, float], dict[str, float]):
+def calculate_post_sentiment(
+    title: str, selftext: str
+) -> (dict[str, float], dict[str, float]):
     sid = SentimentIntensityAnalyzer()
     title_score = sid.polarity_scores(title)
     content_score = sid.polarity_scores(selftext)

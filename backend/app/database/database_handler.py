@@ -10,6 +10,7 @@ def store_submission(
     sentiment_neutral,
     sentiment_negative,
     sentiment_compound,
+    summation_score,
 ) -> int:
     new_submission = RedditSubmission(
         submission_id=submission.id,
@@ -21,6 +22,7 @@ def store_submission(
         sentiment_negative=sentiment_negative,
         sentiment_compound=sentiment_compound,
         permalink=submission.permalink,
+        summation_score=summation_score,
         timestamp=datetime.fromtimestamp(submission.created_utc),
     )
 
@@ -36,6 +38,7 @@ def store_comment(
     sentiment_neutral,
     sentiment_negative,
     sentiment_compound,
+    summation_score,
 ):
     new_comment = RedditComment(
         parent_submission_id=parent_id,
@@ -45,6 +48,7 @@ def store_comment(
         sentiment_neutral=sentiment_neutral,
         sentiment_negative=sentiment_negative,
         sentiment_compound=sentiment_compound,
+        summation_score=summation_score,
         timestamp=comment["created_utc"],
     )
 

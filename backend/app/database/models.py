@@ -13,6 +13,7 @@ class RedditSubmission(db.Model):
     sentiment_neutral = db.Column(db.Float, nullable=False)
     sentiment_negative = db.Column(db.Float, nullable=False)
     sentiment_compound = db.Column(db.Float, nullable=False)
+    summation_score = db.Column(db.Float, nullable=False)
     permalink = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
 
@@ -33,4 +34,5 @@ class RedditComment(db.Model):
     sentiment_neutral = db.Column(db.Float, nullable=False)
     sentiment_negative = db.Column(db.Float, nullable=False)
     sentiment_compound = db.Column(db.Float, nullable=False)
+    summation_score = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)

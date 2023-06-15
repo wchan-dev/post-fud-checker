@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, g, current_app
 from ..services.reddit import RedditApp
 from ..services.sentiment_analysis import (
-    getPostSentiment,
-    getCommentSentiment,
+    calculate_post_sentiment,
+    calculate_comment_sentiment,
     calcPostSentiment,
 )
 from ..database.database_handler import store_submission, store_comment
@@ -14,23 +14,25 @@ sentiment = Blueprint("sentiment", __name__)
 def analyze_and_store_sentiments(postURL, redditApp):
     comments = redditApp.getPostComments(postURL)
     submission = redditApp.reddit.submission(url=postURL)
-    title_sentiment, content_sentiment = getPostSentiment(
+    title_sentiment, content_sentiment = calculate_post_sentiment(
         submission.title, submission.selftext
     )
     post_sentiment = calcPostSentiment(title_sentiment, content_sentiment)
+    summation_score = float(post_sentiment["post_compound"])
+
     db_submission_id = store_submission(
         submission,
         post_sentiment["post_pos"],
         post_sentiment["post_neu"],
         post_sentiment["post_neg"],
         post_sentiment["post_compound"],
+        summation_score,
     )
 
     results = []
-    summation_score = float(post_sentiment["post_compound"])
     print("this is first summatio_score: " + str(summation_score))
     for idx, comment in enumerate(comments):
-        comment_sentiment = getCommentSentiment(comment["body"])
+        comment_sentiment = calculate_comment_sentiment(comment["body"])
         store_comment(
             comment,
             db_submission_id,
@@ -38,6 +40,7 @@ def analyze_and_store_sentiments(postURL, redditApp):
             comment_sentiment["neu"],
             comment_sentiment["neg"],
             comment_sentiment["compound"],
+            summation_score,
         )
         summation_score += float(comment_sentiment["compound"]) / (2 + idx)
         print("summation_score" + "[" + str(idx + 2) + "]: " + str(summation_score))
@@ -53,7 +56,7 @@ def analyze_and_store_sentiments(postURL, redditApp):
 
 
 @sentiment.route(os.environ.get("POST_SENTIMENT_ANALYSIS"), methods=["POST"])
-def analyzePostSentiment():
+def analyze_sentiment():
     redditApp = RedditApp(g.reddit)
     postURL = request.json.get("postURL")
 
@@ -63,7 +66,7 @@ def analyzePostSentiment():
 
 
 @sentiment.route(os.environ.get("POST_SENTIMENT_ANALYSIS_INITIAL"), methods=["POST"])
-def initialRandomSentiment():
+def analyze_sentiment_from_random_submission():
     redditApp = RedditApp(g.reddit)
     postURL = redditApp.getRandomSubmission()
 
