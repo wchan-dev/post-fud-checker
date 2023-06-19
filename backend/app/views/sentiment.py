@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, g, current_app
+from flask import Blueprint, request, jsonify, g
 from ..services.reddit import RedditApp
 from ..services.sentiment_analysis import (
     calculate_post_sentiment,

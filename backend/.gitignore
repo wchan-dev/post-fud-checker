@@ -2,7 +2,6 @@
 .venv
 dotenv.env
 __pycache__
-test.py
 *.ipynb
 .ipynb_checkpoints
 .idea
