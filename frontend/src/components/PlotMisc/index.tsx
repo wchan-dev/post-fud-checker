@@ -41,6 +41,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
 interface Comment {
   created_utc: string;
   summation_score: number;
+  comment_count_diff: number;
 }
 
 const CommentSentimentForm: React.FC = () => {
@@ -48,6 +49,7 @@ const CommentSentimentForm: React.FC = () => {
   const [timeStamps, setTimeStamps] = useState([]);
   const [sentiments, setSentiments] = useState([]);
   const [postTitle, setPostTitle] = useState();
+  const [commentCountDiff, setCommentCountDiff] = useState();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -55,7 +57,6 @@ const CommentSentimentForm: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const getSentiment = (url: string) => {
-    console.log(postURL);
     setLoading(true);
     const data = { postURL };
     axios
@@ -70,6 +71,7 @@ const CommentSentimentForm: React.FC = () => {
         setPostTitle(response.data.post);
         setTimeStamps(timeStamps);
         setSentiments(scores);
+        setCommentCountDiff(response.data.comment_count_diff);
         setLoading(false);
         const respURL = response.data.postURL;
         setPostURL(respURL);
@@ -115,6 +117,9 @@ const CommentSentimentForm: React.FC = () => {
               timeStamps={timeStamps}
               sentiments={sentiments}
             />
+            <Stack>
+              <p>Comments Since Last Query: {commentCountDiff}</p>
+            </Stack>
           </Box>
         )}
         <Center>

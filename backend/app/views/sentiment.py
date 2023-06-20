@@ -23,8 +23,15 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         submission_use = submission
         comments_use = redditApp.getPostComments(postURL)
     else:
+        comment_count_diff = calc_num_comments(
+            submission.num_comments, submission_use.num_comments
+        )
+        print("comment_count_diff: " + str(comment_count_diff))
         return jsonify(
-            post=submission_use.title, comments=comments_use, postURL=postURL
+            post=submission_use.title,
+            comments=comments_use,
+            postURL=postURL,
+            comment_count_diff=comment_count_diff,
         )
 
     comments_use = redditApp.getPostComments(postURL)
@@ -65,7 +72,13 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         }
         results.append(comment_dict)
 
-    return jsonify(post=submission.title, comments=results, postURL=postURL)
+    return jsonify(
+        post=submission.title, comments=results, postURL=postURL, comment_count_diff=0
+    )
+
+
+def calc_num_comments(submission_curr: int, submission_prev: int):
+    return submission_curr - submission_prev
 
 
 def get_previous_results(submission_id, redditApp):
