@@ -5,23 +5,37 @@ from ..services.sentiment_analysis import (
     calculate_comment_sentiment,
     calcPostSentiment,
 )
-from ..database.database_handler import store_submission, store_comment
+from ..database.database_handler import (
+    store_submission,
+    store_comment,
+    get_submission_by_id,
+    get_comments_by_submission_id,
+)
 import os
 
 sentiment = Blueprint("sentiment", __name__)
 
 
-def analyze_and_store_sentiments(postURL, redditApp):
-    comments = redditApp.getPostComments(postURL)
-    submission = redditApp.reddit.submission(url=postURL)
+def analyze_and_store_sentiments(postURL, redditApp, submission):
+    submission_use, comments_use = get_previous_results(submission.id, redditApp)
+    if submission_use is None:
+        print("pulling from reddit api")
+        submission_use = submission
+        comments_use = redditApp.getPostComments(postURL)
+    else:
+        return jsonify(
+            post=submission_use.title, comments=comments_use, postURL=postURL
+        )
+
+    comments_use = redditApp.getPostComments(postURL)
     title_sentiment, content_sentiment = calculate_post_sentiment(
-        submission.title, submission.selftext
+        submission_use.title, submission_use.selftext
     )
     post_sentiment = calcPostSentiment(title_sentiment, content_sentiment)
     summation_score = float(post_sentiment["post_compound"])
 
     db_submission_id = store_submission(
-        submission,
+        submission_use,
         post_sentiment["post_pos"],
         post_sentiment["post_neu"],
         post_sentiment["post_neg"],
@@ -30,8 +44,7 @@ def analyze_and_store_sentiments(postURL, redditApp):
     )
 
     results = []
-    print("this is first summatio_score: " + str(summation_score))
-    for idx, comment in enumerate(comments):
+    for idx, comment in enumerate(comments_use):
         comment_sentiment = calculate_comment_sentiment(comment["body"])
         store_comment(
             comment,
@@ -55,12 +68,22 @@ def analyze_and_store_sentiments(postURL, redditApp):
     return jsonify(post=submission.title, comments=results, postURL=postURL)
 
 
+def get_previous_results(submission_id, redditApp):
+    # check if submission id exists in database
+    db_submission = get_submission_by_id(submission_id)
+    if db_submission:
+        db_comments = get_comments_by_submission_id(submission_id)
+        return db_submission, db_comments
+    else:
+        return None, None
+
+
 @sentiment.route(os.environ.get("POST_SENTIMENT_ANALYSIS"), methods=["POST"])
 def analyze_sentiment():
     redditApp = RedditApp(g.reddit)
     postURL = request.json.get("postURL")
-
-    results = analyze_and_store_sentiments(postURL, redditApp)
+    submission = redditApp.reddit.submission(url=postURL)
+    results = analyze_and_store_sentiments(postURL, redditApp, submission)
 
     return results
 
@@ -69,7 +92,7 @@ def analyze_sentiment():
 def analyze_sentiment_from_random_submission():
     redditApp = RedditApp(g.reddit)
     postURL = redditApp.getRandomSubmission()
-
-    results = analyze_and_store_sentiments(postURL, redditApp)
+    submission = redditApp.reddit.submission(url=postURL)
+    results = analyze_and_store_sentiments(postURL, redditApp, submission)
 
     return results

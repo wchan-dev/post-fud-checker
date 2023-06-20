@@ -54,3 +54,20 @@ def store_comment(
 
     db.session.add(new_comment)
     db.session.commit()
+
+
+def get_submission_by_id(submission_id: str):
+    submission = RedditSubmission.query.filter_by(submission_id=submission_id).first()
+    if submission:
+        return submission
+    else:
+        return None
+
+
+def get_comments_by_submission_id(submission_id):
+    submission = RedditSubmission.query.filter_by(submission_id=submission_id).first()
+    if submission:
+        comments = [comment.to_dict() for comment in submission.comments]
+        return comments
+    else:
+        return None

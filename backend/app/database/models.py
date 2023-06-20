@@ -17,7 +17,27 @@ class RedditSubmission(db.Model):
     permalink = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
 
-    comments = db.relationship("RedditComment", backref="post", lazy=True)
+    comments = db.relationship("RedditComment", backref="submission", lazy=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "submission_id": self.submission_id,
+            "selftext": self.selftext,
+            "title": self.title,
+            "num_comments": self.num_comments,
+            "sentiment_positive": self.sentiment_positive,
+            "sentiment_neutral": self.sentiment_neutral,
+            "sentiment_negative": self.sentiment_negative,
+            "sentiment_compound": self.sentiment_compound,
+            "summation_score": self.summation_score,
+            "permalink": self.permalink,
+            "created_utc": self.timestamp.isoformat(),  # convert datetime to string,
+            # created_utc is kept due to naming
+            "comments": [
+                comment.to_dict() for comment in self.comments
+            ],  # convert comments to dict
+        }
 
 
 class RedditComment(db.Model):
@@ -36,3 +56,17 @@ class RedditComment(db.Model):
     sentiment_compound = db.Column(db.Float, nullable=False)
     summation_score = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "parent_submission_id": self.parent_submission_id,
+            "body": self.body,
+            "permalink": self.permalink,
+            "sentiment_positive": self.sentiment_positive,
+            "sentiment_neutral": self.sentiment_neutral,
+            "sentiment_negative": self.sentiment_negative,
+            "sentiment_compound": self.sentiment_compound,
+            "summation_score": self.summation_score,
+            "created_utc": self.timestamp.isoformat(),  # convert datetime to string
+        }
