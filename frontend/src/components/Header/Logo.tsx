@@ -4,7 +4,7 @@ export default function Logo() {
   return (
     <Box>
       <Text fontSize="lg" fontWeight="bold" color="black">
-        FUD Checker
+        Reddit Sentiment Post Analyzer
       </Text>
     </Box>
   );

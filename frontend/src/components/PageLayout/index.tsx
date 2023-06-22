@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import NavBar from "../Header";
-import PlotContainer from "../PlotMisc";
-import MainContent from "../MainContent";
+import SentimentPlotContainer from "../SentimentPlot";
+// import MainContent from "../MainContent";
 // import { ReactNode } from "react";
 
 // interface PageLayoutProps {
@@ -11,8 +11,8 @@ import MainContent from "../MainContent";
 const PageLayOut = () => {
   return (
     <Flex direction="column" minHeight="100vh">
-      <NavBar></NavBar>
-      <MainContent></MainContent>
+      <NavBar initialIsOpen={false}></NavBar>
+      <SentimentPlotContainer></SentimentPlotContainer>
     </Flex>
   );
 };
