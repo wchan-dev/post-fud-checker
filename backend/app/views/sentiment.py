@@ -73,7 +73,10 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         results.append(comment_dict)
 
     return jsonify(
-        post=submission.title, comments=results, postURL=postURL, comment_count_diff=0
+        post_title=submission.title,
+        comments=results,
+        postURL=postURL,
+        comment_count_diff=0,
     )
 
 
@@ -94,7 +97,7 @@ def get_previous_results(submission_id, redditApp):
 @sentiment.route(os.environ.get("POST_SENTIMENT_ANALYSIS"), methods=["POST"])
 def analyze_sentiment():
     redditApp = RedditApp(g.reddit)
-    postURL = request.json.get("postURL")
+    postURL = request.json.get("reddit_url")
     submission = redditApp.reddit.submission(url=postURL)
     results = analyze_and_store_sentiments(postURL, redditApp, submission)
 
