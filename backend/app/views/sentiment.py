@@ -28,7 +28,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         )
         print("comment_count_diff: " + str(comment_count_diff))
         return jsonify(
-            post=submission_use.title,
+            post_title=submission_use.title,
             comments=comments_use,
             postURL=postURL,
             comment_count_diff=comment_count_diff,

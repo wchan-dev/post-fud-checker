@@ -40,23 +40,18 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="flex-start"
-      w={{ base: "50%", sm: "70%", md: "30%" }}
-    >
+    <Box display="flex" justifyContent="flex-start">
       <form onSubmit={handleSubmit}>
         <FormControl
           isRequired
           isInvalid={!redditUrlPattern.test(inputValue) && inputValue !== ""}
         >
           <FormHelperText fontSize="xs">
-            {redditUrlPattern.test(inputValue) ? (
-              <FormHelperText> Paste Reddit Post Link here</FormHelperText>
-            ) : (
-              <FormErrorMessage>Invalid Reddit Thread URL</FormErrorMessage>
-            )}
+            Paste Reddit Thread URL Here
           </FormHelperText>
+          {!redditUrlPattern.test(inputValue) && (
+            <FormErrorMessage> Invalid Reddit Thread URL</FormErrorMessage>
+          )}
           <Flex direction={{ base: "column", md: "row" }} gap={3}>
             <Input
               type="text"

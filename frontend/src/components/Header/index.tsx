@@ -84,11 +84,6 @@ const MenuLinks = ({ isOpen }: ToggleProps) => {
         <MenuItem to="/">Home</MenuItem>
         <MenuItem to="/how">How It Works</MenuItem>
         <MenuItem to="post-analyzer">Post Analyzer</MenuItem>
-        <MenuItem>
-          <Button size="sm" rounded="md">
-            Create Account
-          </Button>
-        </MenuItem>
       </Stack>
     </Box>
   );

@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Stack, useColorModeValue } from "@chakra-ui/react";
 import Plot from "react-plotly.js";
 
 interface CommentSentimentPlotProps {
@@ -12,25 +12,59 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   sentiments,
   postTitle,
 }) => {
-  // if (timeStamps.length === 0 || sentiments.length === 0) {
-  //   return <p>No data to display</p>;
-  // }
+  const bg = useColorModeValue("white", "gray.800");
+  const text = useColorModeValue("black", "white");
+
   const data = [
-    { x: timeStamps, y: sentiments, mode: "markers", type: "scatter" },
+    {
+      x: timeStamps,
+      y: sentiments,
+      mode: "lines+markers",
+      marker: { color: "rgba(26,188,156,0.5)" },
+    },
   ];
+
   const layout = {
-    title: "Comment Sentiment Over Time",
-    xaxis: { title: "Time", showgrid: true, zeroline: true },
-    yaxis: { title: "Sentiment", showline: true },
-    margin: { 1: 25, r: 25, b: 25, t: 35 },
-    width: "100%",
     autosize: true,
+    plot_bgcolor: bg,
+    paper_bgcolor: bg,
+    font: {
+      family: "Inter, sans-serif",
+      color: text,
+      size: 12,
+    },
+    title: {
+      text: "Comment Sentiment Over Time",
+      font: {
+        size: 14,
+      },
+    },
+    xaxis: {
+      title: "Time",
+      showgrid: false,
+      zeroline: true,
+      tickformat: "%I:%M %p",
+    },
+    yaxis: {
+      title: "Sentiment",
+      showline: false,
+    },
+    margin: { l: 50, r: 20, b: 50, t: 50, pad: 4 },
   };
 
   return (
-    <Box display="flex" w="100%" border="1px">
-      <Heading>{postTitle}</Heading>
-      <Plot data={data} layout={layout} useResizeHandler={true} />
+    <Box w="100%" h="100%">
+      <Stack>
+        <Heading size="sm" textAlign="center">
+          Post Title: {postTitle}
+        </Heading>
+        <Plot
+          data={data}
+          layout={layout}
+          style={{ width: "100%", height: "100%" }}
+          config={{ responsive: true }}
+        />
+      </Stack>
     </Box>
   );
 };
