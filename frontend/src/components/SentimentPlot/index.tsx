@@ -1,36 +1,38 @@
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState, createContext, useContext } from "react";
+import { useState } from "react";
 // import getSentiment from "./getSentiment";
 
 import CommentSentimentForm from "./SentimentForm";
-import TestComponent from "./TestComponent";
 import CommentSentimentPlot from "./SentimentPlot";
+import { getSentiment, SentimentResult } from "./getSentiment";
 
 const SentimentPlotContainer: React.FC = () => {
-  const [postURL, setPostURL] = useState<string>("");
-  const [timeStamps, setTimeStamps] = useState([]);
-  const [sentiments, setSentiments] = useState([]);
-  // const [postTitle, setPostTitle] = useState();
+  // const [postURL, setPostURL] = useState<string>("");
+  const [timeStamps, setTimeStamps] = useState<Date[]>([]);
+  const [sentiments, setSentiments] = useState<number[]>([]);
+  const [postTitle, setPostTitle] = useState<string>("");
   // const [commentCountDiff, setCommentCountDiff] = useState();
-  //
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  // };
 
-  // useEffect(() => {
-  //   if (!sessionStorage.getItem("initialPostFetched")) {
-  //     getInitial();
-  //     sessionStorage.setItem("initialPostFetched", "true");
-  //   }
-  // }, []);
-  //
+  const handleGetSentiment = async (
+    api_endpoint: string,
+    reddit_url: string
+  ) => {
+    const { timeStamps, sentiments, postTitle }: SentimentResult =
+      await getSentiment(api_endpoint, reddit_url);
+    setTimeStamps(timeStamps);
+    setSentiments(sentiments);
+    setPostTitle(postTitle);
+  };
   return (
     <Box display="flex" flexDirection="column" mb={8} p={8}>
       <CommentSentimentPlot
         timeStamps={timeStamps}
         sentiments={sentiments}
+        postTitle={postTitle}
       ></CommentSentimentPlot>
-      <CommentSentimentForm></CommentSentimentForm>
+      <CommentSentimentForm
+        handleGetSentiment={handleGetSentiment}
+      ></CommentSentimentForm>
     </Box>
   );
 };

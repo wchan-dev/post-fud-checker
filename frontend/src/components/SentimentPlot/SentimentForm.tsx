@@ -10,7 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-const CommentSentimentForm: React.FC = () => {
+interface Props {
+  handleGetSentiment: (
+    api_endpoint: string,
+    reddit_url: string
+  ) => Promise<void>;
+}
+
+const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
   const [inputValue, setInputValue] = useState<string | "">("");
 
   const redditUrlPattern = new RegExp(
@@ -21,9 +28,11 @@ const CommentSentimentForm: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setInputValue(e.target.value);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(inputValue);
     if (redditUrlPattern.test(inputValue)) {
+      await handleGetSentiment("api/sentiment_analysis", inputValue);
       console.log("will send request to API");
     } else {
       console.log("incorrect, will not send request to api");

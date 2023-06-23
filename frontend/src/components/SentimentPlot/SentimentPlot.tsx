@@ -1,14 +1,16 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import Plot from "react-plotly.js";
 
 interface CommentSentimentPlotProps {
   timeStamps: Date[];
   sentiments: number[];
+  postTitle: string;
 }
 
 const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   timeStamps,
   sentiments,
+  postTitle,
 }) => {
   // if (timeStamps.length === 0 || sentiments.length === 0) {
   //   return <p>No data to display</p>;
@@ -27,6 +29,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
 
   return (
     <Box display="flex" w="100%" border="1px">
+      <Heading>{postTitle}</Heading>
       <Plot data={data} layout={layout} useResizeHandler={true} />
     </Box>
   );
