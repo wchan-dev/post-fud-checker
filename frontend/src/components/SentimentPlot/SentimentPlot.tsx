@@ -20,7 +20,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: timeStamps,
       y: sentiments,
       mode: "lines+markers",
-      marker: { color: "rgba(26,188,156,0.5)" },
+      // marker: { color: "rgba(26,188,156,0.5)" },
     },
   ];
 

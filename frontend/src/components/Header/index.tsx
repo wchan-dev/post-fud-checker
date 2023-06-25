@@ -81,9 +81,9 @@ const MenuLinks = ({ isOpen }: ToggleProps) => {
         justify={["center", "space-between", "flex-end", "flex-end"]}
         direction={["column", "row", "row", "row"]}
       >
-        <MenuItem to="/">Home</MenuItem>
-        <MenuItem to="/how">How It Works</MenuItem>
-        <MenuItem to="post-analyzer">Post Analyzer</MenuItem>
+        <MenuItem>Home</MenuItem>
+        <MenuItem>How It Works</MenuItem>
+        <MenuItem>Post Analyzer</MenuItem>
       </Stack>
     </Box>
   );
