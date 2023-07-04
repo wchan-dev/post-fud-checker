@@ -1,5 +1,6 @@
 import {
   Box,
+  Link,
   Table,
   Tbody,
   TableContainer,
@@ -33,7 +34,7 @@ export const QueryHistoryContainer: React.FC = () => {
         <Table variant="striped" fontSize="sm">
           <Thead>
             <Tr>
-              <Th textAlign="center">id</Th>
+              <Th textAlign="center">Query No.</Th>
               <Th textAlign="center">Post Title</Th>
               <Th textAlign="center">Number of Comments</Th>
               <Th textAlign="center"> Overall Sentiment</Th>
@@ -44,14 +45,32 @@ export const QueryHistoryContainer: React.FC = () => {
           <Tbody>
             {historyList.map((history, index) => (
               <Tr key={index}>
-                <Td>{index}</Td>
-                <Td style={{ whiteSpace: "normal", wordBreak: "break-word" }}>
-                  <a href={history.postURL}>{history.postTitle}</a>
+                <Td textAlign="center">{index + 1}</Td>
+                <Td
+                  textAlign="center"
+                  style={{ whiteSpace: "normal", wordBreak: "break-word" }}
+                >
+                  <Link
+                    href={history.postURL}
+                    color="blue.500"
+                    isExternal
+                    _hover={{ textDecoration: "underline" }}
+                  >
+                    {history.postTitle}
+                  </Link>
                 </Td>
-                <Td maxW="80px">{history.numComments}</Td>
-                <Td>{history.overallSentiment}</Td>
-                <Td>{formatDateString(new Date(history.postDate))}</Td>
-                <Td>{formatDateString(new Date(history.queryDate))}</Td>
+                <Td textAlign="center" maxW="80px">
+                  {history.numComments}
+                </Td>
+                <Td textAlign="center">
+                  {history.overallSentiment.toFixed(2)}
+                </Td>
+                <Td textAlign="center">
+                  {formatDateString(new Date(history.postDate))}
+                </Td>
+                <Td textAlign="center">
+                  {formatDateString(new Date(history.queryDate))}
+                </Td>
               </Tr>
             ))}
           </Tbody>
