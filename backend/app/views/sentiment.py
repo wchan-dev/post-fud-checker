@@ -23,7 +23,6 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
     # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
-        print("if submission_use is None")
         submission_use = submission
         comments_use = redditApp.getPostComments(postURL)
     else:
@@ -77,7 +76,6 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
             summation_score,
         )
         summation_score += float(comment_sentiment["compound"]) / (2 + idx)
-        print("summation_score" + "[" + str(idx + 2) + "]: " + str(summation_score))
 
         comment_dict = {
             **comment,
