@@ -32,7 +32,7 @@ const SentimentPlotContainer: React.FC = () => {
         overallSentiment:
           sentiments.reduce((a, b) => a + b, 0) / sentiments.length, // Placeholder, replace with actual data
         postDate: new Date(), // Placeholder, replace with actual data
-        queryDate: new Date(),
+        queryDate: new Date(), //this can be the current date
       },
     ]);
   };

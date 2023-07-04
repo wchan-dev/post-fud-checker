@@ -29,15 +29,15 @@ export const QueryHistoryContainer: React.FC = () => {
           </Thead>
           <Tbody>
             {historyList.map((history, index) => (
-              <Tr>
+              <Tr key={index}>
                 <Td>{index}</Td>
-                <Td>
+                <Td wordBreak="break-all">
                   <a href={history.postURL}>{history.postTitle}</a>
                 </Td>
-                <Td>{history.numComments}</Td>
+                <Td maxW="80px">{history.numComments}</Td>
                 <Td>{history.overallSentiment}</Td>
-                <Td>history.postDate</Td>
-                <Td>history.queryDate</Td>
+                <Td wordBreak="break-all">{history.postDate.toString()}</Td>
+                <Td wordBreak="break-all">{history.queryDate.toString()}</Td>
               </Tr>
             ))}
           </Tbody>

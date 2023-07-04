@@ -19,8 +19,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     {
       x: timeStamps,
       y: sentiments,
-      mode: "line",
-      // marker: { color: "rgba(26,188,156,0.5)" },
+      mode: "markers",
     },
   ];
 
@@ -63,6 +62,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
           layout={layout}
           style={{ width: "100%", height: "100%" }}
           config={{ responsive: true }}
+          revision={timeStamps.length}
         />
       </Stack>
     </Box>
