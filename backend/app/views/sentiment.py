@@ -12,6 +12,7 @@ from ..database.database_handler import (
     get_comments_by_submission_id,
 )
 import os
+import datetime
 
 sentiment = Blueprint("sentiment", __name__)
 
@@ -19,8 +20,10 @@ sentiment = Blueprint("sentiment", __name__)
 def analyze_and_store_sentiments(postURL, redditApp, submission):
     # need to make comparison between number of comments now and then
     submission_use, comments_use = get_previous_results(submission.id, redditApp)
+    submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
     # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
+        print("if submission_use is None")
         submission_use = submission
         comments_use = redditApp.getPostComments(postURL)
     else:
@@ -28,20 +31,21 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
             submission.num_comments, submission_use.num_comments
         )
         if (
-            comment_count_diff > 50
+            comment_count_diff < 50
             or ((comment_count_diff) / submission.num_comments)
             / submission.num_comments
-            > 0.1
+            < 0.1
         ):
             submission_use = submission
             comments_use = redditApp.getPostComments(postURL)
-            print("aleady has submission but will pull from it")
+
         else:
             return jsonify(
                 post_title=submission_use.title,
                 comments=comments_use,
                 postURL=postURL,
                 comment_count_diff=comment_count_diff,
+                submission_date=submission_date,
             )
 
     comments_use = redditApp.getPostComments(postURL)
@@ -87,6 +91,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         comments=results,
         postURL=postURL,
         comment_count_diff=0,
+        submission_date=submission_date,
     )
 
 

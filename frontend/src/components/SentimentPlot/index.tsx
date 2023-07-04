@@ -12,16 +12,22 @@ const SentimentPlotContainer: React.FC = () => {
   const [sentiments, setSentiments] = useState<number[]>([]);
   const [postTitle, setPostTitle] = useState<string>("");
   const [historyList, setHistoryList] = useContext(HistoryContext);
+  const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
 
   const handleGetSentiment = async (
     api_endpoint: string,
     reddit_url: string
   ) => {
-    const { timeStamps, sentiments, postTitle }: SentimentResult =
-      await getSentiment(api_endpoint, reddit_url);
+    const {
+      timeStamps,
+      sentiments,
+      postTitle,
+      submission_Date,
+    }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
     setTimeStamps(timeStamps);
     setSentiments(sentiments);
     setPostTitle(postTitle);
+    setSubmissionDate(submission_Date);
 
     setHistoryList((prevHistory) => [
       ...prevHistory,
@@ -31,7 +37,7 @@ const SentimentPlotContainer: React.FC = () => {
         numComments: sentiments.length, // Placeholder, replace with actual data
         overallSentiment:
           sentiments.reduce((a, b) => a + b, 0) / sentiments.length, // Placeholder, replace with actual data
-        postDate: new Date(), // Placeholder, replace with actual data
+        postDate: submission_Date,
         queryDate: new Date(), //this can be the current date
       },
     ]);

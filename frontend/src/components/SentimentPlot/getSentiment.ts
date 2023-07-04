@@ -11,6 +11,7 @@ export type SentimentResult = {
   timeStamps: Date[];
   sentiments: number[];
   postTitle: string;
+  submission_Date: Date;
   error?: string;
 };
 
@@ -34,12 +35,15 @@ export const getSentiment = async (
     );
     const postTitle = response.data.post_title;
 
-    return { timeStamps, sentiments, postTitle };
+    const submission_Date = response.data.submission_date;
+
+    return { timeStamps, sentiments, postTitle, submission_Date };
   } catch (error: any) {
     return {
       timeStamps: [],
       sentiments: [],
       postTitle: "",
+      submission_Date: new Date(),
       error: error.message,
     };
   }
