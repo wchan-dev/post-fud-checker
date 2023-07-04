@@ -6,14 +6,10 @@ import { QueryHistoryContainer } from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
 
 const PageLayOut: React.FC = () => {
-  const [historyList, setHistoryList] = useState<History[]>([]);
-
-  useEffect(() => {
-    const data = localStorage.getItem("historyList");
-    if (data) {
-      setHistoryList(JSON.parse(data));
-    }
-  }, []);
+  const [historyList, setHistoryList] = useState<History[]>(() => {
+    const localData = localStorage.getItem("historyList");
+    return localData ? JSON.parse(localData) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem("historyList", JSON.stringify(historyList));
