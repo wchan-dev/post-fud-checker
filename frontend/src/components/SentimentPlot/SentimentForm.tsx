@@ -39,18 +39,21 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
     }
   };
 
+  const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
+
   return (
     <Box display="flex" justifyContent="flex-start">
       <form onSubmit={handleSubmit}>
-        <FormControl
-          isRequired
-          isInvalid={!redditUrlPattern.test(inputValue) && inputValue !== ""}
-        >
-          <FormHelperText fontSize="xs">
-            Paste Reddit Thread URL Here
-          </FormHelperText>
-          {!redditUrlPattern.test(inputValue) && (
-            <FormErrorMessage> Invalid Reddit Thread URL</FormErrorMessage>
+        <FormControl isRequired isInvalid={!isValidUrl}>
+          {isValidUrl ? (
+            <FormHelperText fontSize="xs" ml="4px" mb="4px">
+              Paste Reddit Thread URL Here
+            </FormHelperText>
+          ) : (
+            <FormErrorMessage fontSize="xs" ml="4px" mb="4px">
+              {" "}
+              Invalid Reddit Thread URL
+            </FormErrorMessage>
           )}
           <Flex direction={{ base: "column", md: "row" }} gap={3}>
             <Input
