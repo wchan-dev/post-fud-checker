@@ -35,17 +35,20 @@ export const QueryHistoryContainer: React.FC = () => {
           <Thead>
             <Tr>
               <Th textAlign="center">Query No.</Th>
+              <Th textAlign="center">Query Date</Th>
               <Th textAlign="center">Post Title</Th>
               <Th textAlign="center">Number of Comments</Th>
               <Th textAlign="center"> Overall Sentiment</Th>
               <Th textAlign="center">Post Created Date</Th>
-              <Th textAlign="center">Query Date</Th>
             </Tr>
           </Thead>
           <Tbody>
             {historyList.map((history, index) => (
               <Tr key={index}>
                 <Td textAlign="center">{index + 1}</Td>
+                <Td textAlign="center">
+                  {formatDateString(new Date(history.queryDate))}
+                </Td>
                 <Td
                   textAlign="center"
                   style={{ whiteSpace: "normal", wordBreak: "break-word" }}
@@ -67,9 +70,6 @@ export const QueryHistoryContainer: React.FC = () => {
                 </Td>
                 <Td textAlign="center">
                   {formatDateString(new Date(history.postDate))}
-                </Td>
-                <Td textAlign="center">
-                  {formatDateString(new Date(history.queryDate))}
                 </Td>
               </Tr>
             ))}
