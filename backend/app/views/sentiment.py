@@ -17,22 +17,32 @@ sentiment = Blueprint("sentiment", __name__)
 
 
 def analyze_and_store_sentiments(postURL, redditApp, submission):
+    # need to make comparison between number of comments now and then
     submission_use, comments_use = get_previous_results(submission.id, redditApp)
+    # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
-        print("pulling from reddit api")
         submission_use = submission
         comments_use = redditApp.getPostComments(postURL)
     else:
         comment_count_diff = calc_num_comments(
             submission.num_comments, submission_use.num_comments
         )
-        print("comment_count_diff: " + str(comment_count_diff))
-        return jsonify(
-            post_title=submission_use.title,
-            comments=comments_use,
-            postURL=postURL,
-            comment_count_diff=comment_count_diff,
-        )
+        if (
+            comment_count_diff > 50
+            or ((comment_count_diff) / submission.num_comments)
+            / submission.num_comments
+            > 0.1
+        ):
+            submission_use = submission
+            comments_use = redditApp.getPostComments(postURL)
+            print("aleady has submission but will pull from it")
+        else:
+            return jsonify(
+                post_title=submission_use.title,
+                comments=comments_use,
+                postURL=postURL,
+                comment_count_diff=comment_count_diff,
+            )
 
     comments_use = redditApp.getPostComments(postURL)
     title_sentiment, content_sentiment = calculate_post_sentiment(

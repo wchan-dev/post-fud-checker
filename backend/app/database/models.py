@@ -45,6 +45,7 @@ class RedditComment(db.Model):
     __table_args__ = {"schema": "reddit"}
 
     id = db.Column(db.Integer, primary_key=True)
+    comment_id = db.Column(db.String, unique=True)
     parent_submission_id = db.Column(
         db.Integer, db.ForeignKey("reddit.submission.id"), nullable=False
     )
@@ -60,6 +61,7 @@ class RedditComment(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "comment_id": self.comment_id,
             "parent_submission_id": self.parent_submission_id,
             "body": self.body,
             "permalink": self.permalink,
