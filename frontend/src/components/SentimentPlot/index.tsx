@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import CommentSentimentForm from "./SentimentForm";
 import CommentSentimentPlot from "./SentimentPlot";
@@ -13,6 +13,16 @@ const SentimentPlotContainer: React.FC = () => {
   const [postTitle, setPostTitle] = useState<string>("");
   const [historyList, setHistoryList] = useContext(HistoryContext);
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("plotData");
+    if (savedData) {
+      const { timeStamps, sentiments, postTitle } = JSON.parse(savedData);
+      setTimeStamps(timeStamps.map((ts: string) => new Date(ts)));
+      setSentiments(sentiments);
+      setPostTitle(postTitle);
+    }
+  }, []);
 
   const handleGetSentiment = async (
     api_endpoint: string,
@@ -28,6 +38,11 @@ const SentimentPlotContainer: React.FC = () => {
     setSentiments(sentiments);
     setPostTitle(postTitle);
     setSubmissionDate(submission_Date);
+
+    localStorage.setItem(
+      "plotData",
+      JSON.stringify({ timeStamps, sentiments, postTitle })
+    );
 
     setHistoryList((prevHistory) => [
       ...prevHistory,
