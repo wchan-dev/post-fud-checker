@@ -22,6 +22,7 @@ const SentimentPlotContainer: React.FC = () => {
     setTimeStamps(timeStamps);
     setSentiments(sentiments);
     setPostTitle(postTitle);
+
     setHistoryList((prevHistory) => [
       ...prevHistory,
       {

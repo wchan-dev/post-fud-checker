@@ -19,7 +19,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     {
       x: timeStamps,
       y: sentiments,
-      mode: "lines+markers",
+      mode: "line",
       // marker: { color: "rgba(26,188,156,0.5)" },
     },
   ];
@@ -53,7 +53,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   };
 
   return (
-    <Box w="100%" h="100%">
+    <Box w="100%" h="500px">
       <Stack>
         <Heading size="sm" textAlign="center">
           Post Title: {postTitle}

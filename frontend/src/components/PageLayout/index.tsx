@@ -1,4 +1,4 @@
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import NavBar from "../Header";
 import SentimentPlotContainer from "../SentimentPlot";
@@ -20,13 +20,11 @@ const PageLayOut: React.FC = () => {
   }, [historyList]);
 
   return (
-    <Flex direction="column" minHeight="100vh">
+    <Flex direction="column" minHeight="100vh" overflow="auto" p={8}>
       <NavBar initialIsOpen={false}></NavBar>
       <HistoryContext.Provider value={[historyList, setHistoryList]}>
-        <Stack>
-          <SentimentPlotContainer></SentimentPlotContainer>
-          <QueryHistoryContainer></QueryHistoryContainer>
-        </Stack>
+        <SentimentPlotContainer></SentimentPlotContainer>
+        <QueryHistoryContainer></QueryHistoryContainer>
       </HistoryContext.Provider>
     </Flex>
   );
