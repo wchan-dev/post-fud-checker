@@ -12,25 +12,28 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   sentiments,
   postTitle,
 }) => {
-  const bg = useColorModeValue("white", "gray.800");
-  const text = useColorModeValue("black", "white");
+  const textColor = useColorModeValue("brand.text", "brand.textSecondary");
+  const bgColor = useColorModeValue("brand.bg", "brand.bg");
 
   const data = [
     {
       x: timeStamps,
       y: sentiments,
       mode: "markers",
+      marker: {
+        color: textColor,
+      },
     },
   ];
 
   const layout = {
     autosize: true,
-    plot_bgcolor: bg,
-    paper_bgcolor: bg,
+    plot_bgcolor: bgColor,
+    paper_bgcolor: bgColor,
     font: {
       family: "Inter, sans-serif",
-      color: text,
       size: 12,
+      color: textColor,
     },
     title: {
       text: "Comment Sentiment Over Time",

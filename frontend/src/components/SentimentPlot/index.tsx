@@ -60,14 +60,14 @@ const SentimentPlotContainer: React.FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" mb={8} p={8} gap={4}>
-      <CommentSentimentForm
-        handleGetSentiment={handleGetSentiment}
-      ></CommentSentimentForm>
       <CommentSentimentPlot
         timeStamps={timeStamps}
         sentiments={sentiments}
         postTitle={postTitle}
       ></CommentSentimentPlot>
+      <CommentSentimentForm
+        handleGetSentiment={handleGetSentiment}
+      ></CommentSentimentForm>
     </Box>
   );
 };

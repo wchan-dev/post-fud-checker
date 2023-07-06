@@ -7,6 +7,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   Input,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -19,6 +20,7 @@ interface Props {
 
 const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
   const [inputValue, setInputValue] = useState<string | "">("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const redditUrlPattern = new RegExp(
     "^(https?://)?(www.)?reddit.com/r/\\w+/comments/\\w+.*$",
@@ -30,25 +32,28 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(inputValue);
+    setIsLoading(true);
     if (redditUrlPattern.test(inputValue)) {
       await handleGetSentiment("api/sentiment_analysis", inputValue);
-      console.log("will send request to API");
+      setIsLoading(false);
     } else {
-      console.log("incorrect, will not send request to api");
+      console.log("invalid reddit url");
     }
   };
 
   const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
 
   return (
-    <Box display="flex" justifyContent="flex-start">
-      <form onSubmit={handleSubmit}>
+    <Box ml={-4} width="100%" display="flex" justifyContent="flex-start">
+      <form onSubmit={handleSubmit} width="100%">
         <FormControl isRequired isInvalid={!isValidUrl}>
           {isValidUrl ? (
-            <FormHelperText fontSize="xs" ml="4px" mb="4px">
-              Paste Reddit Thread URL Here
-            </FormHelperText>
+            <FormHelperText
+              fontSize="xs"
+              ml="4px"
+              mb="4px"
+              height="1.2em"
+            ></FormHelperText>
           ) : (
             <FormErrorMessage fontSize="xs" ml="4px" mb="4px">
               {" "}
@@ -60,8 +65,16 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
               type="text"
               value={inputValue}
               onChange={handleInputChange}
+              fontSize="sm"
+              width={["100%", "480px", "820px"]}
             />
-            <Button type="submit" fontSize="xs">
+            <Button
+              minWidth={["100%", "140px"]} // Responsive width
+              type="submit"
+              fontSize="sm"
+              isLoading={isLoading}
+              loadingText="Submitting..."
+            >
               Submit
             </Button>
           </Flex>

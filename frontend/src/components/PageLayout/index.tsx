@@ -1,9 +1,11 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Box } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import NavBar from "../Header";
+
+import NavBar from "../Navbar";
 import SentimentPlotContainer from "../SentimentPlot";
 import { QueryHistoryContainer } from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
+import Banner from "../Banner";
 
 const PageLayOut: React.FC = () => {
   const [historyList, setHistoryList] = useState<History[]>(() => {
@@ -16,12 +18,19 @@ const PageLayOut: React.FC = () => {
   }, [historyList]);
 
   return (
-    <Flex direction="column" minHeight="100vh" overflow="auto" p={8}>
+    <Flex direction="column" minHeight="100vh">
       <NavBar initialIsOpen={false}></NavBar>
-      <HistoryContext.Provider value={[historyList, setHistoryList]}>
-        <SentimentPlotContainer></SentimentPlotContainer>
-        <QueryHistoryContainer></QueryHistoryContainer>
-      </HistoryContext.Provider>
+      <Banner></Banner>
+      <Flex direction="column" overflow="auto" p={8}>
+        <HistoryContext.Provider value={[historyList, setHistoryList]}>
+          <Box mb={-16}>
+            {" "}
+            {/* Apply marginBottom here */}
+            <SentimentPlotContainer></SentimentPlotContainer>
+          </Box>
+          <QueryHistoryContainer></QueryHistoryContainer>
+        </HistoryContext.Provider>
+      </Flex>
     </Flex>
   );
 };

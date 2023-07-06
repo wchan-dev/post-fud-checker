@@ -8,12 +8,15 @@ import {
   Thead,
   Th,
   Tr,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { HistoryContext } from "./HistoryContext";
 
 export const QueryHistoryContainer: React.FC = () => {
   const [historyList, setHistoryList] = useContext(HistoryContext);
+
+  const linkColor = useColorModeValue("brand.link", "brand.link");
 
   const formatDateString = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -29,10 +32,16 @@ export const QueryHistoryContainer: React.FC = () => {
   };
 
   return (
-    <Box maxWidth="100%" overflow="wrap" marginTop="20px" pr="8px" pl="8px">
-      <TableContainer>
-        <Table variant="striped" fontSize="sm">
-          <Thead>
+    <Box
+      maxWidth="100%"
+      // Set maximum height
+      marginTop="20px"
+      pr="8px"
+      pl="8px"
+    >
+      <TableContainer maxHeight="30vh" overflowY="scroll">
+        <Table fontSize="sm">
+          <Thead position="sticky" top={0} mb={8} bg="white" zIndex="1">
             <Tr>
               <Th textAlign="center">Query No.</Th>
               <Th textAlign="center">Query Date</Th>
@@ -55,7 +64,7 @@ export const QueryHistoryContainer: React.FC = () => {
                 >
                   <Link
                     href={history.postURL}
-                    color="blue.500"
+                    color={linkColor}
                     isExternal
                     _hover={{ textDecoration: "underline" }}
                   >
