@@ -66,7 +66,7 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
               value={inputValue}
               onChange={handleInputChange}
               fontSize="sm"
-              width={["100%", "480px", "820px"]}
+              placeholder="Paste Reddit Thread URL Here"
             />
             <Button
               minWidth={["100%", "140px"]} // Responsive width

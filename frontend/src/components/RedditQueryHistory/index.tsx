@@ -40,8 +40,15 @@ export const QueryHistoryContainer: React.FC = () => {
       pl="8px"
     >
       <TableContainer maxHeight="30vh" overflowY="scroll">
-        <Table fontSize="sm">
-          <Thead position="sticky" top={0} mb={8} bg="white" zIndex="1">
+        <Table>
+          <Thead
+            fontSize="xs"
+            position="sticky"
+            top={0}
+            mb={8}
+            bg="white"
+            zIndex="1"
+          >
             <Tr>
               <Th textAlign="center">Query No.</Th>
               <Th textAlign="center">Query Date</Th>
@@ -51,7 +58,7 @@ export const QueryHistoryContainer: React.FC = () => {
               <Th textAlign="center">Post Created Date</Th>
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody fontSize="xs">
             {historyList.map((history, index) => (
               <Tr key={index}>
                 <Td textAlign="center">{index + 1}</Td>
