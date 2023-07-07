@@ -30,6 +30,7 @@ export const getSentiment = async (
     const timeStamps = response.data.comments.map(
       (comment: Comment) => new Date(comment.created_utc)
     );
+    console.log(timeStamps);
     const sentiments = response.data.comments.map(
       (comment: Comment) => comment.summation_score
     );

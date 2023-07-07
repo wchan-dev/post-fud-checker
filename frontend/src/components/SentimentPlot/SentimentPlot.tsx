@@ -19,10 +19,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     {
       x: timeStamps,
       y: sentiments,
-      mode: "markers",
-      marker: {
-        color: textColor,
-      },
+      mode: "line",
     },
   ];
 
@@ -40,22 +37,71 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       font: {
         size: 14,
       },
+      x: 0.5,
     },
     xaxis: {
       title: "Time",
       showgrid: false,
       zeroline: true,
-      tickformat: "%I:%M %p",
+      rangeselector: {
+        x: 0.08,
+        buttons: [
+          {
+            count: 1,
+            label: "1d",
+            step: "day",
+            stepmode: "backward",
+          },
+          {
+            count: 5,
+            label: "5d",
+            step: "day",
+            stepmode: "backward",
+          },
+          {
+            count: 1,
+            label: "1m",
+            step: "month",
+            stepmode: "backward",
+          },
+          { step: "all" },
+        ],
+      },
     },
     yaxis: {
       title: "Sentiment",
       showline: false,
     },
+    updatemenus: [
+      {
+        x: 0.07,
+        y: 1.1,
+
+        showactive: false,
+        buttons: [
+          {
+            label: "Lines",
+            method: "restyle",
+            args: ["mode", "lines", [0]], // Trace index added in arguments list
+          },
+          {
+            label: "Markers",
+            method: "restyle",
+            args: ["mode", "markers", [0]], // Trace index added in arguments list
+          },
+          {
+            label: "Lines+Markers",
+            method: "restyle",
+            args: ["mode", "lines+markers", [0]], // Trace index added in arguments list
+          },
+        ],
+      },
+    ],
+
     margin: { l: 50, r: 20, b: 50, t: 50, pad: 4 },
   };
-
   return (
-    <Box w="100%" h="500px">
+    <Box w="100%" h="500px" minW="864px" overflowX="auto">
       <Stack>
         <Heading size="sm" textAlign="center">
           Post Title: {postTitle}

@@ -32,13 +32,7 @@ export const QueryHistoryContainer: React.FC = () => {
   };
 
   return (
-    <Box
-      maxWidth="100%"
-      // Set maximum height
-      marginTop="20px"
-      pr="8px"
-      pl="8px"
-    >
+    <Box minWidth="864px" overflowX="auto" marginTop="20px" pr="8px" pl="8px">
       <TableContainer maxHeight="30vh" overflowY="scroll">
         <Table>
           <Thead
