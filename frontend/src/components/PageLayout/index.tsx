@@ -19,7 +19,6 @@ const PageLayOut: React.FC = () => {
 
   return (
     <Flex direction="column" minHeight="100vh">
-      <NavBar initialIsOpen={false}></NavBar>
       <Banner></Banner>
       <Flex direction="column" overflow="auto" p={8}>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>

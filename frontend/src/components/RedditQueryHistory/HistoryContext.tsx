@@ -1,6 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
 export type History = {
+  subreddit: string;
   postTitle: string;
   postURL: string;
   numComments: number;

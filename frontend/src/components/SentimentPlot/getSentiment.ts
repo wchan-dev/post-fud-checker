@@ -12,6 +12,7 @@ export type SentimentResult = {
   sentiments: number[];
   postTitle: string;
   submission_Date: Date;
+  subreddit: string;
   error?: string;
 };
 
@@ -34,17 +35,19 @@ export const getSentiment = async (
     const sentiments = response.data.comments.map(
       (comment: Comment) => comment.summation_score
     );
+
     const postTitle = response.data.post_title;
-
     const submission_Date = response.data.submission_date;
+    const subreddit = response.data.subreddit;
 
-    return { timeStamps, sentiments, postTitle, submission_Date };
+    return { timeStamps, sentiments, postTitle, submission_Date, subreddit };
   } catch (error: any) {
     return {
       timeStamps: [],
       sentiments: [],
       postTitle: "",
       submission_Date: new Date(),
+      subreddit: "",
       error: error.message,
     };
   }

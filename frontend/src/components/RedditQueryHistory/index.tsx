@@ -46,6 +46,7 @@ export const QueryHistoryContainer: React.FC = () => {
             <Tr>
               <Th textAlign="center">Query No.</Th>
               <Th textAlign="center">Query Date</Th>
+              <Th textAlign="center">Subreddit</Th>
               <Th textAlign="center">Post Title</Th>
               <Th textAlign="center">Number of Comments</Th>
               <Th textAlign="center"> Overall Sentiment</Th>
@@ -59,6 +60,7 @@ export const QueryHistoryContainer: React.FC = () => {
                 <Td textAlign="center">
                   {formatDateString(new Date(history.queryDate))}
                 </Td>
+                <Td textAlign="center">{history.subreddit}</Td>
                 <Td
                   textAlign="center"
                   style={{ whiteSpace: "normal", wordBreak: "break-word" }}

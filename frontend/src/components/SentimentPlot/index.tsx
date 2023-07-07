@@ -13,6 +13,7 @@ const SentimentPlotContainer: React.FC = () => {
   const [postTitle, setPostTitle] = useState<string>("");
   const [historyList, setHistoryList] = useContext(HistoryContext);
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
+  const [subreddit, setSubreddit] = useState<string>("");
 
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
@@ -33,11 +34,13 @@ const SentimentPlotContainer: React.FC = () => {
       sentiments,
       postTitle,
       submission_Date,
+      subreddit,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
     setTimeStamps(timeStamps);
     setSentiments(sentiments);
     setPostTitle(postTitle);
     setSubmissionDate(submission_Date);
+    setSubreddit(subreddit);
 
     localStorage.setItem(
       "plotData",
@@ -54,6 +57,7 @@ const SentimentPlotContainer: React.FC = () => {
           sentiments.reduce((a, b) => a + b, 0) / sentiments.length, // Placeholder, replace with actual data
         postDate: submission_Date,
         queryDate: new Date(), //this can be the current date
+        subreddit: subreddit,
       },
     ]);
   };
