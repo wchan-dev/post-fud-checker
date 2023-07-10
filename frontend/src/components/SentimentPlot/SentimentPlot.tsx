@@ -21,7 +21,9 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   histogram_sentiments,
   postTitle,
 }) => {
-  const [plotType, setPlotType] = useState<"line" | "histogram">("line");
+  const [plotType, setPlotType] = useState<"line" | "histogram" | "marker">(
+    "line"
+  );
 
   const textColor = useColorModeValue("brand.text", "brand.textSecondary");
   const bgColor = useColorModeValue("brand.bg", "brand.bg");
@@ -60,6 +62,31 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
         name: "Negative Sentiment",
       },
     ];
+  } else if (plotType === "marker") {
+    const decreasingSentiments = [];
+    const increasingSentiments = [];
+
+    for (let i = 1; i < timeStamps.length; i++) {
+      if (sentiments[i] >= sentiments[i - 1]) {
+        increasingSentiments.push({
+          x: [timeStamps[i]],
+          y: [sentiments[i]],
+          mode: "markers",
+          marker: { color: "green", size: 7 },
+          name: "Increasing",
+        });
+      } else {
+        decreasingSentiments.push({
+          x: [timeStamps[i]],
+          y: [sentiments[i]],
+          mode: "markers",
+          marker: { color: "red", size: 7 },
+          name: "Decreasing",
+        });
+      }
+    }
+
+    data = [...increasingSentiments, ...decreasingSentiments];
   } else {
     const decreasingSentiments = [];
     const increasingSentiments = [];
@@ -130,11 +157,12 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
           size="sm"
           width="fit-content"
           onChange={(event) =>
-            setPlotType(event.target.value as "line" | "histogram")
+            setPlotType(event.target.value as "line" | "histogram" | "marker")
           }
         >
           <option value="line">Line plot</option>
           <option value="histogram">Histogram</option>
+          <option value="marker">Marker plot</option>
         </Select>
         <Plot
           data={data}
