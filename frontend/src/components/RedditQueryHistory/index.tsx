@@ -65,7 +65,7 @@ export const QueryHistoryContainer: React.FC = () => {
               <Th textAlign="center">Post Title</Th>
               <Th textAlign="center">Number of Comments</Th>
               <Th textAlign="center"> Overall Sentiment</Th>
-              <Th textAlign="center">Post Created Date</Th>
+              <Th textAlign="center">Post Created</Th>
             </Tr>
           </Thead>
           <Tbody fontSize="xs">
