@@ -62,6 +62,11 @@ const SentimentPlotContainer: React.FC = () => {
     ]);
   };
 
+  const handleClearHistory = () => {
+    localStorage.removeItem("historyList");
+    setHistoryList([]);
+  };
+
   return (
     <Box display="flex" flexDirection="column" mb={8} p={8} gap={4}>
       <CommentSentimentPlot
@@ -71,6 +76,7 @@ const SentimentPlotContainer: React.FC = () => {
       ></CommentSentimentPlot>
       <CommentSentimentForm
         handleGetSentiment={handleGetSentiment}
+        handleClearHistory={handleClearHistory}
       ></CommentSentimentForm>
     </Box>
   );

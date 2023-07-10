@@ -10,7 +10,7 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { HistoryContext } from "./HistoryContext";
 
 export const QueryHistoryContainer: React.FC = () => {
@@ -30,6 +30,21 @@ export const QueryHistoryContainer: React.FC = () => {
     };
     return date.toLocaleString(undefined, options);
   };
+
+  //Listen for changes to 'historyList' in localStorage
+  useEffect(() => {
+    function handleStorageChange(e: StorageEvent) {
+      if (e.key === "historyList") {
+        setHistoryList(JSON.parse(e.newValue || "[]"));
+      }
+    }
+    window.addEventListener("storage", handleStorageChange);
+
+    //Cleanup
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [setHistoryList]);
 
   return (
     <Box minWidth="864px" overflowX="auto" marginTop="20px" pr="8px" pl="8px">
@@ -78,7 +93,9 @@ export const QueryHistoryContainer: React.FC = () => {
                   {history.numComments}
                 </Td>
                 <Td textAlign="center">
-                  {history.overallSentiment.toFixed(2)}
+                  {history.overallSentiment
+                    ? history.overallSentiment.toFixed(2)
+                    : "N/A"}
                 </Td>
                 <Td textAlign="center">
                   {formatDateString(new Date(history.postDate))}

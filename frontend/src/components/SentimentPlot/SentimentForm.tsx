@@ -16,9 +16,13 @@ interface Props {
     api_endpoint: string,
     reddit_url: string
   ) => Promise<void>;
+  handleClearHistory: () => void;
 }
 
-const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
+const CommentSentimentForm: React.FC<Props> = ({
+  handleGetSentiment,
+  handleClearHistory,
+}) => {
   const [inputValue, setInputValue] = useState<string | "">("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -44,7 +48,7 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
   const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
 
   return (
-    <Box ml={-4} width="100%" display="flex" justifyContent="flex-start">
+    <Box ml={-4} width="100%" display="flex" justifyContent="space-between">
       <form onSubmit={handleSubmit} width="100%">
         <FormControl isRequired isInvalid={!isValidUrl}>
           {isValidUrl ? (
@@ -80,6 +84,7 @@ const CommentSentimentForm: React.FC<Props> = ({ handleGetSentiment }) => {
           </Flex>
         </FormControl>
       </form>
+      <Button onClick={handleClearHistory}>Clear History</Button>
     </Box>
   );
 };
