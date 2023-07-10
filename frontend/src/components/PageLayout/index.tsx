@@ -5,7 +5,7 @@ import NavBar from "../Navbar";
 import SentimentPlotContainer from "../SentimentPlot";
 import { QueryHistoryContainer } from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
-import Banner from "../Banner";
+import Header from "../Header";
 
 const PageLayOut: React.FC = () => {
   const [historyList, setHistoryList] = useState<History[]>(() => {
@@ -19,7 +19,7 @@ const PageLayOut: React.FC = () => {
 
   return (
     <Flex direction="column" minHeight="100vh">
-      <Banner></Banner>
+      <Header></Header>
       <Flex direction="column" overflow="auto" p={8}>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>
           <Box mb={-16}>

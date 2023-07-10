@@ -1,4 +1,3 @@
-// import getSentiment from "./getSentiment";
 import {
   Box,
   Button,
@@ -64,13 +63,20 @@ const CommentSentimentForm: React.FC<Props> = ({
               Invalid Reddit Thread URL
             </FormErrorMessage>
           )}
-          <Flex direction={{ base: "column", md: "row" }} gap={3}>
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            justifyContent={{ base: "space-between", md: "flex-start" }}
+            alignItems={{ base: "stretch", md: "flex-start" }}
+            gap={3}
+            flexWrap="wrap"
+          >
             <Input
               type="text"
               value={inputValue}
               onChange={handleInputChange}
               fontSize="sm"
               placeholder="Paste Reddit Thread URL Here"
+              width={{ base: "100%", md: "512px" }}
             />
             <Button
               minWidth={["100%", "140px"]} // Responsive width
@@ -78,13 +84,20 @@ const CommentSentimentForm: React.FC<Props> = ({
               fontSize="sm"
               isLoading={isLoading}
               loadingText="Submitting..."
+              mt={{ base: 2, md: 0 }}
             >
               Submit
+            </Button>
+            <Button
+              onClick={handleClearHistory}
+              mt={{ base: 2, md: 0 }}
+              fontSize="sm"
+            >
+              Clear History
             </Button>
           </Flex>
         </FormControl>
       </form>
-      <Button onClick={handleClearHistory}>Clear History</Button>
     </Box>
   );
 };
