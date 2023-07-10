@@ -10,6 +10,7 @@ import { HistoryContext } from "../RedditQueryHistory/HistoryContext";
 const SentimentPlotContainer: React.FC = () => {
   const [timeStamps, setTimeStamps] = useState<Date[]>([]);
   const [sentiments, setSentiments] = useState<number[]>([]);
+  const [histogramSentiments, setHistogramSentiments] = useState<number[]>([]);
   const [postTitle, setPostTitle] = useState<string>("");
   const [historyList, setHistoryList] = useContext(HistoryContext);
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
@@ -18,9 +19,11 @@ const SentimentPlotContainer: React.FC = () => {
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
     if (savedData) {
-      const { timeStamps, sentiments, postTitle } = JSON.parse(savedData);
+      const { timeStamps, sentiments, histogram_sentiments, postTitle } =
+        JSON.parse(savedData);
       setTimeStamps(timeStamps.map((ts: string) => new Date(ts)));
       setSentiments(sentiments);
+      setHistogramSentiments(histogram_sentiments || []);
       setPostTitle(postTitle);
     }
   }, []);
@@ -32,19 +35,26 @@ const SentimentPlotContainer: React.FC = () => {
     const {
       timeStamps,
       sentiments,
+      histogram_sentiments,
       postTitle,
       submission_Date,
       subreddit,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
     setTimeStamps(timeStamps);
     setSentiments(sentiments);
+    setHistogramSentiments(histogram_sentiments);
     setPostTitle(postTitle);
     setSubmissionDate(submission_Date);
     setSubreddit(subreddit);
 
     localStorage.setItem(
       "plotData",
-      JSON.stringify({ timeStamps, sentiments, postTitle })
+      JSON.stringify({
+        timeStamps,
+        sentiments,
+        histogram_sentiments,
+        postTitle,
+      })
     );
 
     setHistoryList((prevHistory) => [
@@ -72,11 +82,14 @@ const SentimentPlotContainer: React.FC = () => {
       <CommentSentimentPlot
         timeStamps={timeStamps}
         sentiments={sentiments}
+        histogram_sentiments={histogramSentiments}
         postTitle={postTitle}
+        style={{ order: 1 }}
       ></CommentSentimentPlot>
       <CommentSentimentForm
         handleGetSentiment={handleGetSentiment}
         handleClearHistory={handleClearHistory}
+        style={{ order: 2 }}
       ></CommentSentimentForm>
     </Box>
   );

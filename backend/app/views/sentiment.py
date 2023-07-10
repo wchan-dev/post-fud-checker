@@ -21,6 +21,8 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     # need to make comparison between number of comments now and then
     submission_use, comments_use = get_previous_results(submission.id, redditApp)
     submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
+    submission_subreddit = submission.subreddit.display_name
+
     # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
         submission_use = submission
@@ -45,6 +47,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
                 postURL=postURL,
                 comment_count_diff=comment_count_diff,
                 submission_date=submission_date,
+                subreddit=submission_subreddit,
             )
 
     comments_use = redditApp.getPostComments(postURL)
@@ -81,6 +84,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
             **comment,
             **comment_sentiment,
             "summation_score": summation_score,
+            "compound_score": comment_sentiment["compound"],
         }
         results.append(comment_dict)
 
@@ -90,6 +94,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         postURL=postURL,
         comment_count_diff=0,
         submission_date=submission_date,
+        subreddit=submission_subreddit,
     )
 
 
