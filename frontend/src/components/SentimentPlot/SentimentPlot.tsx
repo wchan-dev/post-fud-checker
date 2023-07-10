@@ -136,7 +136,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: 0.5,
     },
     xaxis: {
-      title: plotType === "histogram" ? "Sentiment Score" : "Time",
+      title: plotType === "histogram" ? "Sentiment Score" : "Time (UTC)",
       showgrid: false,
       zeroline: true,
     },

@@ -1,19 +1,10 @@
-import {
-  Box,
-  Link,
-  Table,
-  Tbody,
-  TableContainer,
-  Td,
-  Thead,
-  Th,
-  Tr,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
+import { useTable, useSortBy } from "react-table";
+import { Box, Link, useColorModeValue } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { HistoryContext } from "./HistoryContext";
 
-export const QueryHistoryContainer: React.FC = () => {
+const QueryHistoryContainer: React.FC = () => {
   const [historyList, setHistoryList] = useContext(HistoryContext);
 
   const linkColor = useColorModeValue("brand.link", "brand.link");
@@ -46,65 +37,101 @@ export const QueryHistoryContainer: React.FC = () => {
     };
   }, [setHistoryList]);
 
+  const data = useMemo(() => historyList, [historyList]);
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Query No.",
+        accessor: (row: any, i: number) => i + 1,
+        id: "queryNo",
+      },
+      {
+        Header: "Query Date",
+        accessor: (row: any) => formatDateString(new Date(row.queryDate)),
+        id: "queryDate",
+      },
+      {
+        Header: "Subreddit",
+        accessor: "subreddit",
+      },
+      {
+        Header: "Post Title",
+        accessor: "postTitle",
+        Cell: ({ value, row: { original } }: any) => (
+          <Link
+            href={original.postURL}
+            color={linkColor}
+            isExternal
+            _hover={{ textDecoration: "underline" }}
+          >
+            {value}
+          </Link>
+        ),
+      },
+      {
+        Header: "Number of Comments",
+        accessor: "numComments",
+      },
+      {
+        Header: "Overall Sentiment",
+        accessor: "overallSentiment",
+        Cell: ({ value }: any) => (value ? value.toFixed(2) : "N/A"),
+      },
+      {
+        Header: "Post Created",
+        accessor: (row: any) => formatDateString(new Date(row.postDate)),
+        id: "postDate",
+      },
+    ],
+    [linkColor]
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data }, useSortBy);
+
   return (
     <Box minWidth="864px" marginTop="20px" pr="8px" pl="8px">
-      <TableContainer maxHeight="30vh" overflowY="scroll">
-        <Table>
-          <Thead
-            fontSize="xs"
-            position="sticky"
-            top={0}
-            mb={8}
-            bg="white"
-            zIndex="1"
-          >
-            <Tr>
-              <Th textAlign="center">Query No.</Th>
-              <Th textAlign="center">Query Date</Th>
-              <Th textAlign="center">Subreddit</Th>
-              <Th textAlign="center">Post Title</Th>
-              <Th textAlign="center">Number of Comments</Th>
-              <Th textAlign="center"> Overall Sentiment</Th>
-              <Th textAlign="center">Post Created</Th>
-            </Tr>
-          </Thead>
-          <Tbody fontSize="xs">
-            {historyList.map((history, index) => (
-              <Tr key={index}>
-                <Td textAlign="center">{index + 1}</Td>
-                <Td textAlign="center">
-                  {formatDateString(new Date(history.queryDate))}
-                </Td>
-                <Td textAlign="center">{history.subreddit}</Td>
-                <Td
+      <Table {...getTableProps()} size="sm">
+        <Thead>
+          {headerGroups.map((headerGroup) => (
+            <Tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <Th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   textAlign="center"
-                  style={{ whiteSpace: "normal", wordBreak: "break-word" }}
+                  style={{ cursor: "pointer" }}
                 >
-                  <Link
-                    href={history.postURL}
-                    color={linkColor}
-                    isExternal
-                    _hover={{ textDecoration: "underline" }}
-                  >
-                    {history.postTitle}
-                  </Link>
-                </Td>
-                <Td textAlign="center" maxW="80px">
-                  {history.numComments}
-                </Td>
-                <Td textAlign="center">
-                  {history.overallSentiment
-                    ? history.overallSentiment.toFixed(2)
-                    : "N/A"}
-                </Td>
-                <Td textAlign="center">
-                  {formatDateString(new Date(history.postDate))}
-                </Td>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? " 🔽"
+                        : " 🔼"
+                      : ""}
+                  </span>
+                </Th>
+              ))}
+            </Tr>
+          ))}
+        </Thead>
+        <Tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <Tr {...row.getRowProps()}>
+                {row.cells.map((cell) => (
+                  <Td {...cell.getCellProps()} textAlign="center">
+                    {cell.render("Cell")}
+                  </Td>
+                ))}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+            );
+          })}
+        </Tbody>
+      </Table>
     </Box>
   );
 };
+
+export default QueryHistoryContainer;
