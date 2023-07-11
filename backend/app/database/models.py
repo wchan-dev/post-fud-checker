@@ -16,6 +16,7 @@ class RedditSubmission(db.Model):
     summation_score = db.Column(db.Float, nullable=False)
     permalink = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
+    requests_made = db.Column(db.Integer, nullable=False)
 
     comments = db.relationship("RedditComment", backref="submission", lazy=True)
 

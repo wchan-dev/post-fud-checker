@@ -7,6 +7,7 @@ import logging
 
 
 class RequestCounterHandler(logging.StreamHandler):
+    # this is inaccurate, it doesn't hit the limit of the api as it should i believe
     def __init__(self):
         super().__init__()
         self.request_count = 0
@@ -56,8 +57,7 @@ class RedditApp:
         comments = sorted(
             comments, key=lambda x: x["created_utc"]
         )  # sorts by time, don't remove, the order of how plotly renders does materr
-        print(f"Total requests made: {counter_handler.request_count}")
-        return comments
+        return comments, counter_handler.request_count
 
     def getPostCommentsLimited(self, submissionURL: str):
         comments = []

@@ -26,7 +26,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
         submission_use = submission
-        comments_use = redditApp.getPostComments(postURL)
+        comments_use, requests_made = redditApp.getPostComments(postURL)
     else:
         comment_count_diff = calc_num_comments(
             submission.num_comments, submission_use.num_comments
@@ -49,7 +49,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
                 subreddit=submission_subreddit,
             )
 
-    comments_use = redditApp.getPostComments(postURL)
+    comments_use, requests_made = redditApp.getPostComments(postURL)
     title_sentiment, content_sentiment = calculate_post_sentiment(
         submission_use.title, submission_use.selftext
     )
@@ -63,6 +63,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         post_sentiment["post_neg"],
         post_sentiment["post_compound"],
         summation_score,
+        requests_made,
     )
 
     results = []
