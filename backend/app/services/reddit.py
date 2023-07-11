@@ -36,6 +36,54 @@ class RedditApp:
         )  # sorts by time, don't remove, the order of how plotly renders does materr
         return comments
 
+
+def getPostCommentsLimited(self, submissionURL: str):
+    comments = []
+    submission = self.reddit.submission(url=submissionURL)
+    submission.comments.replace_more(limit=None)
+    for top_level_comment in submission.comments:
+        comments.append(
+            {
+                "body": top_level_comment.body,
+                "permalink": top_level_comment.permalink,
+                "created_utc": datetime.fromtimestamp(top_level_comment.created_utc),
+            },
+        )
+        if hasattr(top_level_comment, "replies"):
+            top_level_comment.replies.replace_more(limit=None)
+            for reply in top_level_comment.replies.list():
+                comments.append(
+                    {
+                        "body": reply.body,
+                        "permalink": reply.permalink,
+                        "created_utc": datetime.fromtimestamp(reply.created_utc),
+                    },
+                )
+    comments = sorted(
+        comments, key=lambda x: x["created_utc"]
+    )  # sorts by time, don't remove, the order of how plotly renders does materr
+    return comments
+
+    def getTopLevelPostComments(self, submissionURL: str):
+        comments = []
+        submission = self.reddit.submission(url=submissionURL)
+
+        for top_level_comment in submission.comments:
+            comments.append(
+                {
+                    "body": top_level_comment.body,
+                    "permalink": top_level_comment.permalink,
+                    "created_utc": datetime.fromtimestamp(
+                        top_level_comment.created_utc
+                    ),
+                },
+            )
+        comments = sorted(
+            comments, key=lambda x: x["created_utc"]
+        )  # sorts by time, don't remove, the order of how plotly renders does materr
+
+        return comments
+
     def getRandomSubmission(self) -> str:
         # should only do it for 100+comment submissions
         isFound = False

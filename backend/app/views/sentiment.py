@@ -26,21 +26,20 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
         submission_use = submission
-        comments_use = redditApp.getPostComments(postURL)
+        comments_use = redditApp.getPostCommentsLimited(postURL)
     else:
         comment_count_diff = calc_num_comments(
             submission.num_comments, submission_use.num_comments
         )
         if (
-            comment_count_diff < 50
-            or ((comment_count_diff) / submission.num_comments)
-            / submission.num_comments
-            < 0.1
-        ):
+            (comment_count_diff) / submission.num_comments
+        ) / submission.num_comments > 0.25:
+            print("pulling from reddit api for preexisting")
             submission_use = submission
-            comments_use = redditApp.getPostComments(postURL)
+            comments_use = redditApp.getPostCommentsLimited(postURL)
 
         else:
+            print("pulling from database existing")
             return jsonify(
                 post_title=submission_use.title,
                 comments=comments_use,
@@ -50,7 +49,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
                 subreddit=submission_subreddit,
             )
 
-    comments_use = redditApp.getPostComments(postURL)
+    comments_use = redditApp.getPostCommentsLimited(postURL)
     title_sentiment, content_sentiment = calculate_post_sentiment(
         submission_use.title, submission_use.selftext
     )
