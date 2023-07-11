@@ -101,7 +101,14 @@ const QueryHistoryContainer: React.FC = () => {
     useTable({ columns, data }, useSortBy);
 
   return (
-    <Box minWidth="864px" marginTop="20px" pr="8px" pl="8px">
+    <Box
+      maxHeight="30vH"
+      minWidth="864px"
+      marginTop="20px"
+      pr="8px"
+      pl="8px"
+      overflowY="scroll"
+    >
       <Table {...getTableProps()} size="sm">
         <Thead>
           {headerGroups.map((headerGroup) => (

@@ -148,10 +148,10 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   };
 
   return (
-    <Box w="100%" height="600px" minW="864px">
+    <Box w="100%" height="500px" minW="864px" mb={16}>
       <Stack>
-        <Heading size="lg" textAlign="center">
-          Post Title: {postTitle}
+        <Heading mb={8} size="lg" textAlign="center">
+          {postTitle}
         </Heading>
         <Select
           size="sm"

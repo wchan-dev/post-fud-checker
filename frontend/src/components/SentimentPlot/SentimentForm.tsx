@@ -47,7 +47,13 @@ const CommentSentimentForm: React.FC<Props> = ({
   const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
 
   return (
-    <Box ml={-4} width="100%" display="flex" justifyContent="space-between">
+    <Box
+      mb={8}
+      ml={-4}
+      width="100%"
+      display="flex"
+      justifyContent="space-between"
+    >
       <form onSubmit={handleSubmit} width="100%">
         <FormControl isRequired isInvalid={!isValidUrl}>
           {isValidUrl ? (

@@ -6,14 +6,14 @@ const Header = () => {
       <Flex alignItems="center" justifyContent="space-between">
         <Flex direction="column" justifyContent="center">
           <Flex justifyContent="flex-start" alignItems="center">
-            <Box boxSize="75px">
+            <Box boxSize="55px">
               <Image
                 src="../../../public/reddit-alien-default.png"
                 boxSize="100%"
                 alt="Someone Deleted the art lol"
               />
             </Box>
-            <Heading as="h1" size="xl">
+            <Heading as="h1" size="lg">
               reddit sentiment analyzer
             </Heading>
           </Flex>
