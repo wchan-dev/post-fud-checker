@@ -13,6 +13,7 @@ interface CommentSentimentPlotProps {
   sentiments: number[];
   histogram_sentiments: number[];
   postTitle: string;
+  subreddit: string;
 }
 
 const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
@@ -20,6 +21,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   sentiments,
   histogram_sentiments,
   postTitle,
+  subreddit,
 }) => {
   const [plotType, setPlotType] = useState<"line" | "histogram" | "marker">(
     "line"
@@ -72,7 +74,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
           x: [timeStamps[i]],
           y: [sentiments[i]],
           mode: "markers",
-          marker: { color: "green", size: 7 },
+          marker: { color: "green", size: 4 },
           name: "Increasing",
         });
       } else {
@@ -80,12 +82,11 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
           x: [timeStamps[i]],
           y: [sentiments[i]],
           mode: "markers",
-          marker: { color: "red", size: 7 },
+          marker: { color: "red", size: 4 },
           name: "Decreasing",
         });
       }
     }
-
     data = [...increasingSentiments, ...decreasingSentiments];
   } else {
     const decreasingSentiments = [];
@@ -147,11 +148,16 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     margin: { l: 50, r: 20, b: 50, t: 50, pad: 4 },
   };
 
+  const formatPlotTitle = (subreddit: string, postTitle: string) =>
+    `r/${subreddit}: ${postTitle}`;
+
+  const plotTitle = formatPlotTitle(subreddit, postTitle);
+
   return (
     <Box w="100%" height="500px" minW="864px" mb={16}>
       <Stack>
-        <Heading mb={8} size="lg" textAlign="center">
-          {postTitle}
+        <Heading mb={8} size="md" textAlign="center">
+          {plotTitle}
         </Heading>
         <Select
           size="sm"

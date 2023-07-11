@@ -84,6 +84,7 @@ const SentimentPlotContainer: React.FC = () => {
         sentiments={sentiments}
         histogram_sentiments={histogramSentiments}
         postTitle={postTitle}
+        subreddit={subreddit}
         style={{ order: 1 }}
       ></CommentSentimentPlot>
       <CommentSentimentForm

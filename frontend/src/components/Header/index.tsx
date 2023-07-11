@@ -17,7 +17,7 @@ const Header = () => {
               reddit sentiment analyzer
             </Heading>
           </Flex>
-          <Box width="60%">
+          <Box ml={4} width="70%">
             <Text fontSize="sm">
               Ever wonder why you feel down after doom scrolling through a whole
               Reddit thread? Look no further! Welcome to the Reddit Sentiment
