@@ -3,6 +3,28 @@ from flask import g
 from datetime import datetime
 
 
+import logging
+
+
+class RequestCounterHandler(logging.StreamHandler):
+    def __init__(self):
+        super().__init__()
+        self.request_count = 0
+
+    def emit(self, record):
+        if record.msg.startswith("Fetching:"):
+            self.request_count += 1
+        super().emit(record)
+
+
+counter_handler = RequestCounterHandler()
+counter_handler.setLevel(logging.DEBUG)
+
+logger = logging.getLogger("prawcore")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(counter_handler)
+
+
 def create_reddit_instance(app):
     if "reddit" not in g:
         g.reddit = praw.Reddit(
@@ -34,6 +56,7 @@ class RedditApp:
         comments = sorted(
             comments, key=lambda x: x["created_utc"]
         )  # sorts by time, don't remove, the order of how plotly renders does materr
+        print(f"Total requests made: {counter_handler.request_count}")
         return comments
 
     def getPostCommentsLimited(self, submissionURL: str):
