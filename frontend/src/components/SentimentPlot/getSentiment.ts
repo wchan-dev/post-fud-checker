@@ -55,6 +55,11 @@ export const getSentiment = async (
       subreddit,
     };
   } catch (error: any) {
+    if (error.response && error.response.status === 429) {
+      let errorMessage = error.message;
+
+      errorMessage = "The API limit has been reached. Please try again later.";
+    }
     return {
       timeStamps: [],
       sentiments: [],

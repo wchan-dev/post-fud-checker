@@ -13,6 +13,7 @@ from ..database.database_handler import (
 )
 import os
 import datetime
+from prawcore.exceptions import RequestException
 
 sentiment = Blueprint("sentiment", __name__)
 
@@ -26,7 +27,14 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
         submission_use = submission
-        comments_use, requests_made = redditApp.getPostComments(postURL)
+        try:
+            comments_use, requests_made = redditApp.getPostComments(postURL)
+        except RequestException:
+            return (
+                jsonify(error="Reddit API Limit Reached, please try again later."),
+                429,
+            )
+
     else:
         comment_count_diff = calc_num_comments(
             submission.num_comments, submission_use.num_comments

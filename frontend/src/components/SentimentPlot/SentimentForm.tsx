@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Flex,
@@ -24,6 +25,7 @@ const CommentSentimentForm: React.FC<Props> = ({
 }) => {
   const [inputValue, setInputValue] = useState<string | "">("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const redditUrlPattern = new RegExp(
     "^(https?://)?(www.)?reddit.com/r/\\w+/comments/\\w+.*$",
@@ -37,7 +39,10 @@ const CommentSentimentForm: React.FC<Props> = ({
     event.preventDefault();
     setIsLoading(true);
     if (redditUrlPattern.test(inputValue)) {
-      await handleGetSentiment("api/sentiment_analysis", inputValue);
+      const error = await handleGetSentiment(
+        "api/sentiment_analysis",
+        inputValue
+      );
       setIsLoading(false);
     } else {
       console.log("invalid reddit url");
@@ -102,6 +107,11 @@ const CommentSentimentForm: React.FC<Props> = ({
               Clear History
             </Button>
           </Flex>
+          {apiError && (
+            <Alert status="error" mt={4}>
+              {apiError}
+            </Alert>
+          )}
         </FormControl>
       </form>
     </Box>
