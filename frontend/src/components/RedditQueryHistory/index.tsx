@@ -1,8 +1,18 @@
 import React, { useContext, useEffect, useMemo } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, Column } from "react-table";
 import { Box, Link, useColorModeValue } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { HistoryContext } from "./HistoryContext";
+
+interface HistoryRecord {
+  queryDate: string;
+  subreddit: string;
+  postTitle: string;
+  postURL: string;
+  numComments: number;
+  overallSentiment: number | null;
+  postDate: string;
+}
 
 const QueryHistoryContainer: React.FC = () => {
   const [historyList, setHistoryList] = useContext(HistoryContext);
@@ -39,16 +49,16 @@ const QueryHistoryContainer: React.FC = () => {
 
   const data = useMemo(() => historyList, [historyList]);
 
-  const columns = useMemo(
+  const columns: Column<HistoryRecord>[] = useMemo(
     () => [
       {
         Header: "Query No.",
-        accessor: (row: any, i: number) => i + 1,
+        accessor: (row, i) => i + 1,
         id: "queryNo",
       },
       {
         Header: "Query Date",
-        accessor: (row: any) => formatDateString(new Date(row.queryDate)),
+        accessor: (row) => formatDateString(new Date(row.queryDate)),
         id: "queryDate",
       },
       {
@@ -58,7 +68,7 @@ const QueryHistoryContainer: React.FC = () => {
       {
         Header: "Post Title",
         accessor: "postTitle",
-        Cell: ({ value, row: { original } }: any) => (
+        Cell: ({ value, row: { original } }) => (
           <Link
             href={original.postURL}
             color={linkColor}
@@ -76,11 +86,11 @@ const QueryHistoryContainer: React.FC = () => {
       {
         Header: "Overall Sentiment",
         accessor: "overallSentiment",
-        Cell: ({ value }: any) => (value ? value.toFixed(2) : "N/A"),
+        Cell: ({ value }) => (value ? value.toFixed(2) : "N/A"),
       },
       {
         Header: "Post Created",
-        accessor: (row: any) => formatDateString(new Date(row.postDate)),
+        accessor: (row) => formatDateString(new Date(row.postDate)),
         id: "postDate",
       },
     ],

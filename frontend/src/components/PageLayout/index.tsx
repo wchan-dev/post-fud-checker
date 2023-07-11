@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import NavBar from "../Navbar";
 import SentimentPlotContainer from "../SentimentPlot";
-import { QueryHistoryContainer } from "../RedditQueryHistory";
+import QueryHistoryContainer from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
 import Header from "../Header";
 
