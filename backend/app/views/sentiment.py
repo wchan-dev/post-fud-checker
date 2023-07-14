@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify, g
 from ..services.reddit import RedditApp
 from ..services.sentiment_analysis import (
-    calculate_post_sentiment,
+    get_post_title_content_sentiment,
     calculate_comment_sentiment,
-    calcPostSentiment,
+    calculate_post_title_sentiment,
 )
 from ..database.database_handler import (
     store_submission,
@@ -19,12 +19,10 @@ sentiment = Blueprint("sentiment", __name__)
 
 
 def analyze_and_store_sentiments(postURL, redditApp, submission):
-    # need to make comparison between number of comments now and then
     submission_use, comments_use = get_previous_results(submission.id, redditApp)
     submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
     submission_subreddit = submission.subreddit.display_name
 
-    # can we pull both the submission num comments and the db comments first?
     if submission_use is None:
         submission_use = submission
         try:
@@ -58,10 +56,10 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
             )
 
     comments_use, requests_made = redditApp.getPostComments(postURL)
-    title_sentiment, content_sentiment = calculate_post_sentiment(
+    title_sentiment, content_sentiment = get_post_title_content_sentiment(
         submission_use.title, submission_use.selftext
     )
-    post_sentiment = calcPostSentiment(title_sentiment, content_sentiment)
+    post_sentiment = calculate_post_title_sentiment(title_sentiment, content_sentiment)
     summation_score = float(post_sentiment["post_compound"])
 
     db_submission_id = store_submission(
@@ -111,7 +109,6 @@ def calc_num_comments(submission_curr: int, submission_prev: int):
 
 
 def get_previous_results(submission_id, redditApp):
-    # check if submission id exists in database
     db_submission = get_submission_by_id(submission_id)
     if db_submission:
         db_comments = get_comments_by_submission_id(submission_id)

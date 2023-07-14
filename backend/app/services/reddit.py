@@ -88,39 +88,3 @@ class RedditApp:
             comments, key=lambda x: x["created_utc"]
         )  # sorts by time, don't remove, the order of how plotly renders does materr
         return comments
-
-    def getTopLevelPostComments(self, submissionURL: str):
-        comments = []
-        submission = self.reddit.submission(url=submissionURL)
-
-        for top_level_comment in submission.comments:
-            comments.append(
-                {
-                    "body": top_level_comment.body,
-                    "permalink": top_level_comment.permalink,
-                    "created_utc": datetime.fromtimestamp(
-                        top_level_comment.created_utc
-                    ),
-                },
-            )
-        comments = sorted(
-            comments, key=lambda x: x["created_utc"]
-        )  # sorts by time, don't remove, the order of how plotly renders does materr
-
-        return comments
-
-    def getRandomSubmission(self) -> str:
-        # should only do it for 100+comment submissions
-        isFound = False
-        permalink = ""
-        comment_threshold = 100
-        while isFound is False:
-            random_submission = self.reddit.subreddit("all").random()
-            if random_submission.num_comments >= comment_threshold:
-                permalink = "https://www.reddit.com/" + random_submission.permalink
-                isFound = True
-        return permalink
-
-    # sentiment growth since post inception
-    # start out with the post content
-    # then by top level comments
