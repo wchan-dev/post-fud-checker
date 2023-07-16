@@ -1,21 +1,67 @@
 from flask import Blueprint, request, jsonify, g
-from ..services.reddit import RedditApp
 from ..services.sentiment_analysis import (
     get_post_title_content_sentiment,
     calculate_comment_sentiment,
     calculate_post_title_sentiment,
 )
-from ..database.database_handler import (
+
+from ..models.database_handler import (
     store_submission,
     store_comment,
-    get_submission_by_id,
-    get_comments_by_submission_id,
+    get_previous_results,
 )
+
+from ..models.reddit import RedditApp
+
 import os
 import datetime
 from prawcore.exceptions import RequestException
 
 sentiment = Blueprint("sentiment", __name__)
+
+
+def calculate_and_store_comment_sentiment(comments, db_submission_id, summation_score):
+    results = []
+    for idx, comment in enumerate(comments):
+        comment_sentiment = calculate_comment_sentiment(comment["body"])
+        store_comment(
+            comment,
+            db_submission_id,
+            comment_sentiment["pos"],
+            comment_sentiment["neu"],
+            comment_sentiment["neg"],
+            comment_sentiment["compound"],
+            summation_score,
+        )
+        summation_score += float(comment_sentiment["compound"]) / (2 + idx)
+
+        comment_dict = {
+            **comment,
+            **comment_sentiment,
+            "summation_score": summation_score,
+            "compound_score": comment_sentiment["compound"],
+        }
+        results.append(comment_dict)
+    return results, summation_score
+
+
+def calculate_and_store_submission_sentiment(submission, requests_made):
+    title_sentiment, content_sentiment = get_post_title_content_sentiment(
+        submission.title, submission.selftext
+    )
+    post_sentiment = calculate_post_title_sentiment(title_sentiment, content_sentiment)
+    summation_score = float(post_sentiment["post_compound"])
+
+    db_submission_id = store_submission(
+        submission,
+        post_sentiment["post_pos"],
+        post_sentiment["post_neu"],
+        post_sentiment["post_neg"],
+        post_sentiment["post_compound"],
+        summation_score,
+        requests_made,
+    )
+    return db_submission_id, post_sentiment, summation_score
 
 
 def analyze_and_store_sentiments(postURL, redditApp, submission):
@@ -44,55 +90,14 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
             submission_use = submission
             comments_use = redditApp.getPostComments(postURL)
 
-        else:
-            print("pulling from database existing")
-            return jsonify(
-                post_title=submission_use.title,
-                comments=comments_use,
-                postURL=postURL,
-                comment_count_diff=comment_count_diff,
-                submission_date=submission_date,
-                subreddit=submission_subreddit,
-            )
-
-    comments_use, requests_made = redditApp.getPostComments(postURL)
-    title_sentiment, content_sentiment = get_post_title_content_sentiment(
-        submission_use.title, submission_use.selftext
-    )
-    post_sentiment = calculate_post_title_sentiment(title_sentiment, content_sentiment)
-    summation_score = float(post_sentiment["post_compound"])
-
-    db_submission_id = store_submission(
-        submission_use,
-        post_sentiment["post_pos"],
-        post_sentiment["post_neu"],
-        post_sentiment["post_neg"],
-        post_sentiment["post_compound"],
+    (
+        db_submission_id,
+        post_sentiment,
         summation_score,
-        requests_made,
+    ) = calculate_and_store_submission_sentiment(submission_use, requests_made)
+    results, summation_score = calculate_and_store_comment_sentiment(
+        comments_use, db_submission_id, summation_score
     )
-
-    results = []
-    for idx, comment in enumerate(comments_use):
-        comment_sentiment = calculate_comment_sentiment(comment["body"])
-        store_comment(
-            comment,
-            db_submission_id,
-            comment_sentiment["pos"],
-            comment_sentiment["neu"],
-            comment_sentiment["neg"],
-            comment_sentiment["compound"],
-            summation_score,
-        )
-        summation_score += float(comment_sentiment["compound"]) / (2 + idx)
-
-        comment_dict = {
-            **comment,
-            **comment_sentiment,
-            "summation_score": summation_score,
-            "compound_score": comment_sentiment["compound"],
-        }
-        results.append(comment_dict)
 
     return jsonify(
         post_title=submission.title,
@@ -106,15 +111,6 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
 
 def calc_num_comments(submission_curr: int, submission_prev: int):
     return submission_curr - submission_prev
-
-
-def get_previous_results(submission_id, redditApp):
-    db_submission = get_submission_by_id(submission_id)
-    if db_submission:
-        db_comments = get_comments_by_submission_id(submission_id)
-        return db_submission, db_comments
-    else:
-        return None, None
 
 
 @sentiment.route(os.environ.get("POST_SENTIMENT_ANALYSIS"), methods=["POST"])

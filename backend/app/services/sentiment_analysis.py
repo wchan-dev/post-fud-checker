@@ -1,9 +1,4 @@
-import nltk
-
-
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
-from collections import Counter
 
 
 def calculate_comment_sentiment(comment: str):

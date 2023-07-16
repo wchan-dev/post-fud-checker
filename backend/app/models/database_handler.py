@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from .models import RedditSubmission, RedditComment
+from . import RedditSubmission, RedditComment
 from .. import db
 
 
@@ -73,3 +73,12 @@ def get_comments_by_submission_id(submission_id):
         return comments
     else:
         return None
+
+
+def get_previous_results(submission_id, redditApp):
+    db_submission = get_submission_by_id(submission_id)
+    if db_submission:
+        db_comments = get_comments_by_submission_id(submission_id)
+        return db_submission, db_comments
+    else:
+        return None, None
