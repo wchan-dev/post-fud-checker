@@ -45,7 +45,7 @@ def calculate_and_store_comment_sentiment(comments, db_submission_id, summation_
     return results, summation_score
 
 
-def calculate_and_store_submission_sentiment(submission, requests_made):
+def calculate_and_store_submission_sentiment(submission):
     title_sentiment, content_sentiment = get_post_title_content_sentiment(
         submission.title, submission.selftext
     )
@@ -59,7 +59,6 @@ def calculate_and_store_submission_sentiment(submission, requests_made):
         post_sentiment["post_neg"],
         post_sentiment["post_compound"],
         summation_score,
-        requests_made,
     )
     return db_submission_id, post_sentiment, summation_score
 
@@ -72,7 +71,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     if submission_use is None:
         submission_use = submission
         try:
-            comments_use, requests_made = redditApp.getPostComments(postURL)
+            comments_use = redditApp.getPostComments(postURL)
         except RequestException:
             return (
                 jsonify(error="Reddit API Limit Reached, please try again later."),
@@ -94,7 +93,7 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
         db_submission_id,
         post_sentiment,
         summation_score,
-    ) = calculate_and_store_submission_sentiment(submission_use, requests_made)
+    ) = calculate_and_store_submission_sentiment(submission_use)
     results, summation_score = calculate_and_store_comment_sentiment(
         comments_use, db_submission_id, summation_score
     )

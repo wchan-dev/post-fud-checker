@@ -11,7 +11,6 @@ def store_submission(
     sentiment_negative,
     sentiment_compound,
     summation_score,
-    requests_made,
 ) -> int:
     new_submission = RedditSubmission(
         submission_id=submission.id,
@@ -25,7 +24,6 @@ def store_submission(
         permalink=submission.permalink,
         summation_score=summation_score,
         timestamp=datetime.fromtimestamp(submission.created_utc),
-        requests_made=requests_made,
     )
 
     db.session.add(new_submission)
