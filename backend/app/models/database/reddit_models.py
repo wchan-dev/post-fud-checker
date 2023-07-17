@@ -1,4 +1,4 @@
-from .. import db
+from .... import db
 
 
 class RedditSubmission(db.Model):
@@ -9,14 +9,12 @@ class RedditSubmission(db.Model):
     selftext = db.Column(db.String, nullable=False)
     title = db.Column(db.String, nullable=False)
     num_comments = db.Column(db.Integer, nullable=False)
-    sentiment_positive = db.Column(db.Float, nullable=False)
-    sentiment_neutral = db.Column(db.Float, nullable=False)
-    sentiment_negative = db.Column(db.Float, nullable=False)
-    sentiment_compound = db.Column(db.Float, nullable=False)
-    summation_score = db.Column(db.Float, nullable=False)
     permalink = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
 
+    sentiment = db.relationship(
+        "RedditSubmissionSentiment", uselist=False, back_populates="submission"
+    )
     comments = db.relationship("RedditComment", backref="submission", lazy=True)
 
     def to_dict(self):
@@ -26,11 +24,6 @@ class RedditSubmission(db.Model):
             "selftext": self.selftext,
             "title": self.title,
             "num_comments": self.num_comments,
-            "sentiment_positive": self.sentiment_positive,
-            "sentiment_neutral": self.sentiment_neutral,
-            "sentiment_negative": self.sentiment_negative,
-            "sentiment_compound": self.sentiment_compound,
-            "summation_score": self.summation_score,
             "permalink": self.permalink,
             "created_utc": self.timestamp.isoformat(),  # convert datetime to string,
             # created_utc is kept due to naming
@@ -51,12 +44,11 @@ class RedditComment(db.Model):
     )
     body = db.Column(db.String, nullable=False)
     permalink = db.Column(db.String, nullable=False)
-    sentiment_positive = db.Column(db.Float, nullable=False)
-    sentiment_neutral = db.Column(db.Float, nullable=False)
-    sentiment_negative = db.Column(db.Float, nullable=False)
-    sentiment_compound = db.Column(db.Float, nullable=False)
-    summation_score = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
+
+    sentiment = db.relationship(
+        "RedditCommentSentiment", useList=False, back_populates="comment"
+    )
 
     def to_dict(self):
         return {
@@ -65,10 +57,6 @@ class RedditComment(db.Model):
             "parent_submission_id": self.parent_submission_id,
             "body": self.body,
             "permalink": self.permalink,
-            "sentiment_positive": self.sentiment_positive,
-            "sentiment_neutral": self.sentiment_neutral,
-            "sentiment_negative": self.sentiment_negative,
-            "sentiment_compound": self.sentiment_compound,
-            "summation_score": self.summation_score,
-            "created_utc": self.timestamp.isoformat(),  # convert datetime to string
+            "sentiment": self.sentiment.to_dict() if self.sentiment else None,
+            "timestamp": self.timestamp.isoformat(),  # convert datetime to string
         }
