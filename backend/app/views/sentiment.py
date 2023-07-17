@@ -12,45 +12,47 @@ from ..models.database_handler import (
 )
 
 from ..models.reddit import RedditApp
+from ..models.database.reddit_models import RedditSubmission
 
 import os
 import datetime
 from prawcore.exceptions import RequestException
 
+from typing import Union
+
 sentiment = Blueprint("sentiment", __name__)
 
 
-def calculate_and_store_comment_sentiment(comments, db_submission_id, summation_score):
+def calculate_and_store_comment_sentiment(
+    comments: list[dict[str, Union[str, int]]], db_submission_id: int
+) -> list[dict[str, Union[str, int, float]]]:
     results = []
     for idx, comment in enumerate(comments):
         comment_sentiment = calculate_comment_sentiment(comment["body"])
         store_comment(
-            comment,
-            db_submission_id,
+            comment["id"],
             comment_sentiment["pos"],
             comment_sentiment["neu"],
             comment_sentiment["neg"],
             comment_sentiment["compound"],
-            summation_score,
         )
-        summation_score += float(comment_sentiment["compound"]) / (2 + idx)
 
         comment_dict = {
             **comment,
             **comment_sentiment,
-            "summation_score": summation_score,
-            "compound_score": comment_sentiment["compound"],
         }
+
         results.append(comment_dict)
-    return results, summation_score
+    return results
 
 
-def calculate_and_store_submission_sentiment(submission):
+def calculate_and_store_submission_sentiment(
+    submission: RedditSubmission,
+) -> tuple[int, dict[str, float]]:
     title_sentiment, content_sentiment = get_post_title_content_sentiment(
         submission.title, submission.selftext
     )
     post_sentiment = calculate_post_title_sentiment(title_sentiment, content_sentiment)
-    summation_score = float(post_sentiment["post_compound"])
 
     db_submission_id = store_submission(
         submission,
@@ -58,12 +60,13 @@ def calculate_and_store_submission_sentiment(submission):
         post_sentiment["post_neu"],
         post_sentiment["post_neg"],
         post_sentiment["post_compound"],
-        summation_score,
     )
-    return db_submission_id, post_sentiment, summation_score
+    return db_submission_id, post_sentiment
 
 
-def analyze_and_store_sentiments(postURL, redditApp, submission):
+def analyze_and_store_sentiments(
+    postURL: str, redditApp: RedditApp, submission: RedditSubmission
+) -> Union[tuple[dict, int], dict]:
     submission_use, comments_use = get_previous_results(submission.id, redditApp)
     submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
     submission_subreddit = submission.subreddit.display_name
@@ -108,8 +111,8 @@ def analyze_and_store_sentiments(postURL, redditApp, submission):
     )
 
 
-def calc_num_comments(submission_curr: int, submission_prev: int):
-    return submission_curr - submission_prev
+def calc_num_comments(current_num_comments: int, previous_num_comments: int) -> int:
+    return current_num_comments - previous_num_comments
 
 
 @sentiment.route(os.environ.get("POST_SENTIMENT_ANALYSIS"), methods=["POST"])
