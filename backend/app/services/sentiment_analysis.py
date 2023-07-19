@@ -22,7 +22,7 @@ def get_post_title_content_sentiment(
     return title_score, content_score
 
 
-def calculate_post_title_content_sentiment(
+def combine_post_content_sentiment(
     title_sentiment: dict[str, float], content_sentiment: dict[str, float]
 ):
     post_compound = title_sentiment["compound"] + content_sentiment["compound"]

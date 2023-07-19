@@ -2,8 +2,8 @@ from flask import Response, jsonify
 
 from .services.sentiment_analysis import (
     get_post_title_content_sentiment,
+    combine_post_content_sentiment,
     calculate_comment_sentiment,
-    calculate_post_title_content_sentiment,
 )
 
 from .reddit import RedditApp
@@ -11,7 +11,8 @@ from .reddit import RedditApp
 from ..models.database.reddit_models import RedditSubmission
 from ..models.database_handler import (
     store_submission_raw,
-    store_comment_raw,
+    store_submission_sentiment,
+    store_comments_with_sentiments,
     get_previous_results,
 )
 
@@ -23,47 +24,34 @@ import datetime
 from prawcore.exceptions import RequestException
 
 
-def calculate_and_store_comment_sentiment(
+def store_all_comment_sentiments(
     comments: list[dict[str, Union[str, int]]], db_submission_id: int
 ) -> list[dict[str, Union[str, int, float]]]:
     results = []
     for idx, comment in enumerate(comments):
         comment_sentiment = calculate_comment_sentiment(comment["body"])
-        store_comment_raw(
-            comment["id"],
-            comment_sentiment["pos"],
-            comment_sentiment["neu"],
-            comment_sentiment["neg"],
-            comment_sentiment["compound"],
-        )
+        results.append(comment_sentiment)
 
-        comment_dict = {
-            **comment,
-            **comment_sentiment,
-        }
-
-        results.append(comment_dict)
-    return results
+        return results
 
 
-def calculate_and_store_submission_sentiment(
-    submission: RedditSubmission,
-) -> tuple[int, dict[str, float]]:
+def calculate_and_store_post_sentiment(
+    submission,
+) -> dict[str, float]:
     title_sentiment, content_sentiment = get_post_title_content_sentiment(
         submission.title, submission.selftext
     )
-    post_sentiment = calculate_post_title_content_sentiment(
-        title_sentiment, content_sentiment
-    )
 
-    db_submission_id = store_submission_raw(
-        submission,
-        post_sentiment["post_pos"],
-        post_sentiment["post_neu"],
-        post_sentiment["post_neg"],
-        post_sentiment["post_compound"],
+    post_sentiment = combine_post_content_sentiment(title_sentiment, content_sentiment)
+
+    store_submission_sentiment(
+        submission.id,
+        post_sentiment["pos"],
+        post_sentiment["neu"],
+        post_sentiment["neg"],
+        post_sentiment["compound"],
     )
-    return db_submission_id, post_sentiment
+    return post_sentiment
 
 
 def analyze_and_store_sentiments(
@@ -93,18 +81,22 @@ def analyze_and_store_sentiments(
             submission_use = submission
             comments_use = redditApp.getPostComments(postURL)
 
-    (
-        db_submission_id,
-        post_sentiment,
-        summation_score,
-    ) = calculate_and_store_submission_sentiment(submission_use)
-    results, summation_score = calculate_and_store_comment_sentiment(
-        comments_use, db_submission_id, summation_score
-    )
+    db_submission_id = store_submission_raw(submission)
+    _ = calculate_and_store_post_sentiment(db_submission_id)
+
+    comments_with_sentiments = []
+    for comment in comments_use:
+        comment_sentiment = calculate_comment_sentiment(
+            comment
+        )  # Assuming this function exists
+        comments_with_sentiments.append(
+            {"comment": comment, "sentiment": comment_sentiment}
+        )
+    store_comments_with_sentiments(comments_with_sentiments, db_submission_id)
 
     return {
         "post_title": submission.title,
-        "comments": results,
+        "comments": comments_with_sentiments,
         "postURL": postURL,
         "comment_count_diff": 0,
         "submission_date": submission_date,

@@ -15,7 +15,7 @@ class RedditSubmission(db.Model):
     sentiment = db.relationship(
         "RedditSubmissionSentiment", uselist=False, back_populates="submission"
     )
-   comments = db.relationship("RedditComment", backref="submission", lazy=True)
+    comments = db.relationship("RedditComment", backref="submission", lazy=True)
 
     def to_dict(self):
         return {
