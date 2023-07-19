@@ -3,8 +3,10 @@ import prawcore
 from flask import g
 from datetime import datetime
 
+from typing import Union
 
-def create_reddit_instance(app):
+
+def create_reddit_instance(app) -> praw.Reddit:
     if "reddit" not in g:
         g.reddit = praw.Reddit(
             client_id=app.config["CLIENT_ID"],
@@ -20,7 +22,9 @@ class RedditApp:
     def __init__(self, reddit_instance):
         self.reddit = reddit_instance
 
-    def getPostComments(self, submissionURL: str):
+    def getPostComments(
+        self, submissionURL: str
+    ) -> list[dict[str, Union[str, datetime]]]:
         comments = []
         try:
             submission = self.reddit.submission(url=submissionURL)

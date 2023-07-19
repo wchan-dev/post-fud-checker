@@ -1,4 +1,4 @@
-from .... import db
+from ... import db
 
 
 class RedditSubmission(db.Model):
@@ -15,7 +15,7 @@ class RedditSubmission(db.Model):
     sentiment = db.relationship(
         "RedditSubmissionSentiment", uselist=False, back_populates="submission"
     )
-    comments = db.relationship("RedditComment", backref="submission", lazy=True)
+   comments = db.relationship("RedditComment", backref="submission", lazy=True)
 
     def to_dict(self):
         return {
@@ -47,7 +47,7 @@ class RedditComment(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False)
 
     sentiment = db.relationship(
-        "RedditCommentSentiment", useList=False, back_populates="comment"
+        "RedditCommentSentiment", uselist=False, back_populates="comment"
     )
 
     def to_dict(self):

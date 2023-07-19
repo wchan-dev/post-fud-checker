@@ -1,6 +1,6 @@
 from datetime import datetime
-from . import RedditSubmission, RedditComment
-from . import RedditSubmissionSentiment, RedditCommentSentiment
+from .database.reddit_models import RedditSubmission, RedditComment
+from .database.sentiment_models import RedditSubmissionSentiment, RedditCommentSentiment
 from .. import db
 
 
