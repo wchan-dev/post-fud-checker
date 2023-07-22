@@ -28,9 +28,8 @@ class RedditApp:
         comments = []
         try:
             submission = self.reddit.submission(url=submissionURL)
-            submission.comment_sort = (
-                "best"  # there's no way to retrieve each subreddit's default sort
-            )
+            # sort by new guarantees in time order, must be before network fetching
+            submission.comment_sort = "old"
             submission.comments.replace_more(limit=None)
             for comment in submission.comments.list():
                 comments.append(
@@ -42,6 +41,7 @@ class RedditApp:
                     },
                 )
             return comments
+
         except prawcore.exceptions.NotFound:
             raise Exception(f"No reddit post found at {submissionURL}")
         except prawcore.exceptions.RequestException:

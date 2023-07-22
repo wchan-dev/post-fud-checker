@@ -98,7 +98,6 @@ def analyze_and_store_sentiments(
         "post_title": submission.title,
         "comments": comments_with_sentiments,
         "postURL": postURL,
-        "comment_count_diff": 0,
         "submission_date": submission_date,
         "subreddit": submission_subreddit,
     }
