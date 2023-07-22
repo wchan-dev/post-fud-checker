@@ -1,6 +1,6 @@
 from flask import Response, jsonify
 
-from .services.sentiment_analysis import (
+from .sentiment_analysis import (
     get_post_title_content_sentiment,
     combine_post_content_sentiment,
     calculate_comment_sentiment,
@@ -36,7 +36,7 @@ def store_all_comment_sentiments(
 
 
 def calculate_and_store_post_sentiment(
-    submission,
+    submission, db_submission_id: int
 ) -> dict[str, float]:
     title_sentiment, content_sentiment = get_post_title_content_sentiment(
         submission.title, submission.selftext
@@ -45,7 +45,7 @@ def calculate_and_store_post_sentiment(
     post_sentiment = combine_post_content_sentiment(title_sentiment, content_sentiment)
 
     store_submission_sentiment(
-        submission.id,
+        db_submission_id,
         post_sentiment["pos"],
         post_sentiment["neu"],
         post_sentiment["neg"],
@@ -82,12 +82,12 @@ def analyze_and_store_sentiments(
             comments_use = redditApp.getPostComments(postURL)
 
     db_submission_id = store_submission_raw(submission)
-    _ = calculate_and_store_post_sentiment(db_submission_id)
+    _ = calculate_and_store_post_sentiment(submission, db_submission_id)
 
     comments_with_sentiments = []
     for comment in comments_use:
         comment_sentiment = calculate_comment_sentiment(
-            comment
+            comment["body"]
         )  # Assuming this function exists
         comments_with_sentiments.append(
             {"comment": comment, "sentiment": comment_sentiment}

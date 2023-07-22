@@ -25,11 +25,8 @@ class RedditSubmission(db.Model):
             "title": self.title,
             "num_comments": self.num_comments,
             "permalink": self.permalink,
-            "created_utc": self.timestamp.isoformat(),  # convert datetime to string,
-            # created_utc is kept due to naming
-            "comments": [
-                comment.to_dict() for comment in self.comments
-            ],  # convert comments to dict
+            "timestamp": self.timestamp.isoformat(),  # convert datetime to string,
+            "comments": [comment.to_dict() for comment in self.comments],
         }
 
 
@@ -38,14 +35,13 @@ class RedditComment(db.Model):
     __table_args__ = {"schema": "reddit"}
 
     id = db.Column(db.Integer, primary_key=True)
-    comment_id = db.Column(db.String, unique=True)
     parent_submission_id = db.Column(
         db.Integer, db.ForeignKey("reddit.submission.id"), nullable=False
     )
     body = db.Column(db.String, nullable=False)
+    score = db.Column(db.Integer, nullable=False)
     permalink = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
-
     sentiment = db.relationship(
         "RedditCommentSentiment", uselist=False, back_populates="comment"
     )
@@ -53,9 +49,9 @@ class RedditComment(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "comment_id": self.comment_id,
             "parent_submission_id": self.parent_submission_id,
             "body": self.body,
+            "score": self.score,
             "permalink": self.permalink,
             "sentiment": self.sentiment.to_dict() if self.sentiment else None,
             "timestamp": self.timestamp.isoformat(),  # convert datetime to string

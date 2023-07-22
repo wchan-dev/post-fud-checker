@@ -32,8 +32,8 @@ def combine_post_content_sentiment(
     post_neu = title_sentiment["neu"] + content_sentiment["neu"]
 
     return {
-        "post_compound": post_compound,
-        "post_neg": post_neg,
-        "post_pos": post_pos,
-        "post_neu": post_neu,
+        "compound": post_compound,
+        "neg": post_neg,
+        "pos": post_pos,
+        "neu": post_neu,
     }

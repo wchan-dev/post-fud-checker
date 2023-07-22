@@ -12,6 +12,7 @@ def store_submission_raw(submission) -> int:
         selftext=submission.selftext,
         title=submission.title,
         num_comments=submission.num_comments,
+        permalink=submission.permalink,
         timestamp=datetime.fromtimestamp(submission.created_utc),
     )
 
@@ -38,39 +39,6 @@ def store_submission_sentiment(
     db.session.commit()
 
 
-def store_comments_raw(
-    comments: list[dict],
-    parent_id: int,
-) -> None:
-    new_comment = RedditComment(
-        parent_submission_id=parent_id,
-        body=comment["body"],
-        permalink=comment["permalink"],
-        timestamp=comment["created_utc"],
-    )
-
-    db.session.add(new_comment)
-    db.session.commit()
-
-
-def store_comment_sentiment(
-    comment_id: int,
-    sentiment_positive: float,
-    sentiment_neutral: float,
-    sentiment_negative: float,
-    sentiment_compound: float,
-) -> None:
-    sentiment = RedditCommentSentiment(
-        comment_id=comment_id,
-        sentiment_positive=sentiment_positive,
-        sentiment_neutral=sentiment_neutral,
-        sentiment_negative=sentiment_negative,
-        sentiment_compound=sentiment_compound,
-    )
-    db.session.add(sentiment)
-    db.session.commit()
-
-
 def store_comments_with_sentiments(
     comments_with_sentiments: list[dict],
     parent_id: int,
@@ -79,17 +47,18 @@ def store_comments_with_sentiments(
         new_comment = RedditComment(
             parent_submission_id=parent_id,
             body=comment_with_sentiment["comment"]["body"],
+            score=comment_with_sentiment["comment"]["score"],
             permalink=comment_with_sentiment["comment"]["permalink"],
-            timestamp=comment_with_sentiment["comment"]["created_utc"],
+            timestamp=comment_with_sentiment["comment"]["timestamp"],
         )
         db.session.add(new_comment)
         db.session.flush()  # So that new_comment.id is available
 
         new_sentiment = RedditCommentSentiment(
             comment_id=new_comment.id,
-            sentiment_positive=comment_with_sentiment["sentiment"]["positive"],
-            sentiment_neutral=comment_with_sentiment["sentiment"]["neutral"],
-            sentiment_negative=comment_with_sentiment["sentiment"]["negative"],
+            sentiment_positive=comment_with_sentiment["sentiment"]["pos"],
+            sentiment_neutral=comment_with_sentiment["sentiment"]["neu"],
+            sentiment_negative=comment_with_sentiment["sentiment"]["neg"],
             sentiment_compound=comment_with_sentiment["sentiment"]["compound"],
         )
         db.session.add(new_sentiment)

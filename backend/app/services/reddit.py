@@ -28,13 +28,17 @@ class RedditApp:
         comments = []
         try:
             submission = self.reddit.submission(url=submissionURL)
+            submission.comment_sort = (
+                "best"  # there's no way to retrieve each subreddit's default sort
+            )
             submission.comments.replace_more(limit=None)
             for comment in submission.comments.list():
                 comments.append(
                     {
                         "body": comment.body,
+                        "score": comment.score,
                         "permalink": comment.permalink,
-                        "created_utc": datetime.fromtimestamp(comment.created_utc),
+                        "timestamp": datetime.fromtimestamp(comment.created_utc),
                     },
                 )
             return comments
