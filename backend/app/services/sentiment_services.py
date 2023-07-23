@@ -5,6 +5,7 @@ from .sentiment_analysis import (
     combine_post_content_sentiment,
     calculate_post_baseline,
     calculate_comment_sentiment,
+    calculate_moving_average,
 )
 
 from .reddit import RedditApp
@@ -94,6 +95,7 @@ def analyze_and_store_sentiments(
     _, post_sentiment = calculate_and_store_post_sentiment(submission, db_submission_id)
 
     comments_with_sentiments = []
+    comment_sentiments_compound = []
     for comment in comments_use:
         comment_sentiment = calculate_comment_sentiment(
             comment["body"]
@@ -101,7 +103,14 @@ def analyze_and_store_sentiments(
         comments_with_sentiments.append(
             {"comment": comment, "sentiment": comment_sentiment}
         )
+        # for calculating moving average
+        comment_sentiments_compound.append(comment_sentiment["compound"])
     store_comments_with_sentiments(comments_with_sentiments, db_submission_id)
+
+    # separated for readability from above loop
+    moving_sentiment_average = calculate_moving_average(
+        comment_sentiments_compound, submission_use.num_comments
+    )
 
     return {
         "post_title": submission.title,
@@ -109,5 +118,6 @@ def analyze_and_store_sentiments(
         "postURL": postURL,
         "submission_date": submission_date,
         "sentiment_baseline": post_sentiment["baseline"],
+        "moving_sentiment_average": moving_sentiment_average,
         "comments": comments_with_sentiments,
     }
