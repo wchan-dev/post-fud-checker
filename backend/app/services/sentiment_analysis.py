@@ -60,7 +60,7 @@ def combine_post_content_sentiment(
 
 def calculate_moving_average(
     sentiment_scores_compound: list[float], window_size: int
-) -> list(float):
+) -> list[float]:
     # Moving Average(i) = (si-k+1 + si-k+2 + ... + si) / k
     # window_size: number of comments over the moving average calc so far
     moving_averages = []
