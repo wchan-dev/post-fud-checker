@@ -11,7 +11,7 @@ class RedditSubmission(db.Model):
     num_comments = db.Column(db.Integer, nullable=False)
     permalink = db.Column(db.String, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
-
+    upvote_ratio = db.Column(db.Integer, nullable=False)
     sentiment = db.relationship(
         "RedditSubmissionSentiment", uselist=False, back_populates="submission"
     )
@@ -26,6 +26,7 @@ class RedditSubmission(db.Model):
             "num_comments": self.num_comments,
             "permalink": self.permalink,
             "timestamp": self.timestamp.isoformat(),  # convert datetime to string,
+            "upvote_ratio": self.upvote_ratio,
             "comments": [comment.to_dict() for comment in self.comments],
         }
 

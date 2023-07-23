@@ -3,6 +3,7 @@ from flask import Response, jsonify
 from .sentiment_analysis import (
     get_post_title_content_sentiment,
     combine_post_content_sentiment,
+    calculate_post_baseline,
     calculate_comment_sentiment,
 )
 
@@ -37,12 +38,17 @@ def store_all_comment_sentiments(
 
 def calculate_and_store_post_sentiment(
     submission, db_submission_id: int
-) -> dict[str, float]:
+) -> (int, dict[str, float]):
     title_sentiment, content_sentiment = get_post_title_content_sentiment(
         submission.title, submission.selftext
     )
 
     post_sentiment = combine_post_content_sentiment(title_sentiment, content_sentiment)
+    post_sentiment_baseline = calculate_post_baseline(
+        title_sentiment["compound"],
+        content_sentiment["compound"],
+        submission.upvote_ratio,
+    )
 
     store_submission_sentiment(
         db_submission_id,
@@ -50,8 +56,11 @@ def calculate_and_store_post_sentiment(
         post_sentiment["neu"],
         post_sentiment["neg"],
         post_sentiment["compound"],
+        post_sentiment_baseline,
     )
-    return post_sentiment
+
+    post_sentiment = {**post_sentiment, "baseline": post_sentiment_baseline}
+    return db_submission_id, post_sentiment
 
 
 def analyze_and_store_sentiments(
@@ -82,7 +91,7 @@ def analyze_and_store_sentiments(
             comments_use = redditApp.getPostComments(postURL)
 
     db_submission_id = store_submission_raw(submission)
-    _ = calculate_and_store_post_sentiment(submission, db_submission_id)
+    _, post_sentiment = calculate_and_store_post_sentiment(submission, db_submission_id)
 
     comments_with_sentiments = []
     for comment in comments_use:
@@ -96,8 +105,9 @@ def analyze_and_store_sentiments(
 
     return {
         "post_title": submission.title,
-        "comments": comments_with_sentiments,
+        "subreddit": submission_subreddit,
         "postURL": postURL,
         "submission_date": submission_date,
-        "subreddit": submission_subreddit,
+        "sentiment_baseline": post_sentiment["baseline"],
+        "comments": comments_with_sentiments,
     }

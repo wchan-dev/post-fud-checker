@@ -14,6 +14,7 @@ def store_submission_raw(submission) -> int:
         num_comments=submission.num_comments,
         permalink=submission.permalink,
         timestamp=datetime.fromtimestamp(submission.created_utc),
+        upvote_ratio=submission.upvote_ratio,
     )
 
     db.session.add(new_submission)
@@ -27,6 +28,7 @@ def store_submission_sentiment(
     sentiment_neutral: float,
     sentiment_negative: float,
     sentiment_compound: float,
+    sentiment_baseline: float,
 ) -> None:
     sentiment = RedditSubmissionSentiment(
         submission_id=submission_id,
@@ -34,6 +36,7 @@ def store_submission_sentiment(
         sentiment_neutral=sentiment_neutral,
         sentiment_negative=sentiment_negative,
         sentiment_compound=sentiment_compound,
+        sentiment_baseline=sentiment_baseline,
     )
     db.session.add(sentiment)
     db.session.commit()

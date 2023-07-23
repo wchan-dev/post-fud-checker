@@ -8,6 +8,25 @@ def calculate_comment_sentiment(comment: str) -> dict[str, float]:
     return raw_scores
 
 
+def calculate_post_baseline(
+    title_sentiment_compound: float,
+    content_sentiment_compound: float,
+    upvote_ratio: float,
+) -> float:
+    # case 2: emphasis on content sentiment
+    alpha = 0.2  # title_sentiment
+    beta = 0.6  # content_sentiment
+    gamma = 0.2  # upvote_sentiment
+
+    baseline_score = (
+        alpha * title_sentiment_compound
+        + beta * content_sentiment_compound
+        + gamma * upvote_ratio
+    ) / (alpha + beta + gamma)
+
+    return baseline_score
+
+
 def get_post_title_content_sentiment(
     title: str, selftext: str
 ) -> (dict[str, float], dict[str, float]):

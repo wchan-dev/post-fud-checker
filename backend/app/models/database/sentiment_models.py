@@ -10,6 +10,7 @@ class RedditSubmissionSentiment(db.Model):
     sentiment_neutral = db.Column(db.Float)
     sentiment_negative = db.Column(db.Float)
     sentiment_compound = db.Column(db.Float)
+    sentiment_baseline = db.Column(db.Float)
 
     submission = db.relationship("RedditSubmission", back_populates="sentiment")
 
@@ -19,6 +20,7 @@ class RedditSubmissionSentiment(db.Model):
             "sentiment_neutral": self.sentiment_neutral,
             "sentiment_negative": self.sentiment_negative,
             "sentiment_compound": self.sentiment_compound,
+            "sentiment_baseline": self.sentiment_baseline,
         }
 
 
@@ -31,6 +33,7 @@ class RedditCommentSentiment(db.Model):
     sentiment_neutral = db.Column(db.Float)
     sentiment_negative = db.Column(db.Float)
     sentiment_compound = db.Column(db.Float)
+    sentiment_summation = db.Column(db.Float)
 
     comment = db.relationship("RedditComment", back_populates="sentiment")
 
@@ -40,4 +43,5 @@ class RedditCommentSentiment(db.Model):
             "sentiment_neutral": self.sentiment_neutral,
             "sentiment_negative": self.sentiment_negative,
             "sentiment_compound": self.sentiment_compound,
+            "sentiment_summation": self.sentiment_summation,
         }
