@@ -34,14 +34,14 @@ const SentimentPlotContainer: React.FC = () => {
   ) => {
     const {
       timeStamps,
-      sentiments,
+      sentiments_compound,
       histogram_sentiments,
       postTitle,
       submission_Date,
       subreddit,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
     setTimeStamps(timeStamps);
-    setSentiments(sentiments);
+    setSentiments(sentiments_compound);
     setHistogramSentiments(histogram_sentiments);
     setPostTitle(postTitle);
     setSubmissionDate(submission_Date);

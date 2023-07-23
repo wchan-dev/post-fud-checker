@@ -1,16 +1,24 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-interface Comment {
-  created_utc: string;
-  post_title: string;
-  summation_score: number;
-  compound_score: number;
-  comment_count_diff: number;
+interface CommentData {
+  comment: {
+    body: string;
+    permalink: string;
+    score: number;
+    timestamp: Date;
+  };
+
+  sentiment: {
+    compound: number;
+    neg: number;
+    neu: number;
+    pos: number;
+  };
 }
 
 export type SentimentResult = {
   timeStamps: Date[];
-  sentiments: number[];
+  sentiments_compound: number[];
   histogram_sentiments: number[];
   postTitle: string;
   submission_Date: Date;
@@ -30,39 +38,41 @@ export const getSentiment = async (
         headers: { "Content-Type": "application/json" },
       }
     );
-    const timeStamps = response.data.comments.map(
-      (comment: Comment) => new Date(comment.created_utc)
-    );
-    console.log(timeStamps);
-    const sentiments = response.data.comments.map(
-      (comment: Comment) => comment.summation_score
+
+    const data = response.data;
+
+    const timeStamps = data.comments.map(
+      (commentData: CommentData) => new Date(commentData.comment.timestamp)
     );
 
-    const histogram_sentiments = response.data.comments.map(
-      (comment: Comment) => comment.compound_score
+    const sentiments_compound = data.comments.map(
+      (commentData: CommentData) => commentData.sentiment.compound
     );
 
-    const postTitle = response.data.post_title;
-    const submission_Date = response.data.submission_date;
-    const subreddit = response.data.subreddit;
+    const histogram_sentiments = data.comments.map(
+      (commentData: CommentData) => commentData.sentiment.compound
+    );
+
+    const postTitle = data.post_title;
+    const submission_Date = data.submission_date;
+    const subreddit = data.subreddit;
 
     return {
       timeStamps,
       postTitle,
-      sentiments,
+      sentiments_compound,
       histogram_sentiments,
       submission_Date,
       subreddit,
     };
   } catch (error: any) {
     if (error.response && error.response.status === 429) {
-      let errorMessage = error.message;
-
-      errorMessage = "The API limit has been reached. Please try again later.";
+      const errorMessage = error.message;
+      console.log(errorMessage);
     }
     return {
       timeStamps: [],
-      sentiments: [],
+      sentiments_compound: [],
       histogram_sentiments: [],
       postTitle: "",
       submission_Date: new Date(),
