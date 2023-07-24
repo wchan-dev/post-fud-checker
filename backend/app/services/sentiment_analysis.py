@@ -1,5 +1,5 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 
 def calculate_comment_sentiment(comment: str) -> dict[str, float]:

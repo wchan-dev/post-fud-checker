@@ -5,7 +5,7 @@
         "body": "A recent Reddit policy change threatens to kill many beloved third-party mobile apps, making a great many quality-of-life features not seen in the official mobile app **permanently inaccessible** to users.\n\nOn May 31, 2023, Reddit announced they were raising the price to make calls to their API from being free to a level that will kill every third party app on Reddit, from [Apollo](https://www.reddit.com/r/apolloapp/comments/13ws4w3/had_a_call_with_reddit_to_discuss_pricing_bad/) to [Reddit is Fun](https://www.reddit.com/r/redditisfun/comments/13wxepd/rif_dev_here_reddits_api_changes_will_likely_kill/) to [Narwhal](https://www.reddit.com/r/getnarwhal/comments/13wv038/reddit_have_quoted_the_apollo_devs_a_ridiculous/jmdqtyt/) to [BaconReader](https://www.reddit.com/r/baconreader/comments/13wveb2/reddit_api_changes_and_baconreader/).\n\nEven if you're not a mobile user and don't use any of those apps, this is a step toward killing other ways of customizing Reddit, such as Reddit Enhancement Suite or the use of the old.reddit.com desktop interface .\n\nThis isn't only a problem on the user level: many subreddit moderators depend on tools only available outside the official app to keep their communities on-topic and spam-free.\n\n&#x200B;\n\nWhat can *you* do?\n\n1. **Complain.** Message the mods of r/reddit.com, who are the admins of the site: message [/u/reddit](https://www.reddit.com/u/reddit/): submit a [support request](https://support.reddithelp.com/hc/en-us/requests/new): comment in relevant threads on [r/reddit](https://www.reddit.com/r/reddit/), such as [this one](https://www.reddit.com/r/reddit/comments/12qwagm/an_update_regarding_reddits_api/), leave a negative review on their official iOS or Android app- and sign your username in support to this post.\n2. **Spread the word.** Rabble-rouse on related subreddits. Meme it up, make it spicy. Bitch about it to your cat. Suggest anyone you know who moderates a subreddit join us at our sister sub at [r/ModCoord](https://www.reddit.com/r/ModCoord/) \\- but please don't pester mods you *don't* know by simply spamming their modmail.\n3. **Boycott** ***and*** **spread the word...to Reddit's competition!** Stay off Reddit as much as you can, instead, take to your favorite *non*\\-Reddit platform of choice and make some noise in support! \n\nhttps://discord.gg/cscareerhub\n\nhttps://programming.dev\n\n4. **Don't be a jerk.** As upsetting this may be, threats, profanity and vandalism will be worse than useless in getting people on our side. Please make every effort to be as restrained, polite, reasonable and law-abiding as possible.\n\n\n*I am a bot, and this action was performed automatically. Please [contact the moderators of this subreddit](/message/compose/?to=/r/cscareerquestions) if you have any questions or concerns.*",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8tuzh/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 06:08:48 GMT"
+        "timestamp": "Mon, 24 Jul 2023 13:08:48 GMT"
       },
       "sentiment": {
         "compound": -86.46000000000001,
@@ -18,8 +18,8 @@
       "comment": {
         "body": "\"Judge Marinacci : Let me tell you, it ain't worth it. Why don't you become a jockey, do something useful.\"\n\n(c) Rounders",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8uo2q/",
-        "score": 26,
-        "timestamp": "Mon, 24 Jul 2023 06:15:19 GMT"
+        "score": 31,
+        "timestamp": "Mon, 24 Jul 2023 13:15:19 GMT"
       },
       "sentiment": {
         "compound": -16.950000000000003,
@@ -32,8 +32,8 @@
       "comment": {
         "body": "if your concern is AI then no I wouldn't worry about that. it is just a tool and it is unlikely to get much better in the near-medium term",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8uwfm/",
-        "score": 43,
-        "timestamp": "Mon, 24 Jul 2023 06:17:10 GMT"
+        "score": 47,
+        "timestamp": "Mon, 24 Jul 2023 13:17:10 GMT"
       },
       "sentiment": {
         "compound": 47.77,
@@ -46,8 +46,8 @@
       "comment": {
         "body": "It's better as a programmer to see AI as a tool for productivity than as competition or a replacement for your skills. Programming requires creativity and the ability to approach problems in unique ways that AI can't quite replicate and won't for a very long time.\n\nChatGPT and other AI models can produce functional, impressive-looking code, sure. But that code can include outdated methods or technologies, solutions that just don't quite fit the problem, or straight up fundamentally wrong concepts. In the current state of AI, it's impossible to trust it to create fully functional code that checks all of the required boxes alone. Even if you told AI to write all of the code for a project, you'll still need to be there to clean up all of its mistakes.\n\nProgrammers aren't going anywhere. If programming is your passion and you have a knack for it, stick with programming.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8ve95/",
-        "score": 10,
-        "timestamp": "Mon, 24 Jul 2023 06:21:05 GMT"
+        "score": 13,
+        "timestamp": "Mon, 24 Jul 2023 13:21:05 GMT"
       },
       "sentiment": {
         "compound": 66.13,
@@ -60,8 +60,8 @@
       "comment": {
         "body": "Yes still a good career option despite it being near impossible for entry/mid level jobs for people not from some top end schools.\n\nHopefully this changes sooner then later though..",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8wg91/",
-        "score": 2,
-        "timestamp": "Mon, 24 Jul 2023 06:29:24 GMT"
+        "score": 1,
+        "timestamp": "Mon, 24 Jul 2023 13:29:24 GMT"
       },
       "sentiment": {
         "compound": 77.23,
@@ -74,8 +74,8 @@
       "comment": {
         "body": "There is a lot of hype about AI, but in a lot of ways that’s about all it is. Hype. Sure chatGPT and GitHub copilot can do some useful things. It’s sure good at generating boilerplate. It also likes to generate code that **looks** correct but often times isn’t. It’s far from making you redundant tbh.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8wkml/",
-        "score": 6,
-        "timestamp": "Mon, 24 Jul 2023 06:30:22 GMT"
+        "score": 7,
+        "timestamp": "Mon, 24 Jul 2023 13:30:22 GMT"
       },
       "sentiment": {
         "compound": 95.38,
@@ -88,8 +88,8 @@
       "comment": {
         "body": "AI is not going to replace the need for programmers\n\nif anything there is going to be a surge in demand sometime in the future as companies need humans to fix the problems created when they tried to have AI solve everything for them",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8x0jq/",
-        "score": 17,
-        "timestamp": "Mon, 24 Jul 2023 06:33:46 GMT"
+        "score": 20,
+        "timestamp": "Mon, 24 Jul 2023 13:33:46 GMT"
       },
       "sentiment": {
         "compound": -10.27,
@@ -102,8 +102,8 @@
       "comment": {
         "body": "Not only is AI going to be more of a tool like others have said, but big IF it were to take over programming jobs then pretty much any other non labor job you can think of will probably have been automated already",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8yi7d/",
-        "score": 12,
-        "timestamp": "Mon, 24 Jul 2023 06:45:05 GMT"
+        "score": 15,
+        "timestamp": "Mon, 24 Jul 2023 13:45:05 GMT"
       },
       "sentiment": {
         "compound": 73.37,
@@ -117,7 +117,7 @@
         "body": "Yes, you should. The market for CS grads are super over-saturated right now.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt940mc/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 07:25:08 GMT"
+        "timestamp": "Mon, 24 Jul 2023 14:25:08 GMT"
       },
       "sentiment": {
         "compound": 76.5,
@@ -130,8 +130,8 @@
       "comment": {
         "body": "Software engineering isn't going anywhere.  If you have the interest you might look to build some skills beyond the typical front/back web developer approach though.  (I'm not saying to ignore web tech, but web goes through a lot of boom busts cycles).  I'm always surprised how many people work in the web world, having worked in that space for years a lot of it ends up being the same boiler plate code with different frameworks and tech.  It really should be turn key to setup a website with users accounts, payment/subscriptions, basic account info, options to authenticate with 3rd party services like google, facebook, twitter, apple, etc.  Every ecomm and saas company rolls their own though.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt97bbn/",
-        "score": 7,
-        "timestamp": "Mon, 24 Jul 2023 07:48:01 GMT"
+        "score": 10,
+        "timestamp": "Mon, 24 Jul 2023 14:48:01 GMT"
       },
       "sentiment": {
         "compound": 89.35,
@@ -145,7 +145,7 @@
         "body": "I'm almost 27 and got job recently and know someone who started the job at 33. I'm still learning so it's all about passion💪",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9a6xs/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 08:07:36 GMT"
+        "timestamp": "Mon, 24 Jul 2023 15:07:36 GMT"
       },
       "sentiment": {
         "compound": 0.0,
@@ -159,7 +159,7 @@
         "body": "Yea it’s not looking hot for CS right now. Might be worth checking out a degree in underwater lesbian basket weaving",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9fwvu/",
         "score": 0,
-        "timestamp": "Mon, 24 Jul 2023 08:45:59 GMT"
+        "timestamp": "Mon, 24 Jul 2023 15:45:59 GMT"
       },
       "sentiment": {
         "compound": 22.63,
@@ -172,8 +172,8 @@
       "comment": {
         "body": "If you're worried about AI then no you should try this field.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9g4xi/",
-        "score": 5,
-        "timestamp": "Mon, 24 Jul 2023 08:47:27 GMT"
+        "score": 6,
+        "timestamp": "Mon, 24 Jul 2023 15:47:27 GMT"
       },
       "sentiment": {
         "compound": -52.669999999999995,
@@ -187,7 +187,7 @@
         "body": "Nobody is really sure right now. But it is a powerful skill that is useful in almost all industries with just a little elbow grease, so I think it’s still better than most.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9gwxk/",
         "score": 0,
-        "timestamp": "Mon, 24 Jul 2023 08:52:32 GMT"
+        "timestamp": "Mon, 24 Jul 2023 15:52:32 GMT"
       },
       "sentiment": {
         "compound": 92.16,
@@ -201,7 +201,7 @@
         "body": "When I think about the AI argument, I first think about technology as a whole and it's anthropological placement in human history. What is technology? It is a tool. Tools has been used through out history. When the flint was invented it replaced two sticks. When the matchstick was invented it replaced the flint. When the lighter was invented it replaced the matchstick. When the electric stove was invented it replaced the lighter.... so and and so fourth. \n\nThe point here is not just that technology continually evolves but that at every stage of invention, there will always be a new learning curve. At every intersection of these new begininnings are opportunities for individuals to capatilize on said technology; to start businesses, become experts in the field, and specialize in whatever new emerging technology presents itself. \n\nThis seems to be the one constants that exists in the field of technology that is not as prevalent in other fields. Will technology transform every sector in someway shape or form? Yes! But that is why I think that it I better to be at the center of that transformation rather than in its wake. AI will most certainly increase the speed at which jobs are replaced and it will also lower the barrier for entry of new occupants, meaning there will be more supply of workers and thus more competition for jobs if jobs in tech do not also grow simultaneously. \n\nAt the same time, AI takes away alot of the mundane and monotonous takes from the plate of the developer so that they can actually focus more clearly on bigger picture items. Not only that, but having more new occupants means th a t there's more opportunity for innovation. More innovation means more code, more time and energy that someone has to put in to making that new widget.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9i8a4/",
         "score": 3,
-        "timestamp": "Mon, 24 Jul 2023 09:01:07 GMT"
+        "timestamp": "Mon, 24 Jul 2023 16:01:07 GMT"
       },
       "sentiment": {
         "compound": 98.7,
@@ -215,7 +215,7 @@
         "body": "Yea. software engineering will still be in demand for at least the next coming decade. AI and software will replace a lot of jobs but someone needs to create the software, train the models, and maintain the infrastructure.  If you're afraid of AI, then why not study it? Just like any industrial revolution, you can join it or fight it. You dont have to pick the winner, but instead be part of the industry that creates the tools. As the classic saying, during a gold rush, sell pick axes. During this AI revolution, you can be part of a company that sells white label AI tools.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9mc40/",
         "score": 2,
-        "timestamp": "Mon, 24 Jul 2023 09:27:40 GMT"
+        "timestamp": "Mon, 24 Jul 2023 16:27:40 GMT"
       },
       "sentiment": {
         "compound": 91.69,
@@ -229,7 +229,7 @@
         "body": "AI won’t make CS careers irrelevant and the demand for CS professionals is still rising. Main issue is there is over saturation in the job market right now and supply of entry level developers is rising faster than demand.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9njr0/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 09:35:28 GMT"
+        "timestamp": "Mon, 24 Jul 2023 16:35:28 GMT"
       },
       "sentiment": {
         "compound": -25.0,
@@ -243,7 +243,7 @@
         "body": "AI is not the problem. One of the biggest challenges in software development is that you’ll be asked to create or modify complicated software to address some vague / poorly-defined problem, and the goals are constantly changed. AI can’t really deal with people who don’t know what they want. It can’t deal with systems that are complicated.\n\nThe real problem is that the job market is awful. And the amount you need to know to get hired is constantly growing. And even then, there’s a lot of luck involved.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9p5s2/",
         "score": 2,
-        "timestamp": "Mon, 24 Jul 2023 09:45:45 GMT"
+        "timestamp": "Mon, 24 Jul 2023 16:45:45 GMT"
       },
       "sentiment": {
         "compound": 83.05,
@@ -257,7 +257,7 @@
         "body": "Don't worry. You won't be redundant.\n\nIf you truly worry about that you either (1) are too easily influenced by clickbait and mainstream [FUD](https://en.wikipedia.org/wiki/Fear,_uncertainty,_and_doubt), or (2) you're not cut out for this career which requires constant learning.\n\nThe invention of the CNC machine didn't kill machinist jobs. The invention of CAD software didn't kill mechanical engineering or architect jobs. The list goes on. People adapt and become more productive.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9qio9/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 09:54:18 GMT"
+        "timestamp": "Mon, 24 Jul 2023 16:54:18 GMT"
       },
       "sentiment": {
         "compound": 95.45,
@@ -271,7 +271,7 @@
         "body": "Do what u wanna do in life thats possible, failure is only when u stop working on ur goals",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jta65jy/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 11:39:02 GMT"
+        "timestamp": "Mon, 24 Jul 2023 18:39:02 GMT"
       },
       "sentiment": {
         "compound": -67.05,
@@ -282,10 +282,24 @@
     },
     {
       "comment": {
+        "body": "I'm just a (MSCS) student myself and have undergrad in finance and accounting, but if I had it all to do over again, I'd do a bachelor's in electrical or computer engineering. Actually, I'd still like to do that and am much older than you are, but an engineering bachelor's would take me about another 90 semester hours, whereas my MSCS will only take another 21 hours, so I should stick with my current path. Given your situation, though, consider that there are some accredited online engineering degree options like from Arizona State and maybe the University of North Dakota, and you might still have the option to do software engineering with a EE or CompE degree but would have many other options as well.",
+        "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jtab1xp/",
+        "score": 1,
+        "timestamp": "Mon, 24 Jul 2023 19:10:42 GMT"
+      },
+      "sentiment": {
+        "compound": 84.61999999999999,
+        "neg": 0.0,
+        "neu": 92.7,
+        "pos": 7.3
+      }
+    },
+    {
+      "comment": {
         "body": "(it's a joke, btw)",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt8uq3x/",
         "score": 7,
-        "timestamp": "Mon, 24 Jul 2023 06:15:46 GMT"
+        "timestamp": "Mon, 24 Jul 2023 13:15:46 GMT"
       },
       "sentiment": {
         "compound": 29.599999999999998,
@@ -298,8 +312,8 @@
       "comment": {
         "body": "I believe it just got dumber recently. Lol",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9oyux/",
-        "score": 12,
-        "timestamp": "Mon, 24 Jul 2023 09:44:31 GMT"
+        "score": 15,
+        "timestamp": "Mon, 24 Jul 2023 16:44:31 GMT"
       },
       "sentiment": {
         "compound": 7.720000000000001,
@@ -312,8 +326,8 @@
       "comment": {
         "body": "The junior and entry level market is already impacted",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9q407/",
-        "score": -5,
-        "timestamp": "Mon, 24 Jul 2023 09:51:43 GMT"
+        "score": -6,
+        "timestamp": "Mon, 24 Jul 2023 16:51:43 GMT"
       },
       "sentiment": {
         "compound": 0.0,
@@ -327,7 +341,7 @@
         "body": "I think we’ve hit the peak of Intelligence with current LLM’s tech. A new revolution would have to occur to push the boundaries. Or maybe I’m grossly mistaken.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9rv51/",
         "score": 3,
-        "timestamp": "Mon, 24 Jul 2023 10:02:53 GMT"
+        "timestamp": "Mon, 24 Jul 2023 17:02:53 GMT"
       },
       "sentiment": {
         "compound": -7.720000000000001,
@@ -340,8 +354,8 @@
       "comment": {
         "body": "I think it’s also better as a programmer to see programming as a tool too and not in and of itself the career. \n\nLike a builder / plumber doesn’t think of themselves as the hammer user or the pipe tightener even though doing that well is a huge part of their job. They use their skills to solve problems.\n\n(P.S. no offense to plumbers or carpenters for oversimplifying your job! Just an analogy for the difference between various software developer jobs being considered “programmer” / “coder” colloquially)",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9mzdp/",
-        "score": 3,
-        "timestamp": "Mon, 24 Jul 2023 09:31:49 GMT"
+        "score": 4,
+        "timestamp": "Mon, 24 Jul 2023 16:31:49 GMT"
       },
       "sentiment": {
         "compound": 61.14000000000001,
@@ -355,7 +369,7 @@
         "body": "[removed]",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9fdlr/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 08:42:29 GMT"
+        "timestamp": "Mon, 24 Jul 2023 15:42:29 GMT"
       },
       "sentiment": {
         "compound": 0.0,
@@ -366,10 +380,52 @@
     },
     {
       "comment": {
+        "body": "Oh, for sure — programmers will not be eliminated from the job market until at the very least most service-based jobs have been replaced by AI.",
+        "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jta88jv/",
+        "score": 1,
+        "timestamp": "Mon, 24 Jul 2023 18:52:36 GMT"
+      },
+      "sentiment": {
+        "compound": 31.819999999999997,
+        "neg": 0.0,
+        "neu": 91.3,
+        "pos": 8.7
+      }
+    },
+    {
+      "comment": {
+        "body": "Anecdotally speaking, I entered a discrete calc function into ChatGPT the other day to see if it could provide me with an explanation as to how someone arrived at the final answer, and it spit out the most dogshit solution imaginable. Like not even remotely close to the real answer.",
+        "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jta7xt4/",
+        "score": 1,
+        "timestamp": "Mon, 24 Jul 2023 18:50:41 GMT"
+      },
+      "sentiment": {
+        "compound": 62.22,
+        "neg": 0.0,
+        "neu": 90.10000000000001,
+        "pos": 9.9
+      }
+    },
+    {
+      "comment": {
+        "body": "My internship involved working with a lot of GPT where we pushed the boundaries of information retrieval and extraction and it was extremely frustrating seeing GPT being dumb as a rock. And don't get me started on langchain agents.",
+        "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jtaa5lp/",
+        "score": 1,
+        "timestamp": "Mon, 24 Jul 2023 19:04:57 GMT"
+      },
+      "sentiment": {
+        "compound": -75.74,
+        "neg": 15.6,
+        "neu": 84.39999999999999,
+        "pos": 0.0
+      }
+    },
+    {
+      "comment": {
         "body": "Source?",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9ry5q/",
-        "score": 5,
-        "timestamp": "Mon, 24 Jul 2023 10:03:26 GMT"
+        "score": 6,
+        "timestamp": "Mon, 24 Jul 2023 17:03:26 GMT"
       },
       "sentiment": {
         "compound": 0.0,
@@ -383,7 +439,7 @@
         "body": "Sorry, you do not meet the minimum account age requirement of **seven** days to post a comment. Please try again after you have spent more time on reddit without being banned. Please look at the [rules page](https://old.reddit.com/r/cscareerquestions/w/posting_rules) for more information.\n\n*I am a bot, and this action was performed automatically. Please [contact the moderators of this subreddit](/message/compose/?to=/r/cscareerquestions) if you have any questions or concerns.*",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jt9fdnu/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 08:42:29 GMT"
+        "timestamp": "Mon, 24 Jul 2023 15:42:29 GMT"
       },
       "sentiment": {
         "compound": 79.52,
@@ -394,10 +450,24 @@
     },
     {
       "comment": {
+        "body": "The other day I was thinking that if ChatGPT was fed the entire Internet’s data then it’s just going to be as smart as the Internet as a whole. Which isn’t very smart lol. Mostly since it doesn’t understand reality.\n\nI assume AI is more suited for secluded and very distinct issues with specialized data.",
+        "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jtaaari/",
+        "score": 1,
+        "timestamp": "Mon, 24 Jul 2023 19:05:52 GMT"
+      },
+      "sentiment": {
+        "compound": 81.66,
+        "neg": 0.0,
+        "neu": 85.2,
+        "pos": 14.799999999999999
+      }
+    },
+    {
+      "comment": {
         "body": "“Trust me bro, I saw it on TikTok”",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jta5qnh/",
-        "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 11:36:21 GMT"
+        "score": 3,
+        "timestamp": "Mon, 24 Jul 2023 18:36:21 GMT"
       },
       "sentiment": {
         "compound": 0.0,
@@ -411,7 +481,7 @@
         "body": "In the Chat GPT sub several people said they stopped hiring developers freelancers because now they can do what they need with Chat GPT without knowledge of coding.",
         "permalink": "/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/jta6blp/",
         "score": 1,
-        "timestamp": "Mon, 24 Jul 2023 11:40:07 GMT"
+        "timestamp": "Mon, 24 Jul 2023 18:40:07 GMT"
       },
       "sentiment": {
         "compound": -12.8,
@@ -423,129 +493,149 @@
   ],
   "moving_sentiment_average": [
     {
-      "current_time": "Mon, 24 Jul 2023 06:08:48 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:08:48 GMT",
       "moving_average_sentiment": -86.46000000000001
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:15:19 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:15:19 GMT",
       "moving_average_sentiment": -51.705000000000005
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:17:10 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:17:10 GMT",
       "moving_average_sentiment": -18.54666666666667
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:21:05 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:21:05 GMT",
       "moving_average_sentiment": 2.6224999999999987
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:29:24 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:29:24 GMT",
       "moving_average_sentiment": 43.545
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:30:22 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:30:22 GMT",
       "moving_average_sentiment": 71.6275
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:33:46 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:33:46 GMT",
       "moving_average_sentiment": 57.1175
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:45:05 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:45:05 GMT",
       "moving_average_sentiment": 52.826666666666675
     },
     {
-      "current_time": "Mon, 24 Jul 2023 07:25:08 GMT",
+      "current_time": "Mon, 24 Jul 2023 14:25:08 GMT",
       "moving_average_sentiment": 76.5
     },
     {
-      "current_time": "Mon, 24 Jul 2023 07:48:01 GMT",
+      "current_time": "Mon, 24 Jul 2023 14:48:01 GMT",
       "moving_average_sentiment": 89.35
     },
     {
-      "current_time": "Mon, 24 Jul 2023 08:07:36 GMT",
+      "current_time": "Mon, 24 Jul 2023 15:07:36 GMT",
       "moving_average_sentiment": 0.0
     },
     {
-      "current_time": "Mon, 24 Jul 2023 08:45:59 GMT",
+      "current_time": "Mon, 24 Jul 2023 15:45:59 GMT",
       "moving_average_sentiment": 22.63
     },
     {
-      "current_time": "Mon, 24 Jul 2023 08:47:27 GMT",
+      "current_time": "Mon, 24 Jul 2023 15:47:27 GMT",
       "moving_average_sentiment": -15.019999999999998
     },
     {
-      "current_time": "Mon, 24 Jul 2023 08:52:32 GMT",
+      "current_time": "Mon, 24 Jul 2023 15:52:32 GMT",
       "moving_average_sentiment": 20.706666666666667
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:01:07 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:01:07 GMT",
       "moving_average_sentiment": 46.06333333333334
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:27:40 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:27:40 GMT",
       "moving_average_sentiment": 91.69
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:35:28 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:35:28 GMT",
       "moving_average_sentiment": 33.345
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:45:45 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:45:45 GMT",
       "moving_average_sentiment": 29.025
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:54:18 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:54:18 GMT",
       "moving_average_sentiment": 89.25
     },
     {
-      "current_time": "Mon, 24 Jul 2023 11:39:02 GMT",
+      "current_time": "Mon, 24 Jul 2023 18:39:02 GMT",
       "moving_average_sentiment": -67.05
     },
     {
-      "current_time": "Mon, 24 Jul 2023 06:15:46 GMT",
-      "moving_average_sentiment": 37.171904761904756
+      "current_time": "Mon, 24 Jul 2023 19:10:42 GMT",
+      "moving_average_sentiment": 84.61999999999999
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:44:31 GMT",
+      "current_time": "Mon, 24 Jul 2023 13:15:46 GMT",
+      "moving_average_sentiment": 39.328636363636356
+    },
+    {
+      "current_time": "Mon, 24 Jul 2023 16:44:31 GMT",
       "moving_average_sentiment": 7.720000000000001
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:51:43 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:51:43 GMT",
       "moving_average_sentiment": 3.8600000000000003
     },
     {
-      "current_time": "Mon, 24 Jul 2023 10:02:53 GMT",
+      "current_time": "Mon, 24 Jul 2023 17:02:53 GMT",
       "moving_average_sentiment": -3.8600000000000003
     },
     {
-      "current_time": "Mon, 24 Jul 2023 09:31:49 GMT",
+      "current_time": "Mon, 24 Jul 2023 16:31:49 GMT",
       "moving_average_sentiment": 15.285000000000002
     },
     {
-      "current_time": "Mon, 24 Jul 2023 08:42:29 GMT",
+      "current_time": "Mon, 24 Jul 2023 15:42:29 GMT",
       "moving_average_sentiment": 12.228000000000002
     },
     {
-      "current_time": "Mon, 24 Jul 2023 10:03:26 GMT",
-      "moving_average_sentiment": 0.0
+      "current_time": "Mon, 24 Jul 2023 18:52:36 GMT",
+      "moving_average_sentiment": 31.819999999999997
     },
     {
-      "current_time": "Mon, 24 Jul 2023 08:42:29 GMT",
-      "moving_average_sentiment": 20.094285714285714
+      "current_time": "Mon, 24 Jul 2023 18:50:41 GMT",
+      "moving_average_sentiment": 47.019999999999996
     },
     {
-      "current_time": "Mon, 24 Jul 2023 11:36:21 GMT",
-      "moving_average_sentiment": 0.0
+      "current_time": "Mon, 24 Jul 2023 19:04:57 GMT",
+      "moving_average_sentiment": 6.1000000000000005
     },
     {
-      "current_time": "Mon, 24 Jul 2023 11:40:07 GMT",
-      "moving_average_sentiment": -6.4
+      "current_time": "Mon, 24 Jul 2023 17:03:26 GMT",
+      "moving_average_sentiment": 4.575
+    },
+    {
+      "current_time": "Mon, 24 Jul 2023 15:42:29 GMT",
+      "moving_average_sentiment": 15.896
+    },
+    {
+      "current_time": "Mon, 24 Jul 2023 19:05:52 GMT",
+      "moving_average_sentiment": 81.66
+    },
+    {
+      "current_time": "Mon, 24 Jul 2023 18:36:21 GMT",
+      "moving_average_sentiment": 40.83
+    },
+    {
+      "current_time": "Mon, 24 Jul 2023 18:40:07 GMT",
+      "moving_average_sentiment": 22.953333333333333
     }
   ],
   "postURL": "https://www.reddit.com/r/cscareerquestions/comments/158a8hl/is_programming_still_a_good_career_choice_for/",
   "post_title": "Is programming still a good career choice for beginners?",
-  "sentiment_baseline": 16.602,
+  "sentiment_baseline": 16.608,
   "submission_date": "Mon, 24 Jul 2023 13:08:48 GMT",
   "subreddit": "cscareerquestions"
 }

@@ -13,7 +13,7 @@ def store_submission_raw(submission) -> int:
         title=submission.title,
         num_comments=submission.num_comments,
         permalink=submission.permalink,
-        timestamp=datetime.fromtimestamp(submission.created_utc),
+        timestamp=datetime.utcfromtimestamp(submission.created_utc),
         upvote_ratio=submission.upvote_ratio,
     )
 

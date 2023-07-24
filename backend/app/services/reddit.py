@@ -21,6 +21,7 @@ def create_reddit_instance(app) -> praw.Reddit:
 class RedditApp:
     def __init__(self, reddit_instance):
         self.reddit = reddit_instance
+        self.bots = ["AutoModerator", "some_other_bot"]  # Add bot names here
 
     def getPostComments(
         self, submissionURL: str
@@ -32,15 +33,16 @@ class RedditApp:
             submission.comment_sort = "old"
             submission.comments.replace_more(limit=None)
             for comment in submission.comments.list():
-                comments.append(
-                    {
-                        "body": comment.body,
-                        "score": comment.score,
-                        "permalink": comment.permalink,
-                        # datetime.fromtimestamp will specify GMT by default
-                        "timestamp": datetime.utcfromtimestamp(comment.created_utc),
-                    },
-                )
+                if comment.author is not None and comment.author.name not in self.bots:
+                    comments.append(
+                        {
+                            "body": comment.body,
+                            "score": comment.score,
+                            "permalink": comment.permalink,
+                            # datetime.fromtimestamp will specify GMT by default
+                            "timestamp": datetime.utcfromtimestamp(comment.created_utc),
+                        },
+                    )
 
             return comments
 
