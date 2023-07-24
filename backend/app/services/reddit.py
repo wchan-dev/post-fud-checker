@@ -37,9 +37,11 @@ class RedditApp:
                         "body": comment.body,
                         "score": comment.score,
                         "permalink": comment.permalink,
-                        "timestamp": datetime.fromtimestamp(comment.created_utc),
+                        # datetime.fromtimestamp will specify GMT by default
+                        "timestamp": datetime.utcfromtimestamp(comment.created_utc),
                     },
                 )
+
             return comments
 
         except prawcore.exceptions.NotFound:

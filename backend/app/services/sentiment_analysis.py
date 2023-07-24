@@ -1,4 +1,5 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from datetime import datetime, timedelta
 
 
 def calculate_comment_sentiment(comment: str) -> dict[str, float]:
@@ -58,16 +59,42 @@ def combine_post_content_sentiment(
     }
 
 
-def calculate_moving_average(
-    sentiment_scores_compound: list[float], window_size: int
-) -> list[float]:
+def calculate_moving_average(comments_with_sentiments):
+    # static typing for this is just a mess, just do this
+    # until we can implement a proper class
     # Moving Average(i) = (si-k+1 + si-k+2 + ... + si) / k
     # window_size: number of comments over the moving average calc so far
+    # we'll use a window_size of 15 minutes for now
     moving_averages = []
+    window_size = timedelta(minutes=15)
 
-    for i in range(window_size, len(sentiment_scores_compound) + 1):
-        window = sentiment_scores_compound[i - window_size : i]
-        average = sum(window) / window_size
-        moving_averages.append(average)
+    for i in range(len(comments_with_sentiments)):
+        current_time = comments_with_sentiments[i]["comment"]["timestamp"]
+
+        # initialize window of comments and total sentiment score
+        window_comments = []
+        total_sentiment = 0.0
+
+        # iterate backwards through prev coments until we reach one
+        # out of window
+
+        for j in range(i, -1, -1):
+            previous_time = comments_with_sentiments[j]["comment"]["timestamp"]
+            if current_time - previous_time <= window_size:
+                # within window, add its sentiment
+                total_sentiment += comments_with_sentiments[j]["sentiment"]["compound"]
+                window_comments.append(comments_with_sentiments[j])
+            else:
+                break
+
+        # calcualte the average iwthin the window
+        if window_comments:
+            average_sentiment = total_sentiment / len(window_comments)
+
+            moving_average_sentiment_data = {
+                "current_time": current_time,
+                "moving_average_sentiment": average_sentiment,
+            }
+            moving_averages.append(moving_average_sentiment_data)
 
     return moving_averages

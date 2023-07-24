@@ -108,9 +108,8 @@ def analyze_and_store_sentiments(
     store_comments_with_sentiments(comments_with_sentiments, db_submission_id)
 
     # separated for readability from above loop
-    moving_sentiment_average = calculate_moving_average(
-        comment_sentiments_compound, submission_use.num_comments
-    )
+    # submission.num_comments != length of comments pulled
+    moving_sentiment_average = calculate_moving_average(comments_with_sentiments)
 
     return {
         "post_title": submission.title,
