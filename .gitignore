@@ -1,9 +1,12 @@
 .venv
-dotenv.env
+.env
 __pycache__
 test.py
 *.ipynb
 .ipynb_checkpoints
 .idea
+console_log.json
+test_response.json
+
 
 

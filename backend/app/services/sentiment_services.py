@@ -67,7 +67,10 @@ def calculate_and_store_post_sentiment(
 def analyze_and_store_sentiments(
     postURL: str, redditApp: RedditApp, submission: RedditSubmission
 ) -> Union[dict, Response]:
-    submission_use, comments_use = get_previous_results(submission.id, redditApp)
+    # submission_use, comments_use = get_previous_results(submission.id, redditApp)
+    # commenting out for debugging until refactor new db handler code
+
+    submission_use, comments_use = None, None
     submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
     submission_subreddit = submission.subreddit.display_name
 
