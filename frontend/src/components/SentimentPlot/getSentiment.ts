@@ -16,6 +16,11 @@ interface CommentData {
   };
 }
 
+interface MovingSentimentData {
+  current_time: Date;
+  moving_sentiment_average: number;
+}
+
 export type SentimentResult = {
   timeStamps: Date[];
   sentiments_compound: number[];
@@ -23,6 +28,9 @@ export type SentimentResult = {
   postTitle: string;
   submission_Date: Date;
   subreddit: string;
+  sentimentBaseline: number;
+  moving_average_sentiments: number[];
+  moving_average_times: Date[];
   error?: string;
 };
 
@@ -32,7 +40,7 @@ export const getSentiment = async (
 ): Promise<SentimentResult> => {
   try {
     const response = await axios.post(
-      "api/sentiment_analysis",
+      api_endpoint,
       { reddit_url: reddit_url },
       {
         headers: { "Content-Type": "application/json" },
@@ -41,9 +49,13 @@ export const getSentiment = async (
 
     const data = response.data;
 
-    const timeStamps = data.comments.map(
-      (commentData: CommentData) => new Date(commentData.comment.timestamp)
-    );
+    const timeStamps = data.comments.map((commentData: CommentData) => {
+      const date = new Date(commentData.comment.timestamp);
+      const utcDate = new Date(
+        date.getTime() + date.getTimezoneOffset() * 60000
+      );
+      return utcDate;
+    });
 
     const sentiments_compound = data.comments.map(
       (commentData: CommentData) => commentData.sentiment.compound
@@ -53,17 +65,39 @@ export const getSentiment = async (
       (commentData: CommentData) => commentData.sentiment.compound
     );
 
+    const moving_average_sentiments = data.moving_sentiment_average.map(
+      (movingSentimentData: MovingSentimentData) =>
+        movingSentimentData.moving_sentiment_average
+    );
+
+    const moving_average_times = data.moving_sentiment_average.map(
+      (movingSentimentData: MovingSentimentData) => {
+        const date = new Date(movingSentimentData.current_time);
+        const utcDate = new Date(
+          date.getTime() + date.getTimezoneOffset() * 60000
+        );
+        return utcDate;
+      }
+    );
+
     const postTitle = data.post_title;
-    const submission_Date = data.submission_date;
+    const submission_Date = new Date(data.submission_date);
+    const utcSubmissionDate = new Date(
+      submission_Date.getTime() + submission_Date.getTimezoneOffset() * 60000
+    );
     const subreddit = data.subreddit;
+    const sentimentBaseline = data.sentiment_baseline;
 
     return {
       timeStamps,
       postTitle,
       sentiments_compound,
       histogram_sentiments,
-      submission_Date,
+      submission_Date: utcSubmissionDate,
       subreddit,
+      sentimentBaseline,
+      moving_average_sentiments,
+      moving_average_times,
     };
   } catch (error: any) {
     if (error.response && error.response.status === 429) {
@@ -77,6 +111,9 @@ export const getSentiment = async (
       postTitle: "",
       submission_Date: new Date(),
       subreddit: "",
+      sentimentBaseline: 0,
+      moving_average_sentiments: [],
+      moving_average_times: [],
       error: error.message,
     };
   }

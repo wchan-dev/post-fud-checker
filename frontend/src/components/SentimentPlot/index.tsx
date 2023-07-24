@@ -12,9 +12,15 @@ const SentimentPlotContainer: React.FC = () => {
   const [sentiments, setSentiments] = useState<number[]>([]);
   const [histogramSentiments, setHistogramSentiments] = useState<number[]>([]);
   const [postTitle, setPostTitle] = useState<string>("");
+  const [sentimentBaseline, setSentimentBaseline] = useState<number>(0);
   const [historyList, setHistoryList] = useContext(HistoryContext);
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
   const [subreddit, setSubreddit] = useState<string>("");
+
+  const [movingAverageSentiments, setMovingAverageSentiments] = useState<
+    number[]
+  >([]);
+  const [movingAverageTimes, setMovingAverageTimes] = useState<Date[]>([]);
 
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
@@ -34,11 +40,14 @@ const SentimentPlotContainer: React.FC = () => {
   ) => {
     const {
       timeStamps,
+      postTitle,
       sentiments_compound,
       histogram_sentiments,
-      postTitle,
       submission_Date,
       subreddit,
+      sentimentBaseline,
+      moving_average_sentiments,
+      moving_average_times,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
     setTimeStamps(timeStamps);
     setSentiments(sentiments_compound);
@@ -46,6 +55,9 @@ const SentimentPlotContainer: React.FC = () => {
     setPostTitle(postTitle);
     setSubmissionDate(submission_Date);
     setSubreddit(subreddit);
+    setSentimentBaseline(sentimentBaseline);
+    setMovingAverageSentiments(moving_average_sentiments);
+    setMovingAverageTimes(moving_average_times);
 
     localStorage.setItem(
       "plotData",
@@ -85,6 +97,10 @@ const SentimentPlotContainer: React.FC = () => {
         histogram_sentiments={histogramSentiments}
         postTitle={postTitle}
         subreddit={subreddit}
+        submissionDate={submissionDate}
+        sentimentBaseline={sentimentBaseline}
+        movingAverageSentiment={movingAverageSentiments}
+        movingAverageTimes={movingAverageTimes}
         style={{ order: 1 }}
       ></CommentSentimentPlot>
       <CommentSentimentForm
