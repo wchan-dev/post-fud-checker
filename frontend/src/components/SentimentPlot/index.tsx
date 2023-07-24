@@ -16,7 +16,6 @@ const SentimentPlotContainer: React.FC = () => {
   const [historyList, setHistoryList] = useContext(HistoryContext);
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
   const [subreddit, setSubreddit] = useState<string>("");
-
   const [movingAverageSentiments, setMovingAverageSentiments] = useState<
     number[]
   >([]);
@@ -25,12 +24,26 @@ const SentimentPlotContainer: React.FC = () => {
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
     if (savedData) {
-      const { timeStamps, sentiments, histogram_sentiments, postTitle } =
-        JSON.parse(savedData);
+      const {
+        timeStamps,
+        sentiments,
+        histogram_sentiments,
+        postTitle,
+        submission_Date,
+        sentimentBaseline,
+        movingAverageSentiments,
+        movingAverageTimes,
+      } = JSON.parse(savedData);
       setTimeStamps(timeStamps.map((ts: string) => new Date(ts)));
       setSentiments(sentiments);
       setHistogramSentiments(histogram_sentiments || []);
       setPostTitle(postTitle);
+      setSubmissionDate(new Date(submission_Date));
+      setSentimentBaseline(sentimentBaseline);
+      setMovingAverageSentiments(movingAverageSentiments);
+      setMovingAverageTimes(
+        movingAverageTimes.map((ts: string) => new Date(ts))
+      );
     }
   }, []);
 
@@ -49,11 +62,13 @@ const SentimentPlotContainer: React.FC = () => {
       moving_average_sentiments,
       moving_average_times,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
+
+    const submissionDate = new Date(submission_Date);
     setTimeStamps(timeStamps);
     setSentiments(sentiments_compound);
     setHistogramSentiments(histogram_sentiments);
     setPostTitle(postTitle);
-    setSubmissionDate(submission_Date);
+    setSubmissionDate(submissionDate);
     setSubreddit(subreddit);
     setSentimentBaseline(sentimentBaseline);
     setMovingAverageSentiments(moving_average_sentiments);
@@ -63,9 +78,15 @@ const SentimentPlotContainer: React.FC = () => {
       "plotData",
       JSON.stringify({
         timeStamps,
-        sentiments,
+        sentiments: sentiments_compound,
         histogram_sentiments,
         postTitle,
+        submission_Date: submissionDate.toISOString(),
+        sentimentBaseline,
+        movingAverageSentiments: moving_average_sentiments,
+        movingAverageTimes: moving_average_times.map((date) =>
+          date.toISOString()
+        ),
       })
     );
 
@@ -74,11 +95,12 @@ const SentimentPlotContainer: React.FC = () => {
       {
         postTitle,
         postURL: reddit_url,
-        numComments: sentiments.length, // Placeholder, replace with actual data
+        numComments: sentiments_compound.length,
         overallSentiment:
-          sentiments.reduce((a, b) => a + b, 0) / sentiments.length, // Placeholder, replace with actual data
-        postDate: submission_Date,
-        queryDate: new Date(), //this can be the current date
+          sentiments_compound.reduce((a, b) => a + b, 0) /
+          sentiments_compound.length,
+        postDate: submissionDate,
+        queryDate: new Date(),
         subreddit: subreddit,
       },
     ]);
@@ -99,7 +121,7 @@ const SentimentPlotContainer: React.FC = () => {
         subreddit={subreddit}
         submissionDate={submissionDate}
         sentimentBaseline={sentimentBaseline}
-        movingAverageSentiment={movingAverageSentiments}
+        movingAverageSentiments={movingAverageSentiments}
         movingAverageTimes={movingAverageTimes}
         style={{ order: 1 }}
       ></CommentSentimentPlot>

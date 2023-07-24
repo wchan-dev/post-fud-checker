@@ -10,29 +10,29 @@ import Plot from "react-plotly.js";
 
 interface CommentSentimentPlotProps {
   timeStamps: Date[];
-  submissionDate: Date;
   sentiments: number[];
-  sentimentBaseline: number;
   histogram_sentiments: number[];
   postTitle: string;
   subreddit: string;
+  submissionDate: Date;
+  sentimentBaseline: number;
   movingAverageSentiments: number[];
   movingAverageTimes: Date[];
 }
 
 const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   timeStamps,
-  submissionDate,
   sentiments,
-  sentimentBaseline,
   histogram_sentiments,
   postTitle,
   subreddit,
+  submissionDate,
+  sentimentBaseline,
   movingAverageSentiments,
   movingAverageTimes,
 }) => {
   const [plotType, setPlotType] = useState<"line" | "histogram" | "marker">(
-    "line"
+    "marker"
   );
 
   const textColor = useColorModeValue("brand.text", "brand.textSecondary");
@@ -41,8 +41,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   let data;
 
   if (plotType === "histogram") {
-    data = [];
-
     const positiveSentiments = histogram_sentiments.filter(
       (sentiment) => sentiment >= 0
     );
@@ -75,10 +73,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       },
     ];
   } else if (plotType === "marker") {
-    // console.log("this is baseline number: " + sentimentBaseline);
-    // console.log("this is submission date: " + submissionDate);
-
-    data = [];
     const decreasingSentiments = [];
     const increasingSentiments = [];
     const baselineSentiment = {
@@ -89,22 +83,19 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       name: "Baseline",
     };
 
-    console.log("submissionDate: " + submissionDate);
-    console.log("timeStamps[0]: " + timeStamps[0]);
-
-    for (let i = 1; i < timeStamps.length; i++) {
-      if (sentiments[i] >= sentiments[i - 1]) {
+    for (let i = 1; i < movingAverageTimes.length; i++) {
+      if (movingAverageSentiments[i] >= movingAverageSentiments[i - 1]) {
         increasingSentiments.push({
-          x: [timeStamps[i]],
-          y: [sentiments[i]],
+          x: [movingAverageTimes[i]],
+          y: [movingAverageSentiments[i]],
           mode: "markers",
           marker: { color: "green", size: 8 },
           name: "Increasing",
         });
       } else {
         decreasingSentiments.push({
-          x: [timeStamps[i]],
-          y: [sentiments[i]],
+          x: [movingAverageTimes[i]],
+          y: [movingAverageSentiments[i]],
           mode: "markers",
           marker: { color: "red", size: 8 },
           name: "Decreasing",
@@ -117,7 +108,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       ...decreasingSentiments,
     ];
   } else {
-    data = [];
     const increasingSentiments = [];
     const decreasingSentiments = [];
 
@@ -144,7 +134,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     data = [...increasingSentiments, ...decreasingSentiments];
   }
 
-  // Add layout
   const layout = {
     autosize: true,
     showlegend: false,
@@ -193,12 +182,13 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
         <Select
           size="sm"
           width="fit-content"
+          defaultValue="marker"
           onChange={(event) =>
-            setPlotType(event.target.value as "line" | "marker" | "histogram")
+            setPlotType(event.target.value as "marker" | "line" | "histogram")
           }
         >
-          <option value="line">Line plot</option>
           <option value="marker">Marker plot</option>
+          <option value="line">Line plot</option>
           <option value="histogram">Histogram</option>
         </Select>
         <Plot

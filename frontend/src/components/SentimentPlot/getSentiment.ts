@@ -18,7 +18,7 @@ interface CommentData {
 
 interface MovingSentimentData {
   current_time: Date;
-  moving_sentiment_average: number;
+  moving_average_sentiment: number;
 }
 
 export type SentimentResult = {
@@ -67,8 +67,11 @@ export const getSentiment = async (
 
     const moving_average_sentiments = data.moving_sentiment_average.map(
       (movingSentimentData: MovingSentimentData) =>
-        movingSentimentData.moving_sentiment_average
+        movingSentimentData.moving_average_sentiment
     );
+
+    console.log("from getting sentiment...");
+    console.log(moving_average_sentiments);
 
     const moving_average_times = data.moving_sentiment_average.map(
       (movingSentimentData: MovingSentimentData) => {
