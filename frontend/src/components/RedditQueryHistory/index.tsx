@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import { useTable, useSortBy, Column } from "react-table";
 import { Box, Link, useColorModeValue } from "@chakra-ui/react";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import { HistoryContext } from "./HistoryContext";
 
 interface HistoryRecord {
@@ -32,6 +32,16 @@ const QueryHistoryContainer: React.FC = () => {
     return date.toLocaleString(undefined, options);
   };
 
+  const sentimentScoreToText = (score: number | null): [string, string] => {
+    if (score === null) return ["N/A", "Gray"];
+    if (score <= -60) return ["Very Negative", "DarkRed"];
+    if (score <= -20) return ["Negative", "Red"];
+    if (score <= -3) return ["Slightly Negative", "LightRed"];
+    if (score >= -2 && score <= 2) return ["Neutral", "Gray"];
+    if (score <= 20) return ["Slightly Positive", "LightGreen"];
+    if (score <= 60) return ["Positive", "Green"];
+    return ["Very Positive", "DarkGreen"];
+  };
   //Listen for changes to 'historyList' in localStorage
   useEffect(() => {
     function handleStorageChange(e: StorageEvent) {
@@ -86,7 +96,10 @@ const QueryHistoryContainer: React.FC = () => {
       {
         Header: "Overall Sentiment",
         accessor: "overallSentiment",
-        Cell: ({ value }) => (value ? value.toFixed(2) : "N/A"),
+        Cell: ({ value }) => {
+          const [text, color] = sentimentScoreToText(value);
+          return <Text color={color}>{text}</Text>;
+        },
       },
       {
         Header: "Post Created",

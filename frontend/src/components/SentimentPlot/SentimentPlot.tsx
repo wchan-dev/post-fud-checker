@@ -201,13 +201,13 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
         <Select
           size="sm"
           width="fit-content"
-          defaultValue="marker"
+          defaultValue="line"
           onChange={(event) =>
-            setPlotType(event.target.value as "marker" | "line" | "histogram")
+            setPlotType(event.target.value as "line" | "marker" | "histogram")
           }
         >
-          <option value="marker">Marker plot</option>
           <option value="line">Line plot</option>
+          <option value="marker">Marker plot</option>
           <option value="histogram">Histogram</option>
         </Select>
         <Plot
