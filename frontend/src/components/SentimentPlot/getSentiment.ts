@@ -65,22 +65,28 @@ export const getSentiment = async (
       (commentData: CommentData) => commentData.sentiment.compound
     );
 
-    const moving_average_sentiments = data.moving_sentiment_average.map(
-      (movingSentimentData: MovingSentimentData) =>
-        movingSentimentData.moving_average_sentiment
+    const movingSentimentDataArray = data.moving_sentiment_average.map(
+      (movingSentimentData: MovingSentimentData) => {
+        return {
+          moving_average_sentiment:
+            movingSentimentData.moving_average_sentiment,
+          current_time: new Date(
+            new Date(movingSentimentData.current_time).getTime() +
+              new Date(movingSentimentData.current_time).getTimezoneOffset() *
+                60000
+          ),
+        };
+      }
     );
 
-    console.log("from getting sentiment...");
-    console.log(moving_average_sentiments);
+    movingSentimentDataArray.sort((a, b) => a.current_time - b.current_time);
 
-    const moving_average_times = data.moving_sentiment_average.map(
-      (movingSentimentData: MovingSentimentData) => {
-        const date = new Date(movingSentimentData.current_time);
-        const utcDate = new Date(
-          date.getTime() + date.getTimezoneOffset() * 60000
-        );
-        return utcDate;
-      }
+    const moving_average_sentiments = movingSentimentDataArray.map(
+      (data) => data.moving_average_sentiment
+    );
+
+    const moving_average_times = movingSentimentDataArray.map(
+      (data) => data.current_time
     );
 
     const postTitle = data.post_title;

@@ -107,23 +107,39 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       ...increasingSentiments,
       ...decreasingSentiments,
     ];
-  } else {
+  } else if (plotType === "line") {
     const increasingSentiments = [];
     const decreasingSentiments = [];
 
-    for (let i = 1; i < timeStamps.length; i++) {
-      if (sentiments[i] >= sentiments[i - 1]) {
+    const baselineSentiment = {
+      x: [submissionDate],
+      y: [sentimentBaseline],
+      mode: "markers",
+      marker: { color: "blue", size: 12 },
+      name: "Baseline",
+    };
+
+    const baselineSentimentLine = {
+      x: [submissionDate, movingAverageTimes[0]],
+      y: [sentimentBaseline, movingAverageSentiments[0]],
+      mode: "lines",
+      line: { color: "blue" },
+      name: "Baseline",
+    };
+
+    for (let i = 1; i < movingAverageTimes.length; i++) {
+      if (movingAverageSentiments[i] >= movingAverageSentiments[i - 1]) {
         increasingSentiments.push({
-          x: [timeStamps[i - 1], timeStamps[i]],
-          y: [sentiments[i - 1], sentiments[i]],
+          x: [movingAverageTimes[i - 1], movingAverageTimes[i]],
+          y: [movingAverageSentiments[i - 1], movingAverageSentiments[i]],
           mode: "lines",
           line: { color: "green" },
           name: "Increasing",
         });
       } else {
         decreasingSentiments.push({
-          x: [timeStamps[i - 1], timeStamps[i]],
-          y: [sentiments[i - 1], sentiments[i]],
+          x: [movingAverageTimes[i - 1], movingAverageTimes[i]],
+          y: [movingAverageSentiments[i - 1], movingAverageSentiments[i]],
           mode: "lines",
           line: { color: "red" },
           name: "Decreasing",
@@ -131,9 +147,13 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       }
     }
 
-    data = [...increasingSentiments, ...decreasingSentiments];
+    data = [
+      baselineSentiment,
+      baselineSentimentLine,
+      ...increasingSentiments,
+      ...decreasingSentiments,
+    ];
   }
-
   const layout = {
     autosize: true,
     showlegend: false,
@@ -159,7 +179,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       showgrid: false,
       zeroline: true,
       autorange: true,
-      type: "date",
     },
     yaxis: {
       title: plotType === "histogram" ? "Comment Count" : "Sentiment",
