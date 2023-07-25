@@ -75,7 +75,6 @@ const CommentSentimentForm: React.FC<Props> = ({
             </FormErrorMessage>
           )}
           <Flex
-            direction={{ base: "column", md: "row" }}
             justifyContent={{ base: "space-between", md: "flex-start" }}
             alignItems={{ base: "stretch", md: "flex-start" }}
             gap={3}
@@ -87,25 +86,32 @@ const CommentSentimentForm: React.FC<Props> = ({
               onChange={handleInputChange}
               fontSize="sm"
               placeholder="Paste Reddit Thread URL Here"
-              width={{ base: "100%", md: "512px" }}
             />
-            <Button
-              minWidth={["100%", "140px"]} // Responsive width
-              type="submit"
-              fontSize="sm"
-              isLoading={isLoading}
-              loadingText="Submitting..."
-              mt={{ base: 2, md: 0 }}
+            <Flex
+              direction="row"
+              gap={4}
+              justifyContent="space-between"
+              width="60%"
             >
-              Submit
-            </Button>
-            <Button
-              onClick={handleClearHistory}
-              mt={{ base: 2, md: 0 }}
-              fontSize="sm"
-            >
-              Clear History
-            </Button>
+              <Button
+                colorScheme="blue"
+                minWidth={["100%", "140px"]} // Responsive width
+                type="submit"
+                fontSize="sm"
+                isLoading={isLoading}
+                loadingText="Submitting..."
+                mt={{ base: 2, md: 0 }}
+              >
+                Submit
+              </Button>
+              <Button
+                onClick={handleClearHistory}
+                mt={{ base: 2, md: 0 }}
+                fontSize="sm"
+              >
+                Clear History
+              </Button>
+            </Flex>
           </Flex>
           {apiError && (
             <Alert status="error" mt={4}>

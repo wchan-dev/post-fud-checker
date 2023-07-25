@@ -32,7 +32,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   movingAverageTimes,
 }) => {
   const [plotType, setPlotType] = useState<"line" | "histogram" | "marker">(
-    "marker"
+    "line"
   );
 
   const textColor = useColorModeValue("brand.text", "brand.textSecondary");

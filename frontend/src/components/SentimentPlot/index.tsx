@@ -113,6 +113,11 @@ const SentimentPlotContainer: React.FC = () => {
 
   return (
     <Box display="flex" flexDirection="column" mb={8} p={8} gap={4}>
+      <CommentSentimentForm
+        handleGetSentiment={handleGetSentiment}
+        handleClearHistory={handleClearHistory}
+        style={{ order: 1 }}
+      ></CommentSentimentForm>
       <CommentSentimentPlot
         timeStamps={timeStamps}
         sentiments={sentiments}
@@ -123,13 +128,8 @@ const SentimentPlotContainer: React.FC = () => {
         sentimentBaseline={sentimentBaseline}
         movingAverageSentiments={movingAverageSentiments}
         movingAverageTimes={movingAverageTimes}
-        style={{ order: 1 }}
-      ></CommentSentimentPlot>
-      <CommentSentimentForm
-        handleGetSentiment={handleGetSentiment}
-        handleClearHistory={handleClearHistory}
         style={{ order: 2 }}
-      ></CommentSentimentForm>
+      ></CommentSentimentPlot>
     </Box>
   );
 };
