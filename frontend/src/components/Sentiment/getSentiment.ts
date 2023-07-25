@@ -16,6 +16,13 @@ interface CommentData {
   };
 }
 
+export interface Comment {
+  body: string;
+  score: number;
+  sentiment: number;
+  permalink: string;
+}
+
 interface MovingSentimentData {
   current_time: Date;
   moving_average_sentiment: number;
@@ -31,6 +38,8 @@ export type SentimentResult = {
   sentimentBaseline: number;
   moving_average_sentiments: number[];
   moving_average_times: Date[];
+  bestComments: Comment[];
+  controversialComments: Comment[];
   error?: string;
 };
 
@@ -97,6 +106,28 @@ export const getSentiment = async (
     const subreddit = data.subreddit;
     const sentimentBaseline = data.sentiment_baseline;
 
+    const bestComments = data.best_comments.map(
+      (commentData: CommentData): Comment => {
+        return {
+          body: commentData.comment.body,
+          score: commentData.comment.score,
+          sentiment: commentData.sentiment.compound,
+          permalink: commentData.comment.permalink,
+        };
+      }
+    );
+
+    const controversialComments = data.controversial_comments.map(
+      (commentData: CommentData): Comment => {
+        return {
+          body: commentData.comment.body,
+          score: commentData.comment.score,
+          sentiment: commentData.sentiment.compound,
+          permalink: commentData.comment.permalink,
+        };
+      }
+    );
+
     return {
       timeStamps,
       postTitle,
@@ -107,6 +138,8 @@ export const getSentiment = async (
       sentimentBaseline,
       moving_average_sentiments,
       moving_average_times,
+      bestComments,
+      controversialComments,
     };
   } catch (error: any) {
     if (error.response && error.response.status === 429) {
@@ -123,6 +156,8 @@ export const getSentiment = async (
       sentimentBaseline: 0,
       moving_average_sentiments: [],
       moving_average_times: [],
+      bestComments: [],
+      controversialComments: [],
       error: error.message,
     };
   }

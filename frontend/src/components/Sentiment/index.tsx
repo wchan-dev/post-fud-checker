@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Heading, Stack } from "@chakra-ui/react";
 import { useEffect, useState, useContext } from "react";
 
 import CommentSentimentForm from "./SentimentForm";
@@ -6,6 +6,8 @@ import CommentSentimentPlot from "./SentimentPlot";
 import { getSentiment, SentimentResult } from "./getSentiment";
 
 import { HistoryContext } from "../RedditQueryHistory/HistoryContext";
+import { Comment } from "./getSentiment";
+import CommentsTableContainer from "./CommentsTable";
 
 const SentimentPlotContainer: React.FC = () => {
   const [timeStamps, setTimeStamps] = useState<Date[]>([]);
@@ -20,6 +22,10 @@ const SentimentPlotContainer: React.FC = () => {
     number[]
   >([]);
   const [movingAverageTimes, setMovingAverageTimes] = useState<Date[]>([]);
+  const [bestComments, setBestComments] = useState<Comment[]>([]);
+  const [controversialComments, setControversialComments] = useState<Comment[]>(
+    []
+  );
 
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
@@ -33,6 +39,8 @@ const SentimentPlotContainer: React.FC = () => {
         sentimentBaseline,
         movingAverageSentiments,
         movingAverageTimes,
+        bestComments,
+        controversialComments,
       } = JSON.parse(savedData);
       setTimeStamps(timeStamps.map((ts: string) => new Date(ts)));
       setSentiments(sentiments);
@@ -44,6 +52,8 @@ const SentimentPlotContainer: React.FC = () => {
       setMovingAverageTimes(
         movingAverageTimes.map((ts: string) => new Date(ts))
       );
+      setBestComments(bestComments);
+      setControversialComments(controversialComments);
     }
   }, []);
 
@@ -61,6 +71,8 @@ const SentimentPlotContainer: React.FC = () => {
       sentimentBaseline,
       moving_average_sentiments,
       moving_average_times,
+      bestComments,
+      controversialComments,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
 
     const submissionDate = new Date(submission_Date);
@@ -73,6 +85,8 @@ const SentimentPlotContainer: React.FC = () => {
     setSentimentBaseline(sentimentBaseline);
     setMovingAverageSentiments(moving_average_sentiments);
     setMovingAverageTimes(moving_average_times);
+    setBestComments(bestComments);
+    setControversialComments(controversialComments);
 
     localStorage.setItem(
       "plotData",
@@ -130,6 +144,18 @@ const SentimentPlotContainer: React.FC = () => {
         movingAverageTimes={movingAverageTimes}
         style={{ order: 2 }}
       ></CommentSentimentPlot>
+      <Stack>
+        <Heading size="small">Top 5 Best Comments</Heading>
+        <CommentsTableContainer
+          comments={bestComments}
+        ></CommentsTableContainer>
+      </Stack>
+      <Stack>
+        <Heading size="small">Top 5 Most Controversial Comments</Heading>
+        <CommentsTableContainer
+          comments={controversialComments}
+        ></CommentsTableContainer>
+      </Stack>
     </Box>
   );
 };
