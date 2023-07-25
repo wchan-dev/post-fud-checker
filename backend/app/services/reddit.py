@@ -59,15 +59,16 @@ class RedditApp:
             submission = self.reddit.submission(url=submissionURL)
             submission.comment_sort = "best"
             for comment in submission.comments[:5]:
-                best_comments.append(
-                    {
-                        "body": comment.body,
-                        "score": comment.score,
-                        "permalink": comment.permalink,
-                        # datetime.fromtimestamp will specify GMT by default
-                        "timestamp": datetime.utcfromtimestamp(comment.created_utc),
-                    }
-                )
+                if comment.author is not None and comment.author.name not in self.bots:
+                    best_comments.append(
+                        {
+                            "body": comment.body,
+                            "score": comment.score,
+                            "permalink": comment.permalink,
+                            # datetime.fromtimestamp will specify GMT by default
+                            "timestamp": datetime.utcfromtimestamp(comment.created_utc),
+                        }
+                    )
         except prawcore.exceptions.NotFound:
             raise Exception(f"No reddit post found at {submissionURL}")
         except prawcore.exceptions.RequestException:
@@ -83,15 +84,16 @@ class RedditApp:
             submission = self.reddit.submission(url=submissionURL)
             submission.comment_sort = "controversial"
             for comment in submission.comments[:5]:
-                controversial_comments.append(
-                    {
-                        "body": comment.body,
-                        "score": comment.score,
-                        "permalink": comment.permalink,
-                        # datetime.fromtimestamp will specify GMT by default
-                        "timestamp": datetime.utcfromtimestamp(comment.created_utc),
-                    }
-                )
+                if comment.author is not None and comment.author.name not in self.bots:
+                    controversial_comments.append(
+                        {
+                            "body": comment.body,
+                            "score": comment.score,
+                            "permalink": comment.permalink,
+                            # datetime.fromtimestamp will specify GMT by default
+                            "timestamp": datetime.utcfromtimestamp(comment.created_utc),
+                        }
+                    )
         except prawcore.exceptions.NotFound:
             raise Exception(f"No reddit post found at {submissionURL}")
         except prawcore.exceptions.RequestException:
