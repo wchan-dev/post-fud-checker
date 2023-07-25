@@ -1,4 +1,4 @@
-import { Box, Heading, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import { useEffect, useState, useContext } from "react";
 
 import CommentSentimentForm from "./SentimentForm";
@@ -101,6 +101,8 @@ const SentimentPlotContainer: React.FC = () => {
         movingAverageTimes: moving_average_times.map((date) =>
           date.toISOString()
         ),
+        bestComments: bestComments,
+        controversialComments: controversialComments,
       })
     );
 
@@ -144,18 +146,20 @@ const SentimentPlotContainer: React.FC = () => {
         movingAverageTimes={movingAverageTimes}
         style={{ order: 2 }}
       ></CommentSentimentPlot>
-      <Stack>
-        <Heading size="small">Top 5 Best Comments</Heading>
-        <CommentsTableContainer
-          comments={bestComments}
-        ></CommentsTableContainer>
-      </Stack>
-      <Stack>
-        <Heading size="small">Top 5 Most Controversial Comments</Heading>
-        <CommentsTableContainer
-          comments={controversialComments}
-        ></CommentsTableContainer>
-      </Stack>
+      <Flex flexDirection="row" justifyContent="space-between" gap={4} mb={8}>
+        <Stack>
+          <Heading size="small">Top 5 Best Comments</Heading>
+          <CommentsTableContainer
+            comments={bestComments}
+          ></CommentsTableContainer>
+        </Stack>
+        <Stack>
+          <Heading size="small">Top 5 Most Controversial Comments</Heading>
+          <CommentsTableContainer
+            comments={controversialComments}
+          ></CommentsTableContainer>
+        </Stack>
+      </Flex>
     </Box>
   );
 };
