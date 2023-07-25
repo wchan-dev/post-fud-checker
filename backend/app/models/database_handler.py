@@ -88,11 +88,37 @@ def get_comments_by_submission_id(submission_id: str) -> Optional[List[dict]]:
 
 
 def get_previous_results(
-    submission_id: str, redditApp
-) -> Tuple[Optional[RedditSubmission], Optional[List[dict]]]:
-    db_submission = get_submission_by_id(submission_id)
+    submission_id: str,
+) -> Tuple[
+    Optional[RedditSubmission],
+    Optional[RedditSubmissionSentiment],
+    Optional[List[RedditComment]],
+    Optional[List[RedditCommentSentiment]],
+]:
+    db_submission = RedditSubmission.query.filter_by(
+        submission_id=submission_id
+    ).first()
     if db_submission:
-        db_comments = get_comments_by_submission_id(submission_id)
-        return db_submission, db_comments
+        db_submission_sentiment = RedditSubmissionSentiment.query.filter_by(
+            submission_id=db_submission.id
+        ).first()
+
+        db_comments = RedditComment.query.filter_by(
+            parent_submission_id=db_submission.id
+        ).all()
+        db_comments_sentiments = []
+        for comment in db_comments:
+            comment_sentiment = RedditCommentSentiment.query.filter_by(
+                comment_id=comment.id
+            ).first()
+            if comment_sentiment:
+                db_comments_sentiments.append(comment_sentiment)
+
+        return (
+            db_submission,
+            db_submission_sentiment,
+            db_comments,
+            db_comments_sentiments,
+        )
     else:
-        return None, None
+        return None, None, None, None

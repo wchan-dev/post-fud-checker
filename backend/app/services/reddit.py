@@ -50,3 +50,51 @@ class RedditApp:
             raise Exception(f"No reddit post found at {submissionURL}")
         except prawcore.exceptions.RequestException:
             raise Exception("Reddit API rate limit reached. Please try again later")
+
+    def get_best_comments(
+        self, submissionURL: str
+    ) -> list[dict[str, Union[str, datetime]]]:
+        best_comments = []
+        try:
+            submission = self.reddit.submission(url=submissionURL)
+            submission.comment_sort = "best"
+            for comment in submission.comments[:5]:
+                best_comments.append(
+                    {
+                        "body": comment.body,
+                        "score": comment.score,
+                        "permalink": comment.permalink,
+                        # datetime.fromtimestamp will specify GMT by default
+                        "timestamp": datetime.utcfromtimestamp(comment.created_utc),
+                    }
+                )
+        except prawcore.exceptions.NotFound:
+            raise Exception(f"No reddit post found at {submissionURL}")
+        except prawcore.exceptions.RequestException:
+            raise Exception("Reddit API rate limit reached. Please try again later")
+
+        return best_comments
+
+    def get_most_controversial_comments(
+        self, submissionURL: str
+    ) -> list[dict[str, Union[str, datetime]]]:
+        controversial_comments = []
+        try:
+            submission = self.reddit.submission(url=submissionURL)
+            submission.comment_sort = "controversial"
+            for comment in submission.comments[:5]:
+                controversial_comments.append(
+                    {
+                        "body": comment.body,
+                        "score": comment.score,
+                        "permalink": comment.permalink,
+                        # datetime.fromtimestamp will specify GMT by default
+                        "timestamp": datetime.utcfromtimestamp(comment.created_utc),
+                    }
+                )
+        except prawcore.exceptions.NotFound:
+            raise Exception(f"No reddit post found at {submissionURL}")
+        except prawcore.exceptions.RequestException:
+            raise Exception("Reddit API rate limit reached. Please try again later")
+
+        return controversial_comments
