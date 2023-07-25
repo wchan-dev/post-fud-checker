@@ -108,14 +108,16 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       ...decreasingSentiments,
     ];
   } else if (plotType === "line") {
-    const increasingSentiments = [];
-    const decreasingSentiments = [];
+    const sentimentX = [];
+    const sentimentY = [];
+    const turningPointsX = [];
+    const turningPointsY = [];
 
     const baselineSentiment = {
       x: [submissionDate],
       y: [sentimentBaseline],
       mode: "markers",
-      marker: { color: "blue", size: 12 },
+      marker: { color: "#0077B6", size: 12 }, // Deep Blue
       name: "Baseline",
     };
 
@@ -123,35 +125,49 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: [submissionDate, movingAverageTimes[0]],
       y: [sentimentBaseline, movingAverageSentiments[0]],
       mode: "lines",
-      line: { color: "blue" },
+      line: { shape: "linear", color: "#90E0EF", dash: "dash" }, // Light Cyan
       name: "Baseline",
     };
 
-    for (let i = 1; i < movingAverageTimes.length; i++) {
-      if (movingAverageSentiments[i] >= movingAverageSentiments[i - 1]) {
-        increasingSentiments.push({
-          x: [movingAverageTimes[i - 1], movingAverageTimes[i]],
-          y: [movingAverageSentiments[i - 1], movingAverageSentiments[i]],
-          mode: "lines",
-          line: { color: "green" },
-          name: "Increasing",
-        });
-      } else {
-        decreasingSentiments.push({
-          x: [movingAverageTimes[i - 1], movingAverageTimes[i]],
-          y: [movingAverageSentiments[i - 1], movingAverageSentiments[i]],
-          mode: "lines",
-          line: { color: "red" },
-          name: "Decreasing",
-        });
+    for (let i = 0; i < movingAverageTimes.length; i++) {
+      sentimentX.push(movingAverageTimes[i]);
+      sentimentY.push(movingAverageSentiments[i]);
+
+      // Check if sentiment changes direction
+      if (
+        (i > 0 &&
+          i < movingAverageTimes.length - 1 &&
+          movingAverageSentiments[i - 1] < movingAverageSentiments[i] &&
+          movingAverageSentiments[i] > movingAverageSentiments[i + 1]) ||
+        (movingAverageSentiments[i - 1] > movingAverageSentiments[i] &&
+          movingAverageSentiments[i] < movingAverageSentiments[i + 1])
+      ) {
+        turningPointsX.push(movingAverageTimes[i]);
+        turningPointsY.push(movingAverageSentiments[i]);
       }
     }
+
+    const sentimentLine = {
+      x: sentimentX,
+      y: sentimentY,
+      mode: "lines",
+      line: { shape: "spline", color: "#52b788" }, // Green Sheen
+      name: "Sentiment",
+    };
+
+    const turningPoints = {
+      x: turningPointsX,
+      y: turningPointsY,
+      mode: "markers",
+      marker: { color: "#d00000", size: 6 }, // Lusty Gallant (Deep Red)
+      name: "Turning Points",
+    };
 
     data = [
       baselineSentiment,
       baselineSentimentLine,
-      ...increasingSentiments,
-      ...decreasingSentiments,
+      sentimentLine,
+      turningPoints,
     ];
   }
   const layout = {

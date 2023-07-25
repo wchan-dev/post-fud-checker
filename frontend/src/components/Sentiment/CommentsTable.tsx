@@ -89,9 +89,7 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
             return (
               <Tr {...row.getRowProps()}>
                 {row.cells.map((cell) => (
-                  <Td {...cell.getCellProps()} textAlign="center">
-                    {cell.render("Cell")}
-                  </Td>
+                  <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
                 ))}
               </Tr>
             );
