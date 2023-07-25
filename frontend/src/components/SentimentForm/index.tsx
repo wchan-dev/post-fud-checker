@@ -10,15 +10,15 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-interface Props {
+type SentimentFormProps = {
   handleGetSentiment: (
     api_endpoint: string,
     reddit_url: string
   ) => Promise<void>;
   handleClearHistory: () => void;
-}
+};
 
-const CommentSentimentForm: React.FC<Props> = ({
+const SentimentForm: React.FC<SentimentFormProps> = ({
   handleGetSentiment,
   handleClearHistory,
 }) => {
@@ -123,4 +123,4 @@ const CommentSentimentForm: React.FC<Props> = ({
   );
 };
 
-export default CommentSentimentForm;
+export default SentimentForm;

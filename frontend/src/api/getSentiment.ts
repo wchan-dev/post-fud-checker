@@ -43,10 +43,10 @@ export type SentimentResult = {
   error?: string;
 };
 
-export const getSentiment = async (
+export async function getSentiment(
   api_endpoint: string,
   reddit_url: string
-): Promise<SentimentResult> => {
+): Promise<SentimentResult> {
   try {
     const response = await axios.post(
       api_endpoint,
@@ -81,8 +81,8 @@ export const getSentiment = async (
             movingSentimentData.moving_average_sentiment,
           current_time: new Date(
             new Date(movingSentimentData.current_time).getTime() +
-              new Date(movingSentimentData.current_time).getTimezoneOffset() *
-                60000
+            new Date(movingSentimentData.current_time).getTimezoneOffset() *
+            60000
           ),
         };
       }
@@ -161,4 +161,4 @@ export const getSentiment = async (
       error: error.message,
     };
   }
-};
+}
