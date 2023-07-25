@@ -147,13 +147,13 @@ const SentimentPlotContainer: React.FC = () => {
         style={{ order: 2 }}
       ></CommentSentimentPlot>
       <Flex flexDirection="row" justifyContent="space-between" gap={4} mb={8}>
-        <Stack>
+        <Stack flex="1">
           <Heading size="small">Top 5 Best Comments</Heading>
           <CommentsTableContainer
             comments={bestComments}
           ></CommentsTableContainer>
         </Stack>
-        <Stack>
+        <Stack flex="1">
           <Heading size="small">Top 5 Most Controversial Comments</Heading>
           <CommentsTableContainer
             comments={controversialComments}

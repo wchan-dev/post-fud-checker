@@ -79,7 +79,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: [submissionDate],
       y: [sentimentBaseline],
       mode: "markers",
-      marker: { color: "blue", size: 12 },
+      marker: { color: "#0077B6", size: 12 },
       name: "Baseline",
     };
 
@@ -118,7 +118,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       y: [sentimentBaseline],
       mode: "markers",
       marker: { color: "#0077B6", size: 12 }, // Deep Blue
-      name: "Baseline",
+      name: "Sentiment at Post",
     };
 
     const baselineSentimentLine = {
@@ -126,7 +126,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       y: [sentimentBaseline, movingAverageSentiments[0]],
       mode: "lines",
       line: { shape: "linear", color: "#90E0EF", dash: "dash" }, // Light Cyan
-      name: "Baseline",
+      name: "Post-Comment Gap",
     };
 
     for (let i = 0; i < movingAverageTimes.length; i++) {
@@ -151,7 +151,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: sentimentX,
       y: sentimentY,
       mode: "lines",
-      line: { shape: "spline", color: "#52b788" }, // Green Sheen
+      line: { shape: "spline", color: "26853f" }, // Green Sheen
       name: "Sentiment",
     };
 
@@ -160,7 +160,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       y: turningPointsY,
       mode: "markers",
       marker: { color: "#d00000", size: 6 }, // Lusty Gallant (Deep Red)
-      name: "Turning Points",
+      name: "Sentiment Shifts",
     };
 
     data = [
@@ -172,7 +172,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   }
   const layout = {
     autosize: true,
-    showlegend: false,
+    showlegend: true,
     plot_bgcolor: bgColor,
     paper_bgcolor: bgColor,
     font: {

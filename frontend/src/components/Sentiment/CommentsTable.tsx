@@ -1,6 +1,6 @@
-import { Box, Link } from "@chakra-ui/react";
-import { Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { Box, Flex, Link, Text } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { useMemo, useState } from "react";
 import { useTable, useSortBy, Column as TableColumn } from "react-table";
 import { Comment } from "./getSentiment";
 
@@ -19,28 +19,60 @@ const sentimentScoreToText = (score: number | null): [string, string] => {
   return ["Very Positive", "DarkGreen"];
 };
 
+const ExpandableContent: React.FC<{
+  text: string;
+  expanded: boolean;
+  onToggle: () => void;
+}> = ({ text, expanded, onToggle }) => (
+  <Flex direction="row" align="start" justify="space-between">
+    <Text>{expanded ? text : `${text.substring(0, 72)}...`}</Text>
+    {text.length > 72 && (
+      <Text ml={4} onClick={onToggle} cursor="pointer" color="blue.500">
+        {expanded ? "-" : "+"}
+      </Text>
+    )}
+  </Flex>
+);
+
 const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
   comments,
 }) => {
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
+
+  const handleExpand = (rowIndex: number) => {
+    setExpandedRows((prevRows) =>
+      prevRows.includes(rowIndex)
+        ? prevRows.filter((i) => i !== rowIndex)
+        : [...prevRows, rowIndex]
+    );
+  };
   const columns: TableColumn<Comment>[] = useMemo(
     () => [
       {
         Header: "Score",
         accessor: "score",
+        Cell: ({ value }: { value: string }) => (
+          <Box textAlign="center">{value}</Box>
+        ),
       },
       {
         Header: "Content",
         accessor: "body",
+        maxWidth: 50,
         Cell: ({
           value,
-          row: { original },
+          row: { original, index },
         }: {
           value: string;
-          row: { original: Comment };
+          row: { original: Comment; index: number };
         }) => (
-          <Link href={original.permalink} isExternal>
-            {value}
-          </Link>
+          <Box style={{ maxWidth: "510px" }}>
+            <ExpandableContent
+              text={value}
+              expanded={expandedRows.includes(index)}
+              onToggle={() => handleExpand(index)}
+            />
+          </Box>
         ),
       },
       {
@@ -48,19 +80,23 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
         accessor: "sentiment",
         Cell: ({ value }: { value: number | null }) => {
           const [text, color] = sentimentScoreToText(value);
-          return <Text color={color}>{text}</Text>;
+          return (
+            <Box textAlign="center">
+              <Text color={color}>{text}</Text>
+            </Box>
+          );
         },
       },
     ],
-    []
+    [expandedRows]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data: comments }, useSortBy); // Here use 'comments' instead of 'data'
+    useTable({ columns, data: comments }, useSortBy);
 
   return (
-    <Box>
-      <Table {...getTableProps()} size="sm">
+    <Box width="100%">
+      <Table {...getTableProps()} size="sm" width="100%">
         <Thead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -72,11 +108,7 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
                 >
                   {column.render("Header")}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " 🔽"
-                        : " 🔼"
-                      : ""}
+                    {column.isSorted ? (column.isSortedDesc ? "" : "") : ""}
                   </span>
                 </Th>
               ))}
@@ -89,7 +121,15 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
             return (
               <Tr {...row.getRowProps()}>
                 {row.cells.map((cell) => (
-                  <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                  <Td
+                    {...cell.getCellProps()}
+                    style={{
+                      wordWrap: "break-word",
+                      overflowWrap: "break-word",
+                    }}
+                  >
+                    {cell.render("Cell")}
+                  </Td>
                 ))}
               </Tr>
             );
