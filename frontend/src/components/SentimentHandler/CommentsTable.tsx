@@ -85,8 +85,8 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
     useTable({ columns, data: comments }, useSortBy);
 
   return (
-    <Box width="100%">
-      <Table {...getTableProps()} size="sm" width="100%">
+    <Box>
+      <Table {...getTableProps()} size="sm">
         <Thead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>

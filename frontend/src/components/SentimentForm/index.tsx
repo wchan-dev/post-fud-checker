@@ -6,6 +6,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
+  HStack,
   Input,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -51,14 +52,8 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
   const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
 
   return (
-    <Box
-      mb={8}
-      ml={-4}
-      width="100%"
-      display="flex"
-      justifyContent="space-between"
-    >
-      <form onSubmit={handleSubmit} width="100%">
+    <Box width="100%">
+      <form onSubmit={handleSubmit}>
         <FormControl isRequired isInvalid={!isValidUrl}>
           {isValidUrl ? (
             <FormHelperText
@@ -69,48 +64,29 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
             ></FormHelperText>
           ) : (
             <FormErrorMessage fontSize="xs" ml="4px" mb="4px">
-              {" "}
               Invalid Reddit Thread URL
             </FormErrorMessage>
           )}
-          <Flex
-            justifyContent={{ base: "space-between", md: "flex-start" }}
-            alignItems={{ base: "stretch", md: "flex-start" }}
-            gap={3}
-            flexWrap="wrap"
-          >
+          <Flex direction="row">
             <Input
               type="text"
               value={inputValue}
               onChange={handleInputChange}
               fontSize="sm"
+              flexGrow={3}
               placeholder="Paste Reddit Thread URL Here"
             />
-            <Flex
-              direction="row"
-              gap={4}
-              justifyContent="space-between"
-              width="60%"
+            <Button
+              colorScheme="blue"
+              type="submit"
+              fontSize="sm"
+              minWidth={["100%", "140px"]} // Responsive width
+              isLoading={isLoading}
+              loadingText="Submitting..."
+              mt={{ base: 2, md: 0 }}
             >
-              <Button
-                colorScheme="blue"
-                minWidth={["100%", "140px"]} // Responsive width
-                type="submit"
-                fontSize="sm"
-                isLoading={isLoading}
-                loadingText="Submitting..."
-                mt={{ base: 2, md: 0 }}
-              >
-                Submit
-              </Button>
-              <Button
-                onClick={handleClearHistory}
-                mt={{ base: 2, md: 0 }}
-                fontSize="sm"
-              >
-                Clear History
-              </Button>
-            </Flex>
+              Query
+            </Button>
           </Flex>
           {apiError && (
             <Alert status="error" mt={4}>

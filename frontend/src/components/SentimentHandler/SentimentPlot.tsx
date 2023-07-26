@@ -233,42 +233,34 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   const threadTitle = formatThreadTitle(subreddit, postTitle);
 
   return (
-    <Box
-      w="100%"
-      height="500px"
-      minW="864px"
-      mb={16}
-      border="1px"
-      borderColor="gray.300"
-      borderRadius="md"
-    >
-      <Stack>
-        <Flex direction="row" gap={8} alignItems="center">
-          <Select
-            size="sm"
-            width="fit-content"
-            defaultValue="line"
-            onChange={(event) =>
-              setPlotType(event.target.value as "line" | "marker" | "histogram")
-            }
-          >
-            <option value="line">Sentiment Moving Average</option>
-            <option value="marker">Raw Sentiments</option>
-            <option value="histogram">Sentiment Distribution</option>
-          </Select>
-          <Text fontSize="xs" color="gray.500">
-            {threadTitle}
-          </Text>
-        </Flex>
+    <Stack>
+      <Flex direction="row" gap={8} alignItems="center" justifyContent="center">
+        <Select
+          size="sm"
+          width="fit-content"
+          defaultValue="line"
+          onChange={(event) =>
+            setPlotType(event.target.value as "line" | "marker" | "histogram")
+          }
+        >
+          <option value="line">Sentiment Moving Average</option>
+          <option value="marker">Raw Sentiments</option>
+          <option value="histogram">Sentiment Distribution</option>
+        </Select>
+        <Text fontSize="xs" color="gray.500">
+          {threadTitle}
+        </Text>
+      </Flex>
+      <Box width="100%">
         <Plot
           data={data}
           layout={layout}
-          style={{ width: "100%", height: "100%" }}
           config={{ responsive: true }}
           revision={timeStamps.length}
+          style={{ width: "100%" }}
         />
-      </Stack>
-    </Box>
+      </Box>
+    </Stack>
   );
 };
 

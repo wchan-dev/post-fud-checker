@@ -1,4 +1,4 @@
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, VStack } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from "react";
 
 import { getSentiment, Comment, SentimentResult } from "../../api/getSentiment";
@@ -132,33 +132,30 @@ const PageLayOut: React.FC = () => {
   };
 
   return (
-    <Flex direction="column" minHeight="100vh">
+    <VStack>
       <Header></Header>
-      <Flex direction="column" p={8}>
+      <VStack>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>
-          <Box mb={-16}>
-            <SentimentForm
-              handleGetSentiment={handleGetSentiment}
-              handleClearHistory={handleClearHistory}
-            />
-            <QueryHistoryContainer />
-            <SentimentHandler
-              timeStamps={timeStamps}
-              sentiments={sentiments}
-              histogramSentiments={histogramSentiments}
-              postTitle={postTitle}
-              sentimentBaseline={sentimentBaseline}
-              submissionDate={submissionDate}
-              subreddit={subreddit}
-              movingAverageSentiments={movingAverageSentiments}
-              movingAverageTimes={movingAverageTimes}
-              bestComments={bestComments}
-              controversialComments={controversialComments}
-            />
-          </Box>
+          <SentimentHandler
+            timeStamps={timeStamps}
+            sentiments={sentiments}
+            histogramSentiments={histogramSentiments}
+            postTitle={postTitle}
+            sentimentBaseline={sentimentBaseline}
+            submissionDate={submissionDate}
+            subreddit={subreddit}
+            movingAverageSentiments={movingAverageSentiments}
+            movingAverageTimes={movingAverageTimes}
+            bestComments={bestComments}
+            controversialComments={controversialComments}
+          />
+          <SentimentForm
+            handleGetSentiment={handleGetSentiment}
+            handleClearHistory={handleClearHistory}
+          />
         </HistoryContext.Provider>
-      </Flex>
-    </Flex>
+      </VStack>
+    </VStack>
   );
 };
 
