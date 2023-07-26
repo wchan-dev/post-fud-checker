@@ -59,14 +59,32 @@ def combine_post_content_sentiment(
     }
 
 
-def calculate_moving_average(comments_with_sentiments):
+def calculate_moving_average(comments_with_sentiments, post_lifetime, num_comments):
     # static typing for this is just a mess, just do this
     # until we can implement a proper class
     # Moving Average(i) = (si-k+1 + si-k+2 + ... + si) / k
     # window_size: number of comments over the moving average calc so far
     # we'll use a window_size of 15 minutes for now
+
+    weight_lifetime = 0.5
+    weight_comments = 0.5
+
+    # Calculate window size based on post's lifetime and number of comments
+    window_size_based_on_lifetime = max(15, post_lifetime / 12)  # updated constant
+    window_size_based_on_comments = max(15, num_comments / 16.67)  # updated constant
+
+    # Use weighted average to calculate final window size
+    # Also, as post_lifetime and num_comments are in minutes,
+    # we need to ensure that the timedelta is also expressed in minutes.
+    window_size = timedelta(
+        minutes=(
+            weight_lifetime * window_size_based_on_lifetime
+            + weight_comments * window_size_based_on_comments
+        )
+        / (weight_lifetime + weight_comments)
+    )
+
     moving_averages = []
-    window_size = timedelta(minutes=15)
 
     for i in range(len(comments_with_sentiments)):
         current_time = comments_with_sentiments[i]["comment"]["timestamp"]
@@ -87,7 +105,7 @@ def calculate_moving_average(comments_with_sentiments):
             else:
                 break
 
-        # calcualte the average iwthin the window
+        # calculate the average within the window
         if window_comments:
             average_sentiment = total_sentiment / len(window_comments)
 

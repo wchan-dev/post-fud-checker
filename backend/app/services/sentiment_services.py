@@ -21,7 +21,7 @@ from ..utils.helpers import calc_num_comments
 
 from typing import Union
 
-import datetime
+from datetime import datetime
 from prawcore.exceptions import RequestException
 
 
@@ -70,7 +70,7 @@ def analyze_and_store_sentiments(
     # commenting out for debugging until refactor new db handler code
 
     submission_use, comments_use = None, None
-    submission_date = datetime.datetime.utcfromtimestamp(submission.created_utc)
+    submission_date = datetime.utcfromtimestamp(submission.created_utc)
     submission_subreddit = submission.subreddit.display_name
     best_comments = redditApp.get_best_comments(submissionURL)
     controversial_comments = redditApp.get_most_controversial_comments(submissionURL)
@@ -134,7 +134,11 @@ def analyze_and_store_sentiments(
 
     # separated for readability from above loop
     # submission.num_comments != length of comments pulled
-    moving_sentiment_average = calculate_moving_average(comments_with_sentiments)
+    post_lifetime_timedelta = datetime.utcnow() - submission_date
+    post_lifetime = post_lifetime_timedelta.total_seconds() / 60
+    moving_sentiment_average = calculate_moving_average(
+        comments_with_sentiments, post_lifetime, submission.num_comments
+    )
 
     return {
         "post_title": submission.title,

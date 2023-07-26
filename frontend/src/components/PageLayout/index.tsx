@@ -134,7 +134,7 @@ const PageLayOut: React.FC = () => {
   return (
     <Flex direction="column" minHeight="100vh">
       <Header></Header>
-      <Flex direction="column" overflow="auto" p={8}>
+      <Flex direction="column" p={8}>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>
           <Box mb={-16}>
             <SentimentForm

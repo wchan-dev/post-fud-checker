@@ -1,8 +1,10 @@
 import {
   Box,
+  Flex,
   Heading,
   Select,
   Stack,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -37,18 +39,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
 
   const textColor = useColorModeValue("brand.text", "brand.textSecondary");
   const bgColor = useColorModeValue("brand.bg", "brand.bg");
-
-  const sentimentRanges = [
-    { min: -Infinity, max: -75, color: "DarkRed", label: "Extremely Negative" },
-    { min: -75, max: -50, color: "Red", label: "Very Negative" },
-    { min: -50, max: -25, color: "IndianRed", label: "Negative" },
-    { min: -25, max: -5, color: "Salmon", label: "Slightly Negative" },
-    { min: -5, max: 5, color: "Gray", label: "Neutral" },
-    { min: 5, max: 25, color: "LightGreen", label: "Slightly Positive" },
-    { min: 25, max: 50, color: "LimeGreen", label: "Positive" },
-    { min: 50, max: 75, color: "Green", label: "Very Positive" },
-    { min: 75, max: Infinity, color: "DarkGreen", label: "Extremely Positive" },
-  ];
 
   let data;
 
@@ -93,8 +83,6 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       };
     });
   } else if (plotType === "marker") {
-    const decreasingSentiments = [];
-    const increasingSentiments = [];
     const baselineSentiment = {
       x: [submissionDate],
       y: [sentimentBaseline],
@@ -103,30 +91,36 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       name: "Baseline",
     };
 
-    for (let i = 1; i < movingAverageTimes.length; i++) {
-      if (movingAverageSentiments[i] >= movingAverageSentiments[i - 1]) {
-        increasingSentiments.push({
-          x: [movingAverageTimes[i]],
-          y: [movingAverageSentiments[i]],
-          mode: "markers",
-          marker: { color: "green", size: 8 },
-          name: "Increasing",
-        });
-      } else {
-        decreasingSentiments.push({
-          x: [movingAverageTimes[i]],
-          y: [movingAverageSentiments[i]],
-          mode: "markers",
-          marker: { color: "red", size: 8 },
-          name: "Decreasing",
-        });
-      }
-    }
-    data = [
-      baselineSentiment,
-      ...increasingSentiments,
-      ...decreasingSentiments,
-    ];
+    const positiveSentiments = sentiments.filter((sentiment) => sentiment >= 0);
+    const positiveTimeStamps = timeStamps.filter(
+      (_, index) => sentiments[index] >= 0
+    );
+
+    const positiveTrace = {
+      x: positiveTimeStamps,
+      y: positiveSentiments,
+      mode: "markers",
+      marker: { color: "#33CC33", size: 6 },
+      name: "Positive Sentiment",
+      type: "scatter",
+    };
+
+    // filter timestamps and sentiments for points below zero
+    const negativeSentiments = sentiments.filter((sentiment) => sentiment < 0);
+    const negativeTimeStamps = timeStamps.filter(
+      (_, index) => sentiments[index] < 0
+    );
+
+    const negativeTrace = {
+      x: negativeTimeStamps,
+      y: negativeSentiments,
+      mode: "markers",
+      marker: { color: "#FF3333", size: 6 },
+      name: "Negative Sentiment",
+      type: "scatter",
+    };
+
+    data = [baselineSentiment, positiveTrace, negativeTrace];
   } else if (plotType === "line") {
     const sentimentX = [];
     const sentimentY = [];
@@ -171,7 +165,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: sentimentX,
       y: sentimentY,
       mode: "lines",
-      line: { shape: "spline", color: "26853f" }, // Green Sheen
+      line: { shape: "spline", color: "blue" }, // Green Sheen
       name: "Sentiment",
     };
 
@@ -199,16 +193,25 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       family: "Inter, sans-serif",
       size: 12,
       color: textColor,
+      bold: true,
     },
     title: {
       text:
-        plotType === "histogram"
-          ? "Frequency Distribution of Comment Sentiment"
-          : "Comment Sentiment Over Time",
+        plotType === "line"
+          ? "Sentiment Moving Average Over Time"
+          : plotType === "marker"
+          ? "All Sentiment Scores Raw"
+          : "Distribution of Negative and Positive Sentiment Comments",
       font: {
-        size: 14,
+        size: 18, // Increased font size
+        color: textColor,
+        family: "Arial, sans-serif",
+        bold: true, // Made text bold
       },
       x: 0.5,
+      y: 1.1, // Moved title further from plot
+      xanchor: "center",
+      yanchor: "top",
     },
     xaxis: {
       title: plotType === "histogram" ? "Sentiment Score" : "Time (UTC)",
@@ -218,34 +221,45 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     },
     yaxis: {
       title: plotType === "histogram" ? "Comment Count" : "Sentiment",
+      font: {
+        bold: true,
+      },
       showline: false,
     },
-    margin: { l: 50, r: 20, b: 50, t: 50, pad: 4 },
   };
+  const formatThreadTitle = (subreddit: string, postTitle: string) =>
+    `Thread Title${subreddit}: ${postTitle}`;
 
-  const formatPlotTitle = (subreddit: string, postTitle: string) =>
-    `r/${subreddit}: ${postTitle}`;
-
-  const plotTitle = formatPlotTitle(subreddit, postTitle);
+  const threadTitle = formatThreadTitle(subreddit, postTitle);
 
   return (
-    <Box w="100%" height="500px" minW="864px" mb={16}>
+    <Box
+      w="100%"
+      height="500px"
+      minW="864px"
+      mb={16}
+      border="1px"
+      borderColor="gray.300"
+      borderRadius="md"
+    >
       <Stack>
-        <Heading mb={8} size="md" textAlign="center">
-          {plotTitle}
-        </Heading>
-        <Select
-          size="sm"
-          width="fit-content"
-          defaultValue="line"
-          onChange={(event) =>
-            setPlotType(event.target.value as "line" | "marker" | "histogram")
-          }
-        >
-          <option value="line">Line plot</option>
-          <option value="marker">Marker plot</option>
-          <option value="histogram">Histogram</option>
-        </Select>
+        <Flex direction="row" gap={8} alignItems="center">
+          <Select
+            size="sm"
+            width="fit-content"
+            defaultValue="line"
+            onChange={(event) =>
+              setPlotType(event.target.value as "line" | "marker" | "histogram")
+            }
+          >
+            <option value="line">Sentiment Moving Average</option>
+            <option value="marker">Raw Sentiments</option>
+            <option value="histogram">Sentiment Distribution</option>
+          </Select>
+          <Text fontSize="xs" color="gray.500">
+            {threadTitle}
+          </Text>
+        </Flex>
         <Plot
           data={data}
           layout={layout}

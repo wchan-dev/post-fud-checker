@@ -56,7 +56,7 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
           value: string;
           row: { original: Comment; index: number };
         }) => (
-          <Box style={{ maxWidth: "510px" }}>
+          <Box style={{ maxWidth: "515px" }}>
             <ExpandableContent
               text={value}
               expanded={expandedRows.includes(index)}
