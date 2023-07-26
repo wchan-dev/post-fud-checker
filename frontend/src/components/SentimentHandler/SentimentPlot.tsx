@@ -38,40 +38,60 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   const textColor = useColorModeValue("brand.text", "brand.textSecondary");
   const bgColor = useColorModeValue("brand.bg", "brand.bg");
 
+  const sentimentRanges = [
+    { min: -Infinity, max: -75, color: "DarkRed", label: "Extremely Negative" },
+    { min: -75, max: -50, color: "Red", label: "Very Negative" },
+    { min: -50, max: -25, color: "IndianRed", label: "Negative" },
+    { min: -25, max: -5, color: "Salmon", label: "Slightly Negative" },
+    { min: -5, max: 5, color: "Gray", label: "Neutral" },
+    { min: 5, max: 25, color: "LightGreen", label: "Slightly Positive" },
+    { min: 25, max: 50, color: "LimeGreen", label: "Positive" },
+    { min: 50, max: 75, color: "Green", label: "Very Positive" },
+    { min: 75, max: Infinity, color: "DarkGreen", label: "Extremely Positive" },
+  ];
+
   let data;
 
   if (plotType === "histogram") {
-    const positiveSentiments = histogram_sentiments.filter(
-      (sentiment) => sentiment >= 0
-    );
-    const negativeSentiments = histogram_sentiments.filter(
-      (sentiment) => sentiment < 0
-    );
-
-    data = [
+    const sentimentRanges = [
       {
-        x: positiveSentiments,
-        type: "histogram",
-        nbinsx: 50,
-        autobinx: false,
-        opacity: 0.7,
-        marker: {
-          color: "green",
-        },
-        name: "Positive Sentiment",
+        min: -Infinity,
+        max: -75,
+        color: "DarkRed",
+        label: "Extremely Negative",
       },
+      { min: -75, max: -50, color: "Red", label: "Very Negative" },
+      { min: -50, max: -25, color: "IndianRed", label: "Negative" },
+      { min: -25, max: -5, color: "Salmon", label: "Slightly Negative" },
+      { min: -5, max: 5, color: "Gray", label: "Neutral" },
+      { min: 5, max: 25, color: "LightGreen", label: "Slightly Positive" },
+      { min: 25, max: 50, color: "LimeGreen", label: "Positive" },
+      { min: 50, max: 75, color: "Green", label: "Very Positive" },
       {
-        x: negativeSentiments,
-        type: "histogram",
-        nbinsx: 50,
-        autobinx: false,
-        opacity: 0.7,
-        marker: {
-          color: "red",
-        },
-        name: "Negative Sentiment",
+        min: 75,
+        max: Infinity,
+        color: "DarkGreen",
+        label: "Extremely Positive",
       },
     ];
+
+    data = sentimentRanges.map((range) => {
+      const sentiments = histogram_sentiments.filter(
+        (sentiment) => sentiment > range.min && sentiment <= range.max
+      );
+
+      return {
+        x: sentiments,
+        type: "histogram",
+        nbinsx: 50,
+        autobinx: false,
+        opacity: 0.7,
+        marker: {
+          color: range.color,
+        },
+        name: range.label,
+      };
+    });
   } else if (plotType === "marker") {
     const decreasingSentiments = [];
     const increasingSentiments = [];

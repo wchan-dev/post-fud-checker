@@ -3,6 +3,7 @@ import { useTable, useSortBy, Column } from "react-table";
 import { Box, Link, useColorModeValue } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import { HistoryContext } from "./HistoryContext";
+import { sentimentScoreToText } from "../../utils/sentimentUtils";
 
 interface HistoryRecord {
   queryDate: string;
@@ -32,16 +33,6 @@ const QueryHistoryContainer: React.FC = () => {
     return date.toLocaleString(undefined, options);
   };
 
-  const sentimentScoreToText = (score: number | null): [string, string] => {
-    if (score === null) return ["N/A", "Gray"];
-    if (score <= -60) return ["Very Negative", "DarkRed"];
-    if (score <= -20) return ["Negative", "Red"];
-    if (score <= -3) return ["Slightly Negative", "LightRed"];
-    if (score >= -2 && score <= 2) return ["Neutral", "Gray"];
-    if (score <= 20) return ["Slightly Positive", "LightGreen"];
-    if (score <= 60) return ["Positive", "Green"];
-    return ["Very Positive", "DarkGreen"];
-  };
   //Listen for changes to 'historyList' in localStorage
   useEffect(() => {
     function handleStorageChange(e: StorageEvent) {

@@ -2,22 +2,12 @@ import { Box, Flex, Link, Text } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { useTable, useSortBy, Column as TableColumn } from "react-table";
-import { Comment } from "./getSentiment";
+import { Comment } from "../../api/getSentiment";
+import { sentimentScoreToText } from "../../utils/sentimentUtils";
 
 interface CommentsTableContainerProps {
   comments: Comment[];
 }
-
-const sentimentScoreToText = (score: number | null): [string, string] => {
-  if (score === null) return ["N/A", "Gray"];
-  if (score <= -60) return ["Very Negative", "DarkRed"];
-  if (score <= -20) return ["Negative", "Red"];
-  if (score <= -3) return ["Slightly Negative", "LightRed"];
-  if (score >= -2 && score <= 2) return ["Neutral", "Gray"];
-  if (score <= 20) return ["Slightly Positive", "LightGreen"];
-  if (score <= 60) return ["Positive", "Green"];
-  return ["Very Positive", "DarkGreen"];
-};
 
 const ExpandableContent: React.FC<{
   text: string;
