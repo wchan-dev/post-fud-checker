@@ -12,8 +12,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import CommentSentimentPlot from "./SentimentPlot";
-import { Comment } from "./getSentiment";
 import CommentsTableContainer from "./CommentsTable";
+import { Comment } from "../../api/getSentiment";
 
 interface SentimentHandlerProps {
   timeStamps: Date[];
@@ -42,22 +42,25 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
   bestComments,
   controversialComments,
 }) => {
+  const [selectedTab, setSelectedTab] = useState(0);
   return (
-    <Box mb={8} p={8} gap={4}>
+    <Box p={4} gap={4} border="1px" borderRadius="xl" borderColor="gray.300">
       <Tabs
-        border="1px"
-        borderColor="gray.300"
         width="100%"
-        isFitted
-        variant="enclosed"
+        variant="soft-rounded"
+        size="sm"
+        onChange={(index) => setSelectedTab(index)}
       >
         <TabList mb="1em">
-          <Tab>Sentiment Plot</Tab>
+          <Tab>Sentiment Moving Average</Tab>
+          <Tab>Sentiment Timeline</Tab>
+          <Tab>Distribution of Comment Sentiments</Tab>
           <Tab>Best & Controversial Comments</Tab>
         </TabList>
         <TabPanels>
           <TabPanel minHeight="55vH" minWidth="70vW">
             <CommentSentimentPlot
+              key={selectedTab}
               timeStamps={timeStamps}
               sentiments={sentiments}
               histogram_sentiments={histogramSentiments}
@@ -67,7 +70,37 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
               sentimentBaseline={sentimentBaseline}
               movingAverageSentiments={movingAverageSentiments}
               movingAverageTimes={movingAverageTimes}
-              style={{ order: 2 }}
+              plotType="line"
+            ></CommentSentimentPlot>
+          </TabPanel>
+          <TabPanel minHeight="55vH" minWidth="70vW">
+            <CommentSentimentPlot
+              key={selectedTab}
+              timeStamps={timeStamps}
+              sentiments={sentiments}
+              histogram_sentiments={histogramSentiments}
+              postTitle={postTitle}
+              subreddit={subreddit}
+              submissionDate={submissionDate}
+              sentimentBaseline={sentimentBaseline}
+              movingAverageSentiments={movingAverageSentiments}
+              movingAverageTimes={movingAverageTimes}
+              plotType="marker"
+            ></CommentSentimentPlot>
+          </TabPanel>
+          <TabPanel minHeight="55vH" minWidth="70vW">
+            <CommentSentimentPlot
+              key={selectedTab}
+              timeStamps={timeStamps}
+              sentiments={sentiments}
+              histogram_sentiments={histogramSentiments}
+              postTitle={postTitle}
+              subreddit={subreddit}
+              submissionDate={submissionDate}
+              sentimentBaseline={sentimentBaseline}
+              movingAverageSentiments={movingAverageSentiments}
+              movingAverageTimes={movingAverageTimes}
+              plotType="histogram"
             ></CommentSentimentPlot>
           </TabPanel>
           <TabPanel minHeight="55vH" minWidth="70vW">

@@ -1,8 +1,8 @@
-import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
 
-const Header = () => {
+const Footer = () => {
   return (
-    <Box p={2} bg="#FF4500" color="white" mb={-4}>
+    <Box maxHeight="5vH" p={2} bg="gray.800" color="gray.50">
       <Flex alignItems="center" justifyContent="space-between">
         <Flex direction="column" justifyContent="center">
           <Flex justifyContent="flex-start" alignItems="center">
@@ -19,18 +19,26 @@ const Header = () => {
           </Flex>
           <Box ml={4} width="70%">
             <Text fontSize="sm">
-              Ever wonder why you feel down after doom scrolling through a whole
-              Reddit thread? Look no further! Welcome to the Reddit Sentiment
-              Analyzer, a tool that visualizes the actual sentiment of Reddit
-              comments in a thread. Analyze the sentiment, gain insights, and
-              discover the emotional tone of the discussion. Stop doom scrolling
-              today.
+              &copy; {new Date().getFullYear()} Reddit Sentiment Analyzer. All
+              rights reserved.
             </Text>
           </Box>
+        </Flex>
+        <Flex direction="column" justifyContent="center">
+          <Text fontSize="sm">
+            <Link href="#" color="white">
+              Terms of Service
+            </Link>
+          </Text>
+          <Text fontSize="sm">
+            <Link href="#" color="white">
+              Privacy Policy
+            </Link>
+          </Text>
         </Flex>
       </Flex>
     </Box>
   );
 };
 
-export default Header;
+export default Footer;

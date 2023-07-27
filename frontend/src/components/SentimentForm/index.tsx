@@ -8,6 +8,7 @@ import {
   FormHelperText,
   HStack,
   Input,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -52,7 +53,7 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
   const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
 
   return (
-    <Box width="100%">
+    <Box width="60%">
       <form onSubmit={handleSubmit}>
         <FormControl isRequired isInvalid={!isValidUrl}>
           {isValidUrl ? (
@@ -67,26 +68,25 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
               Invalid Reddit Thread URL
             </FormErrorMessage>
           )}
-          <Flex direction="row">
+          <Flex direction="row" gap={1}>
             <Input
               type="text"
               value={inputValue}
               onChange={handleInputChange}
-              fontSize="sm"
-              flexGrow={3}
+              fontSize="xs"
+              size="xs"
+              flexGrow={2}
               placeholder="Paste Reddit Thread URL Here"
+              borderColor="gray.300"
+              borderRadius="lg"
             />
-            <Button
-              colorScheme="blue"
-              type="submit"
-              fontSize="sm"
-              minWidth={["100%", "140px"]} // Responsive width
-              isLoading={isLoading}
-              loadingText="Submitting..."
-              mt={{ base: 2, md: 0 }}
-            >
-              Query
-            </Button>
+            {isLoading ? (
+              <Spinner color="blue.500" />
+            ) : (
+              <Button colorScheme="blue" type="submit" fontSize="xs" size="xs">
+                Query
+              </Button>
+            )}{" "}
           </Flex>
           {apiError && (
             <Alert status="error" mt={4}>

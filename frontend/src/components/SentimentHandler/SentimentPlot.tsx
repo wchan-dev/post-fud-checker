@@ -1,16 +1,7 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Select,
-  Stack,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useState } from "react";
+import { Flex, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import Plot from "react-plotly.js";
 
-interface CommentSentimentPlotProps {
+export interface CommentSentimentPlotProps {
   timeStamps: Date[];
   sentiments: number[];
   histogram_sentiments: number[];
@@ -20,6 +11,7 @@ interface CommentSentimentPlotProps {
   sentimentBaseline: number;
   movingAverageSentiments: number[];
   movingAverageTimes: Date[];
+  plotType: string;
 }
 
 const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
@@ -32,11 +24,8 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   sentimentBaseline,
   movingAverageSentiments,
   movingAverageTimes,
+  plotType,
 }) => {
-  const [plotType, setPlotType] = useState<"line" | "histogram" | "marker">(
-    "line"
-  );
-
   const textColor = useColorModeValue("brand.text", "brand.textSecondary");
   const bgColor = useColorModeValue("brand.bg", "brand.bg");
 
@@ -200,7 +189,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
         plotType === "line"
           ? "Sentiment Moving Average Over Time"
           : plotType === "marker"
-          ? "All Sentiment Scores Raw"
+          ? "Timeline of Sentiments"
           : "Distribution of Negative and Positive Sentiment Comments",
       font: {
         size: 18, // Increased font size
@@ -233,33 +222,18 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   const threadTitle = formatThreadTitle(subreddit, postTitle);
 
   return (
-    <Stack>
+    <Stack width="100%">
       <Flex direction="row" gap={8} alignItems="center" justifyContent="center">
-        <Select
-          size="sm"
-          width="fit-content"
-          defaultValue="line"
-          onChange={(event) =>
-            setPlotType(event.target.value as "line" | "marker" | "histogram")
-          }
-        >
-          <option value="line">Sentiment Moving Average</option>
-          <option value="marker">Raw Sentiments</option>
-          <option value="histogram">Sentiment Distribution</option>
-        </Select>
         <Text fontSize="xs" color="gray.500">
           {threadTitle}
         </Text>
       </Flex>
-      <Box width="100%">
-        <Plot
-          data={data}
-          layout={layout}
-          config={{ responsive: true }}
-          revision={timeStamps.length}
-          style={{ width: "100%" }}
-        />
-      </Box>
+      <Plot
+        data={data}
+        layout={layout}
+        config={{ responsive: true }}
+        revision={timeStamps.length}
+      />
     </Stack>
   );
 };

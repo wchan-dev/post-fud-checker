@@ -1,4 +1,4 @@
-import { Flex, Box, VStack } from "@chakra-ui/react";
+import { Flex, Box, Stack, VStack } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from "react";
 
 import { getSentiment, Comment, SentimentResult } from "../../api/getSentiment";
@@ -8,6 +8,7 @@ import SentimentHandler from "../SentimentHandler";
 import QueryHistoryContainer from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
 import Header from "../Header";
+import Footer from "../Footer";
 
 const PageLayOut: React.FC = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);
@@ -134,8 +135,12 @@ const PageLayOut: React.FC = () => {
   return (
     <VStack>
       <Header></Header>
-      <VStack>
+      <Stack p={2}>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>
+          <SentimentForm
+            handleGetSentiment={handleGetSentiment}
+            handleClearHistory={handleClearHistory}
+          />
           <SentimentHandler
             timeStamps={timeStamps}
             sentiments={sentiments}
@@ -149,12 +154,8 @@ const PageLayOut: React.FC = () => {
             bestComments={bestComments}
             controversialComments={controversialComments}
           />
-          <SentimentForm
-            handleGetSentiment={handleGetSentiment}
-            handleClearHistory={handleClearHistory}
-          />
         </HistoryContext.Provider>
-      </VStack>
+      </Stack>
     </VStack>
   );
 };
