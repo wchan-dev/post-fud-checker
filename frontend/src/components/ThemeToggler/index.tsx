@@ -1,12 +1,22 @@
-import { Button, useColorMode } from "@chakra-ui/react";
+import { Flex, IconButton, useColorMode } from "@chakra-ui/react";
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
 const ThemeToggler: React.FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const SwitchIcon = colorMode === "light" ? MoonIcon : SunIcon;
 
   return (
-    <Button width="20%" mt={4} onClick={toggleColorMode}>
-      Toggle {colorMode === "light" ? "Dark" : "Light"}
-    </Button>
+    <Flex width="100%" justifyContent="flex-end">
+      <IconButton
+        width="1%"
+        borderRadius="30px"
+        mt={4}
+        mb={-8}
+        onClick={toggleColorMode}
+        icon={<SwitchIcon />}
+        aria-label="Toggle theme"
+      />
+    </Flex>
   );
 };
 

@@ -7,8 +7,7 @@ import SentimentForm from "../SentimentForm";
 import SentimentHandler from "../SentimentHandler";
 import QueryHistoryContainer from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "../Header/index";
 import ThemeToggler from "../ThemeToggler";
 
 const PageLayOut: React.FC = () => {

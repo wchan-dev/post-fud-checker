@@ -68,7 +68,7 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
               Invalid Reddit Thread URL
             </FormErrorMessage>
           )}
-          <Flex direction="row" gap={1}>
+          <Flex direction="row" gap={3}>
             <Input
               type="text"
               value={inputValue}

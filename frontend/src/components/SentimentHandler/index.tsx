@@ -58,7 +58,7 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
           <Tab>Best & Controversial Comments</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel minHeight="55vH" minWidth="70vW">
+          <TabPanel height="55vH" minWidth="70vW">
             <CommentSentimentPlot
               key={selectedTab}
               timeStamps={timeStamps}
@@ -73,7 +73,7 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
               plotType="line"
             ></CommentSentimentPlot>
           </TabPanel>
-          <TabPanel minHeight="55vH" minWidth="70vW">
+          <TabPanel height="55vH" minWidth="70vW">
             <CommentSentimentPlot
               key={selectedTab}
               timeStamps={timeStamps}
@@ -88,7 +88,7 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
               plotType="marker"
             ></CommentSentimentPlot>
           </TabPanel>
-          <TabPanel minHeight="55vH" minWidth="70vW">
+          <TabPanel height="55vH" minWidth="70vW">
             <CommentSentimentPlot
               key={selectedTab}
               timeStamps={timeStamps}
@@ -103,8 +103,8 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
               plotType="histogram"
             ></CommentSentimentPlot>
           </TabPanel>
-          <TabPanel minHeight="55vH" minWidth="70vW">
-            <VStack>
+          <TabPanel height="55vH" minWidth="70vW" overflowY="auto">
+            <VStack gap={16}>
               <Stack>
                 <Heading size="small">Top 5 Best Comments</Heading>
                 <CommentsTableContainer

@@ -1,23 +1,34 @@
-import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 const Header = () => {
+  // Set the background color to #FF4500 in light mode and to #1A202C (a dark blue) in dark mode
+  const bgColor = useColorModeValue("#FF4500", "#322b6a");
+
   return (
-    <Box p={2} bg="#FF4500" color="white" mb={-4}>
+    <Box p={4} bg={bgColor} color="white" mb={-4}>
       <Flex alignItems="center" justifyContent="space-between">
-        <Flex direction="column" justifyContent="center">
+        <Stack>
           <Flex justifyContent="flex-start" alignItems="center">
-            <Box boxSize="55px">
+            <Box boxSize="45px">
               <Image
-                src="../../../public/reddit-alien-default.png"
+                src="../../../public/Reddit_Mark_OnWhite.png"
                 boxSize="100%"
                 alt="Someone Deleted the art lol"
               />
             </Box>
-            <Heading as="h1" size="lg">
+            <Heading as="h1" size="lg" ml={2}>
               reddit sentiment analyzer
             </Heading>
           </Flex>
-          <Box ml={4} width="70%">
+          <Box width="70%">
             <Text fontSize="sm">
               Ever wonder why you feel down after doom scrolling through a whole
               Reddit thread? Look no further! Welcome to the Reddit Sentiment
@@ -27,7 +38,7 @@ const Header = () => {
               today.
             </Text>
           </Box>
-        </Flex>
+        </Stack>
       </Flex>
     </Box>
   );
