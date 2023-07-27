@@ -10,6 +10,8 @@ import {
 
 const Header = () => {
   // Set the background color to #FF4500 in light mode and to #1A202C (a dark blue) in dark mode
+  // #322b6a
+  // #FDFD96
   const bgColor = useColorModeValue("#FF4500", "#322b6a");
 
   return (

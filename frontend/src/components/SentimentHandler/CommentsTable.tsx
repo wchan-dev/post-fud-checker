@@ -42,7 +42,9 @@ const CommentsTableContainer: React.FC<CommentsTableContainerProps> = ({
         Header: "Score",
         accessor: "score",
         Cell: ({ value }: { value: string }) => (
-          <Box textAlign="center">{value}</Box>
+          <Box textAlign="center">
+            <Text as="b">{value}</Text>
+          </Box>
         ),
       },
       {
