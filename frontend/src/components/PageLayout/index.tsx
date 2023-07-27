@@ -9,6 +9,7 @@ import QueryHistoryContainer from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
 import Header from "../Header";
 import Footer from "../Footer";
+import ThemeToggler from "../ThemeToggler";
 
 const PageLayOut: React.FC = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);
@@ -137,6 +138,7 @@ const PageLayOut: React.FC = () => {
       <Header></Header>
       <Stack p={2}>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>
+          <ThemeToggler></ThemeToggler>
           <SentimentForm
             handleGetSentiment={handleGetSentiment}
             handleClearHistory={handleClearHistory}

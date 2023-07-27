@@ -1,4 +1,4 @@
-import { Flex, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Stack, Text, useColorMode, useTheme } from "@chakra-ui/react";
 import Plot from "react-plotly.js";
 
 export interface CommentSentimentPlotProps {
@@ -26,9 +26,16 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
   movingAverageTimes,
   plotType,
 }) => {
-  const textColor = useColorModeValue("brand.text", "brand.textSecondary");
-  const bgColor = useColorModeValue("brand.bg", "brand.bg");
+  const { colorMode } = useColorMode();
+  const theme = useTheme();
 
+  // The 'color' property of the theme corresponds to the default text color
+  const textColor =
+    theme.colors[colorMode === "light" ? "black" : "whiteAlpha"][800];
+
+  // The 'bg' property of the theme corresponds to the default background color
+  const bgColor =
+    colorMode === "light" ? theme.colors.white : theme.colors.gray[800];
   let data;
 
   if (plotType === "histogram") {
