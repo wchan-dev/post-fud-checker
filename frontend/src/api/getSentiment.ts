@@ -30,7 +30,7 @@ interface MovingSentimentData {
 
 export type SentimentResult = {
   postTitle: string;
-  submission_Date: Date;
+  submissionDate: Date;
   subreddit: string;
   sentimentBaseline: number;
   sentiments_compound: number[];
@@ -60,7 +60,7 @@ export async function getSentiment(
     const postTitle = data.post_title;
     const subreddit = data.subreddit;
     const submission_date_local = new Date(data.submission_date);
-    const submission_Date = new Date(
+    const submissionDate = new Date(
       submission_date_local.getTime() +
         submission_date_local.getTimezoneOffset() * 60000
     ) as Date;
@@ -131,7 +131,7 @@ export async function getSentiment(
     return {
       postTitle,
       subreddit,
-      submission_Date,
+      submissionDate,
       sentimentBaseline,
       timeStamps,
       sentiments_compound,
@@ -148,7 +148,7 @@ export async function getSentiment(
     return {
       postTitle: "",
       subreddit: "",
-      submission_Date: new Date(),
+      submissionDate: new Date(),
       sentimentBaseline: 0,
       sentiments_compound: [] as number[],
       timeStamps: [] as Date[],

@@ -5,7 +5,6 @@ import { getSentiment, Comment, SentimentResult } from "../../api/getSentiment";
 
 import SentimentForm from "../SentimentForm";
 import SentimentHandler from "../SentimentHandler";
-import QueryHistoryContainer from "../RedditQueryHistory";
 import { HistoryContext, History } from "../RedditQueryHistory/HistoryContext";
 import Header from "../Header/index";
 import ThemeToggler from "../ThemeToggler";
@@ -32,7 +31,7 @@ const PageLayOut: React.FC = () => {
       const {
         postTitle,
         subreddit,
-        submission_Date,
+        submissionDate,
         sentimentBaseline,
         sentiments_compound,
         timeStamps,
@@ -45,7 +44,7 @@ const PageLayOut: React.FC = () => {
       setSentimentState({
         postTitle,
         subreddit,
-        submissionDate: new Date(submission_Date),
+        submissionDate: new Date(submissionDate),
         sentimentBaseline,
         sentiments_compound,
 
@@ -69,7 +68,7 @@ const PageLayOut: React.FC = () => {
     const {
       postTitle,
       subreddit,
-      submission_Date,
+      submissionDate,
       sentimentBaseline,
       sentiments_compound,
       timeStamps,
@@ -79,12 +78,10 @@ const PageLayOut: React.FC = () => {
       controversialComments,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
 
-    const submissionDate = new Date(submission_Date);
-
     setSentimentState({
       postTitle,
       subreddit,
-      submission_Date,
+      submissionDate,
       sentimentBaseline,
       sentiments_compound,
       timeStamps,
@@ -98,10 +95,8 @@ const PageLayOut: React.FC = () => {
       "plotData",
       JSON.stringify({
         ...sentimentState,
-        submission_Date: submissionDate.toISOString(),
-        movingAverageTimes: moving_average_times.map((date) =>
-          date.toISOString()
-        ),
+        submissionDate: submissionDate.toISOString(),
+        timeStamps_MovAvg: timeStamps_MovAvg.map((date) => date.toISOString()),
       })
     );
 
