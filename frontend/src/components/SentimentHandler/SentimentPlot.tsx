@@ -84,7 +84,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       y: [sentimentBaseline],
       mode: "markers",
       marker: { color: "#0077B6", size: 12 },
-      name: "Baseline",
+      name: "Sentiment at Post",
     };
 
     const positiveSentiments = sentiments.filter((sentiment) => sentiment >= 0);
@@ -169,7 +169,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
       x: turningPointsX,
       y: turningPointsY,
       mode: "markers",
-      marker: { color: "#d00000", size: 6 }, // Lusty Gallant (Deep Red)
+      marker: { color: "#d00000", size: 3 }, // Lusty Gallant (Deep Red)
       name: "Sentiment Shifts",
     };
 
@@ -224,7 +224,7 @@ const CommentSentimentPlot: React.FC<CommentSentimentPlotProps> = ({
     },
   };
   const formatThreadTitle = (subreddit: string, postTitle: string) =>
-    `Thread Title${subreddit}: ${postTitle}`;
+    `${subreddit}: ${postTitle}`;
 
   const threadTitle = formatThreadTitle(subreddit, postTitle);
 

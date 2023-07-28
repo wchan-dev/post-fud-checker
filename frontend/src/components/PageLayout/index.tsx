@@ -1,5 +1,5 @@
-import { Flex, Box, Stack, VStack } from "@chakra-ui/react";
-import { useContext, useState, useEffect } from "react";
+import { Stack, VStack } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 
 import { getSentiment, Comment, SentimentResult } from "../../api/getSentiment";
 
@@ -12,49 +12,49 @@ import ThemeToggler from "../ThemeToggler";
 
 const PageLayOut: React.FC = () => {
   const [historyList, setHistoryList] = useState<History[]>([]);
-  const [timeStamps, setTimeStamps] = useState<Date[]>([]);
-  const [sentiments, setSentiments] = useState<number[]>([]);
-  const [histogramSentiments, setHistogramSentiments] = useState<number[]>([]);
-  const [postTitle, setPostTitle] = useState<string>("");
-  const [sentimentBaseline, setSentimentBaseline] = useState<number>(0);
-  const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
-  const [subreddit, setSubreddit] = useState<string>("");
-  const [movingAverageSentiments, setMovingAverageSentiments] = useState<
-    number[]
-  >([]);
-  const [movingAverageTimes, setMovingAverageTimes] = useState<Date[]>([]);
-  const [bestComments, setBestComments] = useState<Comment[]>([]);
-  const [controversialComments, setControversialComments] = useState<Comment[]>(
-    []
-  );
+
+  const [sentimentState, setSentimentState] = useState({
+    postTitle: "" as string,
+    subreddit: "" as string,
+    submissionDate: new Date() as Date,
+    sentimentBaseline: 0 as number,
+    sentiments_compound: [] as number[],
+    timeStamps: [] as Date[],
+    sentiments_MovAvg: [] as number[],
+    timeStamps_MovAvg: [] as Date[],
+    bestComments: [] as Comment[],
+    controversialComments: [] as Comment[],
+  });
 
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
     if (savedData) {
       const {
-        timeStamps,
-        sentiments,
-        histogram_sentiments,
         postTitle,
+        subreddit,
         submission_Date,
         sentimentBaseline,
-        movingAverageSentiments,
-        movingAverageTimes,
+        sentiments_compound,
+        timeStamps,
+        sentiments_MovAvg,
+        timeStamps_MovAvg,
         bestComments,
         controversialComments,
       } = JSON.parse(savedData);
-      setTimeStamps(timeStamps.map((ts: string) => new Date(ts)));
-      setSentiments(sentiments);
-      setHistogramSentiments(histogram_sentiments || []);
-      setPostTitle(postTitle);
-      setSubmissionDate(new Date(submission_Date));
-      setSentimentBaseline(sentimentBaseline);
-      setMovingAverageSentiments(movingAverageSentiments);
-      setMovingAverageTimes(
-        movingAverageTimes.map((ts: string) => new Date(ts))
-      );
-      setBestComments(bestComments);
-      setControversialComments(controversialComments);
+
+      setSentimentState({
+        postTitle,
+        subreddit,
+        submissionDate: new Date(submission_Date),
+        sentimentBaseline,
+        sentiments_compound,
+
+        timeStamps: timeStamps.map((ts: string) => new Date(ts)),
+        sentiments_MovAvg,
+        timeStamps_MovAvg: timeStamps_MovAvg.map((ts: string) => new Date(ts)),
+        bestComments,
+        controversialComments,
+      });
     }
   }, []);
 
@@ -67,47 +67,41 @@ const PageLayOut: React.FC = () => {
     reddit_url: string
   ) => {
     const {
-      timeStamps,
       postTitle,
-      sentiments_compound,
-      histogram_sentiments,
-      submission_Date,
       subreddit,
+      submission_Date,
       sentimentBaseline,
-      moving_average_sentiments,
-      moving_average_times,
+      sentiments_compound,
+      timeStamps,
+      sentiments_MovAvg,
+      timeStamps_MovAvg,
       bestComments,
       controversialComments,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
 
     const submissionDate = new Date(submission_Date);
-    setTimeStamps(timeStamps);
-    setSentiments(sentiments_compound);
-    setHistogramSentiments(histogram_sentiments);
-    setPostTitle(postTitle);
-    setSubmissionDate(submissionDate);
-    setSubreddit(subreddit);
-    setSentimentBaseline(sentimentBaseline);
-    setMovingAverageSentiments(moving_average_sentiments);
-    setMovingAverageTimes(moving_average_times);
-    setBestComments(bestComments);
-    setControversialComments(controversialComments);
+
+    setSentimentState({
+      postTitle,
+      subreddit,
+      submission_Date,
+      sentimentBaseline,
+      sentiments_compound,
+      timeStamps,
+      sentiments_MovAvg,
+      timeStamps_MovAvg,
+      bestComments,
+      controversialComments,
+    });
 
     localStorage.setItem(
       "plotData",
       JSON.stringify({
-        timeStamps,
-        sentiments: sentiments_compound,
-        histogram_sentiments,
-        postTitle,
+        ...sentimentState,
         submission_Date: submissionDate.toISOString(),
-        sentimentBaseline,
-        movingAverageSentiments: moving_average_sentiments,
         movingAverageTimes: moving_average_times.map((date) =>
           date.toISOString()
         ),
-        bestComments: bestComments,
-        controversialComments: controversialComments,
       })
     );
 
@@ -142,19 +136,7 @@ const PageLayOut: React.FC = () => {
             handleGetSentiment={handleGetSentiment}
             handleClearHistory={handleClearHistory}
           />
-          <SentimentHandler
-            timeStamps={timeStamps}
-            sentiments={sentiments}
-            histogramSentiments={histogramSentiments}
-            postTitle={postTitle}
-            sentimentBaseline={sentimentBaseline}
-            submissionDate={submissionDate}
-            subreddit={subreddit}
-            movingAverageSentiments={movingAverageSentiments}
-            movingAverageTimes={movingAverageTimes}
-            bestComments={bestComments}
-            controversialComments={controversialComments}
-          />
+          <SentimentHandler {...sentimentState} />
         </HistoryContext.Provider>
       </Stack>
     </VStack>

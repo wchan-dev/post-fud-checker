@@ -29,15 +29,14 @@ interface MovingSentimentData {
 }
 
 export type SentimentResult = {
-  timeStamps: Date[];
-  sentiments_compound: number[];
-  histogram_sentiments: number[];
   postTitle: string;
   submission_Date: Date;
   subreddit: string;
   sentimentBaseline: number;
-  moving_average_sentiments: number[];
-  moving_average_times: Date[];
+  sentiments_compound: number[];
+  timeStamps: Date[];
+  sentiments_MovAvg: number[];
+  timeStamps_MovAvg: Date[];
   bestComments: Comment[];
   controversialComments: Comment[];
   error?: string;
@@ -58,6 +57,20 @@ export async function getSentiment(
 
     const data = response.data;
 
+    const postTitle = data.post_title;
+    const subreddit = data.subreddit;
+    const submission_date_local = new Date(data.submission_date);
+    const submission_Date = new Date(
+      submission_date_local.getTime() +
+        submission_date_local.getTimezoneOffset() * 60000
+    ) as Date;
+
+    const sentimentBaseline = data.sentiment_baseline;
+
+    const sentiments_compound = data.comments.map(
+      (commentData: CommentData) => commentData.sentiment.compound
+    );
+
     const timeStamps = data.comments.map((commentData: CommentData) => {
       const date = new Date(commentData.comment.timestamp);
       const utcDate = new Date(
@@ -66,14 +79,6 @@ export async function getSentiment(
       return utcDate;
     });
 
-    const sentiments_compound = data.comments.map(
-      (commentData: CommentData) => commentData.sentiment.compound
-    );
-
-    const histogram_sentiments = data.comments.map(
-      (commentData: CommentData) => commentData.sentiment.compound
-    );
-
     const movingSentimentDataArray = data.moving_sentiment_average.map(
       (movingSentimentData: MovingSentimentData) => {
         return {
@@ -81,30 +86,25 @@ export async function getSentiment(
             movingSentimentData.moving_average_sentiment,
           current_time: new Date(
             new Date(movingSentimentData.current_time).getTime() +
-            new Date(movingSentimentData.current_time).getTimezoneOffset() *
-            60000
+              new Date(movingSentimentData.current_time).getTimezoneOffset() *
+                60000
           ),
         };
       }
     );
 
-    movingSentimentDataArray.sort((a, b) => a.current_time - b.current_time);
-
-    const moving_average_sentiments = movingSentimentDataArray.map(
-      (data) => data.moving_average_sentiment
+    movingSentimentDataArray.sort(
+      (a: { current_time: Date }, b: { current_time: Date }) =>
+        a.current_time.getTime() - b.current_time.getTime()
     );
 
-    const moving_average_times = movingSentimentDataArray.map(
-      (data) => data.current_time
+    const sentiments_MovAvg = movingSentimentDataArray.map(
+      (movingAvg: MovingSentimentData) => movingAvg.moving_average_sentiment
     );
 
-    const postTitle = data.post_title;
-    const submission_Date = new Date(data.submission_date);
-    const utcSubmissionDate = new Date(
-      submission_Date.getTime() + submission_Date.getTimezoneOffset() * 60000
+    const timeStamps_MovAvg = movingSentimentDataArray.map(
+      (movingAvg: MovingSentimentData) => movingAvg.current_time
     );
-    const subreddit = data.subreddit;
-    const sentimentBaseline = data.sentiment_baseline;
 
     const bestComments = data.best_comments.map(
       (commentData: CommentData): Comment => {
@@ -129,15 +129,14 @@ export async function getSentiment(
     );
 
     return {
-      timeStamps,
       postTitle,
-      sentiments_compound,
-      histogram_sentiments,
-      submission_Date: utcSubmissionDate,
       subreddit,
+      submission_Date,
       sentimentBaseline,
-      moving_average_sentiments,
-      moving_average_times,
+      timeStamps,
+      sentiments_compound,
+      sentiments_MovAvg,
+      timeStamps_MovAvg,
       bestComments,
       controversialComments,
     };
@@ -147,17 +146,16 @@ export async function getSentiment(
       console.log(errorMessage);
     }
     return {
-      timeStamps: [],
-      sentiments_compound: [],
-      histogram_sentiments: [],
       postTitle: "",
-      submission_Date: new Date(),
       subreddit: "",
+      submission_Date: new Date(),
       sentimentBaseline: 0,
-      moving_average_sentiments: [],
-      moving_average_times: [],
-      bestComments: [],
-      controversialComments: [],
+      sentiments_compound: [] as number[],
+      timeStamps: [] as Date[],
+      sentiments_MovAvg: [] as number[],
+      timeStamps_MovAvg: [] as Date[],
+      bestComments: [] as Comment[],
+      controversialComments: [] as Comment[],
       error: error.message,
     };
   }

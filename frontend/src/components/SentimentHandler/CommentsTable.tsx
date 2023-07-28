@@ -15,8 +15,8 @@ const ExpandableContent: React.FC<{
   onToggle: () => void;
 }> = ({ text, expanded, onToggle }) => (
   <Flex direction="row" align="start" justify="space-between">
-    <Text>{expanded ? text : `${text.substring(0, 72)}...`}</Text>
-    {text.length > 72 && (
+    <Text>{expanded ? text : `${text.substring(0, 65)}...`}</Text>
+    {text.length > 65 && (
       <Text ml={4} onClick={onToggle} cursor="pointer" color="blue.500">
         {expanded ? "-" : "+"}
       </Text>
