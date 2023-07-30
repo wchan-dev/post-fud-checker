@@ -14,31 +14,30 @@ import {
 import CommentSentimentPlot from "./SentimentPlot";
 import CommentsTableContainer from "./CommentsTable";
 import { Comment } from "../../api/getSentiment";
+import { MovingAveragePlot } from "./Plots/MovingAverage";
 
 interface SentimentHandlerProps {
-  timeStamps: Date[];
-  sentiments: number[];
-  histogramSentiments: number[];
   postTitle: string;
-  sentimentBaseline: number;
-  submissionDate: Date;
   subreddit: string;
-  movingAverageSentiments: number[];
-  movingAverageTimes: Date[];
+  submissionDate: Date;
+  sentimentBaseline: number;
+  sentiments_compound: number[];
+  timeStamps: Date[];
+  sentiments_MovAvg: number[];
+  timeStamps_MovAvg: Date[];
   bestComments: Comment[];
   controversialComments: Comment[];
 }
 
 const SentimentHandler: React.FC<SentimentHandlerProps> = ({
-  timeStamps,
-  sentiments,
-  histogramSentiments,
   postTitle,
-  sentimentBaseline,
-  submissionDate,
   subreddit,
-  movingAverageSentiments,
-  movingAverageTimes,
+  submissionDate,
+  sentimentBaseline,
+  sentiments_compound,
+  timeStamps,
+  sentiments_MovAvg,
+  timeStamps_MovAvg,
   bestComments,
   controversialComments,
 }) => {
@@ -59,49 +58,11 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
         </TabList>
         <TabPanels>
           <TabPanel height="55vH" minWidth="70vW">
-            <CommentSentimentPlot
+            <MovingAveragePlot
               key={selectedTab}
-              timeStamps={timeStamps}
-              sentiments={sentiments}
-              histogram_sentiments={histogramSentiments}
-              postTitle={postTitle}
-              subreddit={subreddit}
-              submissionDate={submissionDate}
-              sentimentBaseline={sentimentBaseline}
-              movingAverageSentiments={movingAverageSentiments}
-              movingAverageTimes={movingAverageTimes}
-              plotType="line"
-            ></CommentSentimentPlot>
-          </TabPanel>
-          <TabPanel height="55vH" minWidth="70vW">
-            <CommentSentimentPlot
-              key={selectedTab}
-              timeStamps={timeStamps}
-              sentiments={sentiments}
-              histogram_sentiments={histogramSentiments}
-              postTitle={postTitle}
-              subreddit={subreddit}
-              submissionDate={submissionDate}
-              sentimentBaseline={sentimentBaseline}
-              movingAverageSentiments={movingAverageSentiments}
-              movingAverageTimes={movingAverageTimes}
-              plotType="marker"
-            ></CommentSentimentPlot>
-          </TabPanel>
-          <TabPanel height="55vH" minWidth="70vW">
-            <CommentSentimentPlot
-              key={selectedTab}
-              timeStamps={timeStamps}
-              sentiments={sentiments}
-              histogram_sentiments={histogramSentiments}
-              postTitle={postTitle}
-              subreddit={subreddit}
-              submissionDate={submissionDate}
-              sentimentBaseline={sentimentBaseline}
-              movingAverageSentiments={movingAverageSentiments}
-              movingAverageTimes={movingAverageTimes}
-              plotType="histogram"
-            ></CommentSentimentPlot>
+              sentiments_MovAvg={sentiments_MovAvg}
+              timeStamps_MovAvg={timeStamps_MovAvg}
+            />
           </TabPanel>
           <TabPanel height="55vH" minWidth="70vW" overflowY="auto">
             <VStack gap={16}>
