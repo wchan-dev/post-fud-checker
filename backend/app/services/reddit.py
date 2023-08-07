@@ -29,9 +29,13 @@ class RedditApp:
         comments = []
         try:
             submission = self.reddit.submission(url=submissionURL)
-            # sort by new guarantees in time order, must be before network fetching
-            submission.comment_sort = "old"
-            submission.comments.replace_more(limit=None)
+            submission.comment_limit = 1000
+            submission.comment_sort = "best"
+            if submission.num_comments > 500:
+                submission.comments.replace_more(limit=5)
+            else:
+                submission.comments.replace_more(limit=None)
+
             for comment in submission.comments.list():
                 if comment.author is not None and comment.author.name not in self.bots:
                     comments.append(

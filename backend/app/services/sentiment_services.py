@@ -124,6 +124,7 @@ def analyze_and_store_sentiments(
 
     # sentiment analysis for most controversial comments
     controversial_comments_with_sentiments = []
+    sentiment_averaged = []
     for comment in controversial_comments:
         comment_sentiment = calculate_comment_sentiment(
             comment["body"]

@@ -1,5 +1,6 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from datetime import timedelta
+import statsmodels.api as sm
 
 
 def calculate_comment_sentiment(comment: str) -> dict[str, float]:
@@ -70,8 +71,8 @@ def calculate_moving_average(comments_with_sentiments, post_lifetime, num_commen
     weight_comments = 0.5
 
     # Calculate window size based on post's lifetime and number of comments
-    window_size_based_on_lifetime = max(15, post_lifetime / 12)  # updated constant
-    window_size_based_on_comments = max(15, num_comments / 16.67)  # updated constant
+    window_size_based_on_lifetime = max(5, post_lifetime / 12)  # updated constant
+    window_size_based_on_comments = max(5, num_comments / 16.67)  # updated constant
 
     # Use weighted average to calculate final window size
     # Also, as post_lifetime and num_comments are in minutes,
@@ -114,5 +115,25 @@ def calculate_moving_average(comments_with_sentiments, post_lifetime, num_commen
                 "moving_average_sentiment": average_sentiment,
             }
             moving_averages.append(moving_average_sentiment_data)
+    timestamps = [ma["current_time"] for ma in moving_averages]
+
+    min_timestamp = min(timestamps)
+    timestamps = [(t - min_timestamp).total_seconds() / 60 for t in timestamps]
+
+    # Get the sentiments
+    sentiments = [ma["moving_average_sentiment"] for ma in moving_averages]
+
+    # Apply LOWESS
+    lowess = sm.nonparametric.lowess
+    smoothed_values = lowess(
+        sentiments, timestamps, frac=0.2
+    )  # Adjust `frac` as needed
+
+    # `smoothed_values` is now a 2D array where the first column is the timestamp
+    # and the second column is the smoothed sentiment value
+
+    # If you want to add these smoothed values back to your original data:
+    for i, ma in enumerate(moving_averages):
+        ma["smoothed_sentiment"] = smoothed_values[i, 1]
 
     return moving_averages
