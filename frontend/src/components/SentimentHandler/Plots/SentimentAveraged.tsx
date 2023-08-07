@@ -3,19 +3,19 @@ import { Box, Stack } from "@chakra-ui/react";
 import { populateLayout } from "../layout";
 import { usePlotColors } from "./utils/usePlotColors";
 
-interface MovingAveragePlotProps {
+interface SentimentsAveragePlotProps {
   sentimentBaseline: number;
   submissionDate: Date;
-  sentiments_MovAvg: number[];
-  timeStamps_MovAvg: Date[];
+  sentiments_Avg: number[];
+  timeStamps_Avg: Date[];
 }
 
-export function MovingAveragePlot({
+export function SentimentsAveragePlot({
   sentimentBaseline,
   submissionDate,
-  sentiments_MovAvg,
-  timeStamps_MovAvg,
-}: MovingAveragePlotProps) {
+  sentiments_Avg,
+  timeStamps_Avg,
+}: SentimentsAveragePlotProps) {
   const baselineSentiment = {
     x: [submissionDate],
     y: [sentimentBaseline],
@@ -25,19 +25,19 @@ export function MovingAveragePlot({
   };
 
   const baselineSentimentLine = {
-    x: [submissionDate, timeStamps_MovAvg[0]],
-    y: [sentimentBaseline, sentiments_MovAvg[0]],
+    x: [submissionDate, timeStamps_Avg[0]],
+    y: [sentimentBaseline, sentiments_Avg[0]],
     mode: "lines",
     line: { shape: "linear", color: "#90E0EF", dash: "dash" }, // Light Cyan
     name: "Post-Comment Gap",
   };
 
   const sentimentLine = {
-    x: timeStamps_MovAvg,
-    y: sentiments_MovAvg,
+    x: timeStamps_Avg,
+    y: sentiments_Avg,
     mode: "lines",
     line: { shape: "spline", color: "blue" },
-    name: "Sentiment (Moving Average)",
+    name: "Sentiment (ing Average)",
   };
 
   const data = [baselineSentiment, baselineSentimentLine, sentimentLine];
@@ -46,7 +46,7 @@ export function MovingAveragePlot({
   const layout = populateLayout(
     textColor,
     bgColor,
-    "Sentiment Moving Average Over Time",
+    "Sentiment ing Average Over Time",
     "Time (UTC)",
     "Sentiment Score"
   );

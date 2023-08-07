@@ -28,6 +28,11 @@ interface MovingSentimentData {
   moving_average_sentiment: number;
 }
 
+interface SentimentAveragedData {
+  summation_score: number;
+  timestamp: Date;
+}
+
 export type SentimentResult = {
   postTitle: string;
   submissionDate: Date;
@@ -37,6 +42,8 @@ export type SentimentResult = {
   timeStamps: Date[];
   sentiments_MovAvg: number[];
   timeStamps_MovAvg: Date[];
+  sentiments_Avg: number[];
+  timeStamps_Avg: Date[];
   bestComments: Comment[];
   controversialComments: Comment[];
   error?: string;
@@ -62,7 +69,7 @@ export async function getSentiment(
     const submission_date_local = new Date(data.submission_date);
     const submissionDate = new Date(
       submission_date_local.getTime() +
-        submission_date_local.getTimezoneOffset() * 60000
+      submission_date_local.getTimezoneOffset() * 60000
     ) as Date;
 
     const sentimentBaseline = data.sentiment_baseline;
@@ -86,12 +93,30 @@ export async function getSentiment(
             movingSentimentData.moving_average_sentiment,
           current_time: new Date(
             new Date(movingSentimentData.current_time).getTime() +
-              new Date(movingSentimentData.current_time).getTimezoneOffset() *
-                60000
+            new Date(movingSentimentData.current_time).getTimezoneOffset() *
+            60000
           ),
         };
       }
     );
+
+    const sentimentAvgDataArray = data.sentiments_averaged.map(
+      (sentimentAvgData: SentimentAveragedData) => {
+        const date = new Date(sentimentAvgData.timestamp);
+        const utcDate = new Date(
+          date.getTime() + date.getTimezoneOffset() * 60000
+        );
+        return {
+          summation_score: sentimentAvgData.summation_score,
+          timestamp: utcDate,
+        };
+      }
+    );
+
+    const sentiments_Avg = sentimentAvgDataArray.map(
+      (data) => data.summation_score
+    );
+    const timeStamps_Avg = sentimentAvgDataArray.map((data) => data.timestamp);
 
     movingSentimentDataArray.sort(
       (a: { current_time: Date }, b: { current_time: Date }) =>
@@ -137,6 +162,8 @@ export async function getSentiment(
       sentiments_compound,
       sentiments_MovAvg,
       timeStamps_MovAvg,
+      sentiments_Avg,
+      timeStamps_Avg,
       bestComments,
       controversialComments,
     };
@@ -154,6 +181,8 @@ export async function getSentiment(
       timeStamps: [] as Date[],
       sentiments_MovAvg: [] as number[],
       timeStamps_MovAvg: [] as Date[],
+      sentiments_Avg: [] as number[],
+      timeStamps_Avg: [] as Date[],
       bestComments: [] as Comment[],
       controversialComments: [] as Comment[],
       error: error.message,

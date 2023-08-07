@@ -137,3 +137,19 @@ def calculate_moving_average(comments_with_sentiments, post_lifetime, num_commen
         ma["smoothed_sentiment"] = smoothed_values[i, 1]
 
     return moving_averages
+
+
+def calculate_sentiment_average(comments_with_sentiments):
+    res = []
+    comments_with_sentiments.sort(key=lambda x: x["comment"]["timestamp"])
+    summation_score = 0.0
+    for idx, comment in enumerate(comments_with_sentiments):
+        summation_score = summation_score + comment["sentiment"]["compound"] / (idx + 1)
+        res.append(
+            {
+                "summation_score": summation_score,
+                "timestamp": comment["comment"]["timestamp"],
+            }
+        )
+
+    return res

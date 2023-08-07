@@ -1,4 +1,4 @@
-import { Stack, VStack } from "@chakra-ui/react";
+import { Flex, Stack, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 import { getSentiment, Comment, SentimentResult } from "../../api/getSentiment";
@@ -21,6 +21,8 @@ const PageLayOut: React.FC = () => {
     timeStamps: [] as Date[],
     sentiments_MovAvg: [] as number[],
     timeStamps_MovAvg: [] as Date[],
+    sentiments_Avg: [] as number[],
+    timeStamps_Avg: [] as Date[],
     bestComments: [] as Comment[],
     controversialComments: [] as Comment[],
   });
@@ -37,6 +39,8 @@ const PageLayOut: React.FC = () => {
         timeStamps,
         sentiments_MovAvg,
         timeStamps_MovAvg,
+        sentiments_Avg,
+        timeStamps_Avg,
         bestComments,
         controversialComments,
       } = JSON.parse(savedData);
@@ -47,10 +51,11 @@ const PageLayOut: React.FC = () => {
         submissionDate: new Date(submissionDate),
         sentimentBaseline,
         sentiments_compound,
-
         timeStamps: timeStamps.map((ts: string) => new Date(ts)),
         sentiments_MovAvg,
         timeStamps_MovAvg: timeStamps_MovAvg.map((ts: string) => new Date(ts)),
+        sentiments_Avg,
+        timeStamps_Avg: timeStamps_Avg.map((ts: string) => new Date(ts)),
         bestComments,
         controversialComments,
       });
@@ -74,6 +79,8 @@ const PageLayOut: React.FC = () => {
       timeStamps,
       sentiments_MovAvg,
       timeStamps_MovAvg,
+      sentiments_Avg,
+      timeStamps_Avg,
       bestComments,
       controversialComments,
     }: SentimentResult = await getSentiment(api_endpoint, reddit_url);
@@ -87,6 +94,8 @@ const PageLayOut: React.FC = () => {
       timeStamps,
       sentiments_MovAvg,
       timeStamps_MovAvg,
+      sentiments_Avg,
+      timeStamps_Avg,
       bestComments,
       controversialComments,
     });
@@ -120,21 +129,23 @@ const PageLayOut: React.FC = () => {
     localStorage.removeItem("historyList");
     setHistoryList([]);
   };
+  const formattedTitle = `${sentimentState.subreddit}: ${sentimentState.postTitle}`;
 
   return (
-    <VStack>
+    <Stack>
       <Header></Header>
-      <Stack p={2}>
+      <Flex display="column" width="80%" mt={8} ml="auto" mr="auto" p={2}>
         <HistoryContext.Provider value={[historyList, setHistoryList]}>
           <ThemeToggler></ThemeToggler>
+          <Text ml={2}>{formattedTitle}</Text>
           <SentimentForm
             handleGetSentiment={handleGetSentiment}
             handleClearHistory={handleClearHistory}
           />
           <SentimentHandler {...sentimentState} />
         </HistoryContext.Provider>
-      </Stack>
-    </VStack>
+      </Flex>
+    </Stack>
   );
 };
 

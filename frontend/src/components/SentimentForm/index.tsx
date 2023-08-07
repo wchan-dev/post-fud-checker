@@ -53,7 +53,7 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
   const isValidUrl = redditUrlPattern.test(inputValue) || inputValue === "";
 
   return (
-    <Box width="60%">
+    <Box width="80%" mb={2}>
       <form onSubmit={handleSubmit}>
         <FormControl isRequired isInvalid={!isValidUrl}>
           {isValidUrl ? (
@@ -68,17 +68,17 @@ const SentimentForm: React.FC<SentimentFormProps> = ({
               Invalid Reddit Thread URL
             </FormErrorMessage>
           )}
-          <Flex direction="row" gap={3}>
+          <Flex direction="row" gap={2}>
             <Input
               type="text"
               value={inputValue}
               onChange={handleInputChange}
               fontSize="xs"
               size="xs"
+              borderRadius="lg"
+              borderColor="gray.300"
               flexGrow={2}
               placeholder="Paste Reddit Thread URL Here"
-              borderColor="gray.300"
-              borderRadius="lg"
             />
             {isLoading ? (
               <Spinner color="blue.500" />

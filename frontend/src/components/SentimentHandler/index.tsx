@@ -1,7 +1,6 @@
-import { useEffect, useState, useContext } from "react";
+import { useState } from "react";
 import {
   Box,
-  Flex,
   Heading,
   Stack,
   Tab,
@@ -11,10 +10,12 @@ import {
   TabPanels,
   VStack,
 } from "@chakra-ui/react";
-import CommentSentimentPlot from "./SentimentPlot";
 import CommentsTableContainer from "./CommentsTable";
 import { Comment } from "../../api/getSentiment";
-import { MovingAveragePlot } from "./Plots/MovingAverage";
+// import { MovingAveragePlot } from "./Plots/MovingAverage";
+import { SentimentTimelinePlot } from "./Plots/SentimentTimeLine";
+import { SentimentDistributionPlot } from "./Plots/SentimentDistrubtion";
+import { SentimentsAveragePlot } from "./Plots/SentimentAveraged";
 
 interface SentimentHandlerProps {
   postTitle: string;
@@ -25,6 +26,8 @@ interface SentimentHandlerProps {
   timeStamps: Date[];
   sentiments_MovAvg: number[];
   timeStamps_MovAvg: Date[];
+  sentiments_Avg: number[];
+  timeStamps_Avg: Date[];
   bestComments: Comment[];
   controversialComments: Comment[];
 }
@@ -38,33 +41,58 @@ const SentimentHandler: React.FC<SentimentHandlerProps> = ({
   timeStamps,
   sentiments_MovAvg,
   timeStamps_MovAvg,
+  sentiments_Avg,
+  timeStamps_Avg,
   bestComments,
   controversialComments,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
-    <Box p={4} gap={4} border="1px" borderRadius="xl" borderColor="gray.300">
+    <Box
+      p={4}
+      gap={4}
+      border="1px"
+      borderRadius="xl"
+      borderColor="gray.300"
+      width="100%"
+      ml="auto"
+      mr="auto"
+    >
       <Tabs
-        width="100%"
         variant="soft-rounded"
         size="sm"
         onChange={(index) => setSelectedTab(index)}
       >
         <TabList mb="1em">
-          <Tab>Sentiment Moving Average</Tab>
+          <Tab>Sentiments Averaged</Tab>
           <Tab>Sentiment Timeline</Tab>
           <Tab>Distribution of Comment Sentiments</Tab>
           <Tab>Best & Controversial Comments</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel height="55vH" minWidth="70vW">
-            <MovingAveragePlot
-              key={selectedTab}
-              sentiments_MovAvg={sentiments_MovAvg}
-              timeStamps_MovAvg={timeStamps_MovAvg}
+          <TabPanel minHeight="50vH" key={selectedTab}>
+            <SentimentsAveragePlot
+              sentimentBaseline={sentimentBaseline}
+              submissionDate={submissionDate}
+              sentiments_Avg={sentiments_Avg}
+              timeStamps_Avg={timeStamps_Avg}
             />
           </TabPanel>
-          <TabPanel height="55vH" minWidth="70vW" overflowY="auto">
+
+          <TabPanel minHeight="50vH" key={selectedTab}>
+            <SentimentTimelinePlot
+              sentimentBaseline={sentimentBaseline}
+              submissionDate={submissionDate}
+              sentiments_compound={sentiments_compound}
+              timeStamps={timeStamps}
+            ></SentimentTimelinePlot>
+          </TabPanel>
+          <TabPanel minHeight="50vH" key={selectedTab}>
+            <SentimentDistributionPlot
+              sentiments_compound={sentiments_compound}
+            ></SentimentDistributionPlot>
+          </TabPanel>
+          <TabPanel minHeight="50vH" overflowY="auto">
             <VStack gap={16}>
               <Stack>
                 <Heading size="small">Top 5 Best Comments</Heading>

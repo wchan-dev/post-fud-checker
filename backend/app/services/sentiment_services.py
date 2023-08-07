@@ -6,6 +6,7 @@ from .sentiment_analysis import (
     calculate_post_baseline,
     calculate_comment_sentiment,
     calculate_moving_average,
+    calculate_sentiment_average,
 )
 
 from .reddit import RedditApp
@@ -100,6 +101,7 @@ def analyze_and_store_sentiments(
 
     comments_with_sentiments = []
     comment_sentiments_compound = []
+
     # temporary workaround to get demo working
     for comment in comments_use:
         comment_sentiment = calculate_comment_sentiment(
@@ -124,7 +126,6 @@ def analyze_and_store_sentiments(
 
     # sentiment analysis for most controversial comments
     controversial_comments_with_sentiments = []
-    sentiment_averaged = []
     for comment in controversial_comments:
         comment_sentiment = calculate_comment_sentiment(
             comment["body"]
@@ -141,6 +142,8 @@ def analyze_and_store_sentiments(
         comments_with_sentiments, post_lifetime, submission.num_comments
     )
 
+    sentiment_averaged = calculate_sentiment_average(comments_with_sentiments)
+
     return {
         "post_title": submission.title,
         "subreddit": submission_subreddit,
@@ -148,6 +151,7 @@ def analyze_and_store_sentiments(
         "submission_date": submission_date,
         "sentiment_baseline": post_sentiment["baseline"],
         "moving_sentiment_average": moving_sentiment_average,
+        "sentiments_averaged": sentiment_averaged,
         "comments": comments_with_sentiments,
         "best_comments": best_comments_with_sentiments,
         "controversial_comments": controversial_comments_with_sentiments,
