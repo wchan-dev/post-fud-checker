@@ -5,7 +5,10 @@ test.py
 *.ipynb
 .ipynb_checkpoints
 .idea
-console_log.json
+backend/console_log.json
+backend/only_compound.json
+backend/test_response.json
+
 test_response.json
 commants_testing.txt
 
