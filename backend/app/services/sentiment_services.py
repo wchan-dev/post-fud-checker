@@ -12,11 +12,6 @@ from .sentiment_analysis import (
 from .reddit import RedditApp
 
 from ..models.database.reddit_models import RedditSubmission
-from ..models.database_handler import (
-    store_submission_raw,
-    store_submission_sentiment,
-    store_comments_with_sentiments,
-)
 
 from ..utils.helpers import calc_num_comments
 
@@ -49,15 +44,6 @@ def calculate_and_store_post_sentiment(
         title_sentiment["compound"],
         content_sentiment["compound"],
         submission.upvote_ratio,
-    )
-
-    store_submission_sentiment(
-        db_submission_id,
-        post_sentiment["pos"],
-        post_sentiment["neu"],
-        post_sentiment["neg"],
-        post_sentiment["compound"],
-        post_sentiment_baseline,
     )
 
     post_sentiment = {**post_sentiment, "baseline": post_sentiment_baseline}
@@ -96,8 +82,7 @@ def analyze_and_store_sentiments(
             submission_use = submission
             comments_use = redditApp.getPostComments(submissionURL)
 
-    db_submission_id = store_submission_raw(submission)
-    _, post_sentiment = calculate_and_store_post_sentiment(submission, db_submission_id)
+    _, post_sentiment = calculate_and_store_post_sentiment(submission, 1)
 
     comments_with_sentiments = []
     comment_sentiments_compound = []
@@ -112,7 +97,6 @@ def analyze_and_store_sentiments(
         )
         # for calculating moving average
         comment_sentiments_compound.append(comment_sentiment["compound"])
-    store_comments_with_sentiments(comments_with_sentiments, db_submission_id)
 
     # sentiment analysis for best comments
     best_comments_with_sentiments = []
