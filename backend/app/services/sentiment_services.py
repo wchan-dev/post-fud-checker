@@ -1,4 +1,5 @@
 from flask import Response, jsonify
+from app.models.mongo_manager import MongoManager
 
 from .sentiment_analysis import (
     get_post_title_content_sentiment,
@@ -56,7 +57,14 @@ def analyze_and_store_sentiments(
     # submission_use, comments_use = get_previous_results(submission.id, redditApp)
     # commenting out for debugging until refactor new db handler code
 
-    submission_use, comments_use = None, None
+    sentiments_collection = MongoManager.get_sentiments_collection("sentiment_db_v1")
+
+    existing_data = sentiments_collection.find_one({"_id": submission.id})
+    if existing_data:
+        print(existing_data)
+        return existing_data
+    submission_use = None
+    comments_use = None
     submission_date = datetime.utcfromtimestamp(submission.created_utc)
     submission_subreddit = submission.subreddit.display_name
     best_comments = redditApp.get_best_comments(submissionURL)
@@ -128,7 +136,8 @@ def analyze_and_store_sentiments(
 
     sentiment_averaged = calculate_sentiment_average(comments_with_sentiments)
 
-    return {
+    data_to_insert = {
+        "_id": submission.id,  # Using submission.id as the MongoDB document id
         "post_title": submission.title,
         "subreddit": submission_subreddit,
         "postURL": submissionURL,
@@ -140,3 +149,7 @@ def analyze_and_store_sentiments(
         "best_comments": best_comments_with_sentiments,
         "controversial_comments": controversial_comments_with_sentiments,
     }
+
+    sentiments_collection.insert_one(data_to_insert)
+
+    return data_to_insert

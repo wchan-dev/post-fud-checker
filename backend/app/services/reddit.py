@@ -32,7 +32,7 @@ class RedditApp:
             submission.comment_limit = 1000
             submission.comment_sort = "best"
             if submission.num_comments > 500:
-                submission.comments.replace_more(limit=5)
+                submission.comments.replace_more(limit=8)
             else:
                 submission.comments.replace_more(limit=None)
 

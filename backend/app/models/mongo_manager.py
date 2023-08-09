@@ -27,3 +27,8 @@ class MongoManager:
     def get_database(db_name):
         client = MongoManager.get_client()
         return client[db_name]
+
+    @staticmethod
+    def get_sentiments_collection(db_name):
+        db = MongoManager.get_database(db_name)
+        return db["sentiments"]
