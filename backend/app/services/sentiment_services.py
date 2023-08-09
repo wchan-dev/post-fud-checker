@@ -62,11 +62,12 @@ def analyze_and_store_sentiments(
     existing_data = sentiments_collection.find_one({"_id": submission.id})
     if existing_data:
         comment_count_diff = calc_num_comments(
-            submission.num_comments, existing_data["comments"].length
+            submission.num_comments, len(existing_data["comments"])
         )
         if (
             (comment_count_diff) / submission.num_comments
         ) / submission.num_comments < 0.25:
+            print(existing_data)
             return existing_data
 
     comments_use = None
