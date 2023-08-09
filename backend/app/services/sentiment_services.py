@@ -61,34 +61,27 @@ def analyze_and_store_sentiments(
 
     existing_data = sentiments_collection.find_one({"_id": submission.id})
     if existing_data:
-        print(existing_data)
-        return existing_data
-    submission_use = None
+        comment_count_diff = calc_num_comments(
+            submission.num_comments, existing_data["comments"].length
+        )
+        if (
+            (comment_count_diff) / submission.num_comments
+        ) / submission.num_comments < 0.25:
+            return existing_data
+
     comments_use = None
+    try:
+        comments_use = redditApp.getPostComments(submissionURL)
+    except RequestException:
+        return (
+            jsonify({"error": "Reddit API Limit Reached, please try again later."}),
+            429,
+        )
+
     submission_date = datetime.utcfromtimestamp(submission.created_utc)
     submission_subreddit = submission.subreddit.display_name
     best_comments = redditApp.get_best_comments(submissionURL)
     controversial_comments = redditApp.get_most_controversial_comments(submissionURL)
-
-    if submission_use is None:
-        submission_use = submission
-        try:
-            comments_use = redditApp.getPostComments(submissionURL)
-        except RequestException:
-            return (
-                jsonify({"error": "Reddit API Limit Reached, please try again later."}),
-                429,
-            )
-
-    else:
-        comment_count_diff = calc_num_comments(
-            submission.num_comments, submission_use.num_comments
-        )
-        if (
-            (comment_count_diff) / submission.num_comments
-        ) / submission.num_comments > 0.25:
-            submission_use = submission
-            comments_use = redditApp.getPostComments(submissionURL)
 
     _, post_sentiment = calculate_and_store_post_sentiment(submission, 1)
 
