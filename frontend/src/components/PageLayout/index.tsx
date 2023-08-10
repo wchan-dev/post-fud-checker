@@ -27,6 +27,22 @@ const PageLayOut: React.FC = () => {
     controversialComments: [] as Comment[],
   });
 
+  const reconstructDateFromISOString = (isoStr: any) => {
+    const dateParts = isoStr.match(
+      /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/
+    );
+    return new Date(
+      Date.UTC(
+        dateParts[1],
+        dateParts[2] - 1,
+        dateParts[3],
+        dateParts[4],
+        dateParts[5],
+        dateParts[6]
+      )
+    );
+  };
+
   useEffect(() => {
     const savedData = localStorage.getItem("plotData");
     if (savedData) {
@@ -48,14 +64,20 @@ const PageLayOut: React.FC = () => {
       setSentimentState({
         postTitle,
         subreddit,
-        submissionDate: new Date(submissionDate),
+        submissionDate: reconstructDateFromISOString(submissionDate),
         sentimentBaseline,
         sentiments_compound,
-        timeStamps: timeStamps.map((ts: string) => new Date(ts)),
+        timeStamps: timeStamps.map((ts: string) =>
+          reconstructDateFromISOString(ts)
+        ),
         sentiments_MovAvg,
-        timeStamps_MovAvg: timeStamps_MovAvg.map((ts: string) => new Date(ts)),
+        timeStamps_MovAvg: timeStamps_MovAvg.map((ts: string) =>
+          reconstructDateFromISOString(ts)
+        ),
         sentiments_Avg,
-        timeStamps_Avg: timeStamps_Avg.map((ts: string) => new Date(ts)),
+        timeStamps_Avg: timeStamps_Avg.map((ts: string) =>
+          reconstructDateFromISOString(ts)
+        ),
         bestComments,
         controversialComments,
       });
